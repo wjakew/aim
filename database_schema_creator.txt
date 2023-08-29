@@ -1,0 +1,65 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+Table AIM_User {
+  aim_user_id ObjectID
+  aim_user_email varchar
+  aim_user_password varchar
+  aim_user_name varchar
+  aim_user_surname varchar
+  aim_user_type varchar
+  aim_user_telephone varchar
+  aim_user_configuration1 varchar
+  aim_user_configuration2 varchar
+  aim_user_configuration3 varchar
+  aim_user_configuration4 varchar
+}
+
+Table AIM_Task{
+  aim_task_id ObjectID
+  aim_task_name varchar
+  aim_task_desc varchar
+  aim_task_owner AIM_Owner
+  aim_task_members list
+  aim_task_history list
+  status varchar
+  aim_task_timestamp LocalDateTime
+  aim_task_deadline LocalDateTime
+}
+
+Table AIM_Project{
+  aim_project_id ObjectID
+  aim_project_name varchar
+  aim_project_desc varchar
+  aim_owner AIM_Owner
+  project_history List
+}
+
+Table AIM_ApplicationLog{
+  log_code varchar
+  log_desc varchar
+  log_timestamp LocalDateTime
+  currentlyLoogedUser vachar
+}
+
+Table AIM_Board{
+  board_name varchar
+  board_owner AIM_User
+  board_members List
+  board_desc vachar
+  task_list List
+  board_history List
+}
+
+Table AIM_GlobalConfiguration{
+  version varchar
+  build varchar
+  startuptime LocalDateTime
+  userCreationFlag integer
+  globalConfigurationFeature1 vachar
+  globalConfigurationFeature2 vachar
+  globalConfigurationFeature3 vachar
+  globalConfigurationFeature4 vachar
+}
+
+
