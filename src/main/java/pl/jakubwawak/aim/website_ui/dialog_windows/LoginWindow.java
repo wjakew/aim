@@ -6,20 +6,23 @@
 package pl.jakubwawak.aim.website_ui.dialog_windows;
 
 import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.server.StreamResource;
+import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
 import pl.jakubwawak.aim.website_ui.views.WelcomeView;
+import pl.jakubwawak.database_engine.Database_AIMUser;
+import pl.jakubwawak.maintanance.Password_Validator;
 
 import java.awt.*;
 
@@ -66,7 +69,7 @@ public class LoginWindow {
         password_field.setPrefixComponent(VaadinIcon.LOCK.create());
         password_field.setWidth("100%");
 
-        login_button = new Button("Login");
+        login_button = new Button("Login",VaadinIcon.ARROW_RIGHT.create(),this::loginbutton_action);
         createaccount_button = new Button("",VaadinIcon.PLUS.create(),this::createaccoutnbutton_action);
 
         // styling buttons
@@ -131,5 +134,34 @@ public class LoginWindow {
         main_layout.add(caw.main_dialog);
         caw.main_dialog.open();
         main_dialog.close();
+    }
+
+    /**
+     * login_button action
+     * @param ex
+     */
+    private void loginbutton_action(ClickEvent ex){
+        if (!login_field.getValue().isEmpty() && !password_field.getValue().isEmpty()){
+            // try to login
+            try {
+                Database_AIMUser daim = new Database_AIMUser(AimApplication.database);
+                Password_Validator pv = new Password_Validator(password_field.getValue());
+                int ans = daim.loginAIMUser(login_field.getValue(),pv.hash());
+                if ( ans == 1 && AimApplication.loggedUser != null){
+                    // logged successfully
+                    Notification.show("Welcome back "+AimApplication.loggedUser.aim_user_email+"!");
+                    login_button.getUI().ifPresent(ui ->
+                            ui.navigate("/home"));
+                }
+                else if ( ans == 0 ){
+                    Notification.show("Wrong login or password!");
+                }
+                else{
+                    Notification.show("Application error, check log!");
+                }
+            }catch(Exception e){
+                Notification.show("Error: "+e.toString());
+            }
+        }
     }
 }

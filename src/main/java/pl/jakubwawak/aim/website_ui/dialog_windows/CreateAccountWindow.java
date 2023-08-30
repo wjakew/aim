@@ -16,7 +16,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import pl.jakubwawak.aim.AimApplication;
-import pl.jakubwawak.aim.aim_objects.AIM_ApplicationLog;
 import pl.jakubwawak.aim.aim_objects.AIM_User;
 import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
 import pl.jakubwawak.database_engine.Database_AIMUser;
@@ -148,6 +147,7 @@ public class CreateAccountWindow {
                     aimuser.aim_user_name = name_field.getValue();
                     aimuser.aim_user_surname = surname_field.getValue();
                     aimuser.aim_user_telephone = telephone_field.getValue();
+                    aimuser.aim_user_type = "NRLUSER";
 
                     if ( password_field.getValue().equals(confirmpassword_field.getValue()) ){
                         // password confirmed
@@ -158,6 +158,13 @@ public class CreateAccountWindow {
                         if ( ans == 1 ){
                             Notification.show("User created!");
                             main_dialog.close();
+                        }
+                        else if (ans == 0){
+                            Notification.show("User with this email exists!");
+                            email_field.setValue("");
+                        }
+                        else{
+                            Notification.show("Application error, check log!");
                         }
                     }
                     else{
