@@ -6,7 +6,7 @@
 package pl.jakubwawak.aim.website_ui.views;
 
 import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -15,6 +15,8 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextArea;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
@@ -28,26 +30,35 @@ import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
 /**
  * Object for showing welcome view
  */
-@PageTitle("aim home")
-@Route(value = "home")
-public class HomeView extends VerticalLayout {
+@PageTitle("aim terminal")
+@Route(value = "terminal")
+public class TerminalView extends VerticalLayout {
 
     HorizontalLayout headerLayout;
     Button home_button, terminal_button, addelement_button,logout_button,user_button;
+
+    TextArea terminaloutput, terminalsuggestion;
+    TextField terminalinput;
+
+    String terminalCache;
+
+    Button run_button;
 
 
     /**
      * Constructor
      */
-    public HomeView(){
+    public TerminalView(){
+        terminalCache = "";
         this.getElement().setAttribute("theme", Lumo.DARK);
         prepare_view();
 
         setSizeFull();
+        setWidth("100%");
         setJustifyContentMode(JustifyContentMode.CENTER);
         setDefaultHorizontalComponentAlignment(Alignment.CENTER);
         getStyle().set("text-align", "center");
-        getStyle().set("background-image","linear-gradient(black, white)");
+        getStyle().set("background-image","linear-gradient(black, grey)");
         getStyle().set("--lumo-font-family","Monospace");
     }
 
@@ -104,6 +115,37 @@ public class HomeView extends VerticalLayout {
 
         logout_button = new Button("Log out",VaadinIcon.EXIT.create(),this::logoutbutton_action);
         new ButtonStyler().primaryButtonStyle(logout_button,"80%","");
+
+        terminaloutput = new TextArea("AIM Terminal");
+        terminaloutput.setPlaceholder(">");
+        terminaloutput.setValue(terminalCache);
+        terminaloutput.setWidth("100%");terminaloutput.setHeight("70%");
+        terminaloutput.setReadOnly(true);
+        terminaloutput.getStyle().set("--lumo-font-family","Monospace");
+        terminaloutput.getStyle().set("color","black");
+
+        terminalsuggestion = new TextArea("AI Suggestion");
+        terminalsuggestion.setPlaceholder("start typing commands...");
+        terminalsuggestion.setWidth("100%");terminalsuggestion.setHeight("20%");
+        terminalsuggestion.setReadOnly(true);
+        terminalsuggestion.getStyle().set("--lumo-font-family","Monospace");
+        terminalsuggestion.getStyle().set("color","black");
+
+        terminalinput = new TextField("");
+        terminalinput.setPlaceholder(">");
+        terminalinput.setPrefixComponent(VaadinIcon.TERMINAL.create());
+        terminalinput.setWidth("80%");terminalinput.setHeight("");
+        terminalinput.getStyle().set("--lumo-font-family","Monospace");
+        terminalinput.getStyle().set("background-color","black");
+        terminalinput.getStyle().set("color","white");
+
+        run_button = new Button("Run",VaadinIcon.TERMINAL.create(),this::runbutton_action);
+        new ButtonStyler().primaryButtonStyle(run_button,"20%","");
+
+        terminalinput.addKeyPressListener(Key.ENTER, e->
+        {
+            runCommand(terminalinput.getValue());
+        });
     }
 
     /**
@@ -114,6 +156,10 @@ public class HomeView extends VerticalLayout {
             prepare_components();
             prepare_header();
             add(headerLayout);
+            HorizontalLayout input_layout = new HorizontalLayout(terminalinput,run_button);
+            input_layout.setWidth("100%");
+
+            add(terminaloutput,terminalsuggestion,input_layout);
 
         }
         else{
@@ -174,6 +220,24 @@ public class HomeView extends VerticalLayout {
     private void terminalbutton_action(ClickEvent ex){
         terminal_button.getUI().ifPresent(ui ->
                 ui.navigate("/terminal"));
+    }
+
+    /**
+     * Function for running command
+     * @param command
+     */
+    private void runCommand(String command){
+        terminalCache = terminalCache+"\n>"+terminalinput.getValue();
+        terminaloutput.setValue(terminalCache);
+        terminalinput.setValue("");
+    }
+
+    /**
+     * run_button action
+     * @param ex
+     */
+    private void runbutton_action(ClickEvent ex){
+        runCommand(terminalinput.getValue());
     }
 
 }

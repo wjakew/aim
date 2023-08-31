@@ -63,8 +63,8 @@ public class WelcomeView extends VerticalLayout {
         });
 
         Image logo = new Image(res,"aim logo");
-        logo.setHeight("512px");
-        logo.setWidth("512px");
+        logo.setHeight("15rem");
+        logo.setWidth("15rem");
 
         logo.addClickListener(e -> {
             LoginWindow lw = new LoginWindow();

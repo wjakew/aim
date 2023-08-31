@@ -3,10 +3,9 @@
  * all rights reserved
  * kubawawak@gmail.com
  */
-package pl.jakubwawak.aim.website_ui.views;
+package pl.jakubwawak.aim.website_ui;
 
 import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -28,9 +27,9 @@ import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
 /**
  * Object for showing welcome view
  */
-@PageTitle("aim home")
-@Route(value = "home")
-public class HomeView extends VerticalLayout {
+@PageTitle("aim template")
+@Route(value = "template")
+public class TemplateView extends VerticalLayout {
 
     HorizontalLayout headerLayout;
     Button home_button, terminal_button, addelement_button,logout_button,user_button;
@@ -39,7 +38,7 @@ public class HomeView extends VerticalLayout {
     /**
      * Constructor
      */
-    public HomeView(){
+    public TemplateView(){
         this.getElement().setAttribute("theme", Lumo.DARK);
         prepare_view();
 

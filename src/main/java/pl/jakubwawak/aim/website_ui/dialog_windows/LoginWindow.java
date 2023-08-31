@@ -32,8 +32,8 @@ import java.awt.*;
 public class LoginWindow {
 
     // variables for setting x and y of window
-    public String width = "40%";
-    public String height = "40%";
+    public String width = "30rem";
+    public String height = "30rem";
     public String backgroundStyle = "";
 
     // main login components
@@ -43,7 +43,10 @@ public class LoginWindow {
     TextField login_field;
     PasswordField password_field;
 
-    Button login_button, createaccount_button;
+    Button login_button;
+    Button createaccount_button;
+
+    Button resetpassword_button;
 
     /**
      * Constructor
@@ -70,11 +73,17 @@ public class LoginWindow {
         password_field.setWidth("100%");
 
         login_button = new Button("Login",VaadinIcon.ARROW_RIGHT.create(),this::loginbutton_action);
-        createaccount_button = new Button("",VaadinIcon.PLUS.create(),this::createaccoutnbutton_action);
+        createaccount_button = new Button("Create Account",VaadinIcon.PLUS.create(),this::createaccoutnbutton_action);
+        resetpassword_button = new Button("Reset Password",VaadinIcon.LOCK.create());
 
         // styling buttons
-        new ButtonStyler().primaryButtonStyle(login_button,"80%"," 100%");
-        new ButtonStyler().primaryButtonStyle(createaccount_button,"10%","100%");
+        new ButtonStyler().primaryButtonStyle(login_button,"100%","");
+        new ButtonStyler().primaryButtonStyle(createaccount_button,"50%","");
+        new ButtonStyler().primaryButtonStyle(resetpassword_button,"50%","");
+        createaccount_button.getStyle().set("background-color","white");
+        createaccount_button.getStyle().set("color","#000000");
+        resetpassword_button.getStyle().set("background-color","white");
+        resetpassword_button.getStyle().set("color","#000000");
     }
 
     /**
@@ -88,30 +97,27 @@ public class LoginWindow {
             return WelcomeView.class.getClassLoader().getResourceAsStream("images/aim_logo.png");
         });
 
-        HorizontalLayout button_layout = new HorizontalLayout(createaccount_button,login_button);
-        button_layout.setWidth("100%");
+        Image logo = new Image(res,"aim logo");
+        logo.setHeight("5rem");
+        logo.setWidth("5rem");
 
         VerticalLayout vl = new VerticalLayout();
-        vl.add(login_field,password_field,button_layout);
+        HorizontalLayout options_layout = new HorizontalLayout(createaccount_button,resetpassword_button);
+        options_layout.setWidth("100%");
+        vl.add(login_field,password_field,login_button,options_layout);
         vl.setSizeFull();
         vl.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         vl.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
         vl.getStyle().set("text-align", "center");
 
-        Image logo = new Image(res,"aim logo");
-        logo.setHeight("70%");
-        logo.setWidth("70%");
-
         HorizontalLayout mainHL = new HorizontalLayout();
         mainHL.setSizeFull();
         mainHL.setAlignItems(FlexComponent.Alignment.CENTER);
 
-        mainHL.add(logo,vl);
+        mainHL.add(vl);
 
-        Span header = new Span("welcome to AIM");
-        header.getStyle().set("--lumo-font-family","Monospace");
-
-        main_layout.add(header,mainHL);
+        H6 header = new H6("welcome to AIM");
+        main_layout.add(header,logo,mainHL);
 
         main_layout.setSizeFull();
         main_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
