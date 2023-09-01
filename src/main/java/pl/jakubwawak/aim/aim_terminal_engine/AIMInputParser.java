@@ -1,4 +1,3 @@
-
 /**
  * by Jakub Wawak
  * all rights reserved
@@ -22,5 +21,20 @@ public class AIMInputParser {
      */
     public AIMInputParser(){
         userInputHistory = new ArrayList<>();
+    }
+
+    /**
+     * Function for setting userInput
+     * @param userInput
+     */
+    public void setUserInput(String userInput){
+        this.userInput = userInput;
+    }
+
+    /**
+     * Function for parsing user input
+     */
+    public void parse(){
+
     }
 }
