@@ -26,7 +26,6 @@ public class AIM_Task {
     public AIM_User aim_task_owner;
 
     public String status; // NEW, IN PROGRESS, DONE
-    public List<AIM_User> aim_task_members;
     public Date aim_task_timestamp;
     public Date aim_task_deadline;
 
@@ -41,7 +40,6 @@ public class AIM_Task {
         this.aim_task_desc = "";
         this.status = "NEW";
         this.aim_task_owner = AimApplication.loggedUser;
-        this.aim_task_members = new ArrayList<>();
         this.aim_task_history = new ArrayList<>();
         this.aim_task_timestamp = new Date();
         this.aim_task_deadline = new Date();
@@ -56,7 +54,6 @@ public class AIM_Task {
         this.aim_task_desc = task_document.getString("aim_task_desc");
         this.status = task_document.getString("status");
         this.aim_task_owner = task_document.get("aim_task_owner",AIM_User.class);
-        this.aim_task_members = task_document.getList("aim_task_members",AIM_User.class);
         this.aim_task_history = task_document.getList("aim_task_history",String.class);
         this.aim_task_timestamp = task_document.get("aim_task_timestamp",Date.class);
         this.aim_task_deadline = task_document.get("aim_task_deadline",Date.class);
@@ -71,7 +68,6 @@ public class AIM_Task {
         task_document.append("aim_task_desc",aim_task_desc);
         task_document.append("status",status);
         task_document.append("aim_task_owner",aim_task_owner);
-        task_document.append("aim_task_members",aim_task_members);
         task_document.append("aim_task_history",aim_task_history);
         task_document.append("aim_task_timestamp",aim_task_timestamp);
         task_document.append("aim_task_deadline",aim_task_deadline);
