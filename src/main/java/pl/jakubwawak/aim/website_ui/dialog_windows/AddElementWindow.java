@@ -5,12 +5,14 @@
  */
 package pl.jakubwawak.aim.website_ui.dialog_windows;
 
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.button.Button;
+import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.InsertTaskWindow;
 import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
 
 /**
@@ -44,13 +46,13 @@ public class AddElementWindow {
     void prepare_components(){
         // set components
         addboard_button = new Button("Add Board", VaadinIcon.PLUS.create());
-        new ButtonStyler().primaryButtonStyle(addboard_button,"100%","33%");
+        new ButtonStyler().primaryButtonStyle(addboard_button,"100%","");
 
         addproject_button = new Button("Add Project", VaadinIcon.PLUS.create());
-        new ButtonStyler().primaryButtonStyle(addproject_button,"100%","33%");
+        new ButtonStyler().primaryButtonStyle(addproject_button,"100%","");
 
-        addtask_button = new Button("Add Task", VaadinIcon.PLUS.create());
-        new ButtonStyler().primaryButtonStyle(addtask_button,"100%","33%");
+        addtask_button = new Button("Add Task", VaadinIcon.PLUS.create(),this::addtaskbutton_action);
+        new ButtonStyler().primaryButtonStyle(addtask_button,"100%","");
     }
 
     /**
@@ -73,5 +75,16 @@ public class AddElementWindow {
         main_layout.getStyle().set("--lumo-font-family","Monospace");
         main_dialog.add(main_layout);
         main_dialog.setWidth(width);main_dialog.setHeight(height);
+    }
+
+    /**
+     * addtask_button
+     * @param ex
+     */
+    private void addtaskbutton_action(ClickEvent ex){
+        InsertTaskWindow itw = new InsertTaskWindow(null);
+        main_layout.add(itw.main_dialog);
+        itw.main_dialog.open();
+        main_dialog.close();
     }
 }

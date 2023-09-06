@@ -153,4 +153,28 @@ public class Database_AIMTask {
             return -1;
         }
     }
+
+    /**
+     * Function for updating aim task data
+     * @param aimTaskUpdate
+     * @return Integer
+     */
+    public int updateAIMTask(AIM_Task aimTaskUpdate){
+        try{
+            MongoCollection<Document> task_collection = database.get_data_collection("aim_task");
+            Document currentTaskDocument = task_collection.find(new Document("_id",aimTaskUpdate.aim_task_id.toString())).first();
+            Bson updates = Updates.combine(
+                    Updates.set("aim_task_name",aimTaskUpdate.aim_task_name),
+                    Updates.set("aim_task_desc",aimTaskUpdate.aim_task_desc),
+                    Updates.set("aim_task_deadline",aimTaskUpdate.aim_task_deadline)
+            );
+            UpdateResult result = task_collection.updateOne(currentTaskDocument, updates);
+            database.log("DB-TASK-UPDATESTATUS","Updated task ("+aimTaskUpdate.aim_task_id.toString()+")");
+            // TODO need to add record to task history
+            return 1;
+        }catch(Exception ex){
+            database.log("DB-TASK-UPDATEFAILED","Failed to update task ("+ex.toString()+")");
+            return -1;
+        }
+    }
 }
