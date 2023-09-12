@@ -21,10 +21,8 @@ import com.vaadin.flow.server.StreamResource;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
 import pl.jakubwawak.aim.website_ui.views.WelcomeView;
-import pl.jakubwawak.database_engine.Database_AIMUser;
+import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMUser;
 import pl.jakubwawak.maintanance.Password_Validator;
-
-import java.awt.*;
 
 /**
  * Window for logging user to the app

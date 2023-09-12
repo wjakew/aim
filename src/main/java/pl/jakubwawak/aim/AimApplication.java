@@ -8,9 +8,9 @@ package pl.jakubwawak.aim;
 import com.vaadin.flow.spring.annotation.EnableVaadin;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import pl.jakubwawak.aim.aim_objects.AIM_GlobalConfiguration;
-import pl.jakubwawak.aim.aim_objects.AIM_User;
-import pl.jakubwawak.database_engine.Database_Connector;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_GlobalConfiguration;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_User;
+import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_Connector;
 import pl.jakubwawak.maintanance.ConsoleColors;
 
 import java.util.Scanner;
@@ -20,7 +20,7 @@ import java.util.Scanner;
 public class AimApplication {
 
 	public static String version = "v1.0.0";
-	public static String build = "aim060923REV01";
+	public static String build = "aim120923REV01";
 
 	public static int test_flag = 0; // flag for enabling testing
 	public static int log_database_dump_flag = 0; // flag for enabling database log dump

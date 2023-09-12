@@ -3,7 +3,7 @@
  * all rights reserved
  * kubawawak@gmail.com
  */
-package pl.jakubwawak.database_engine;
+package pl.jakubwawak.aim.aim_dataengine.database_engine;
 
 import com.mongodb.*;
 import com.mongodb.client.MongoClient;
@@ -17,8 +17,8 @@ import org.bson.BsonInt64;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import pl.jakubwawak.aim.AimApplication;
-import pl.jakubwawak.aim.aim_objects.AIM_ApplicationLog;
-import pl.jakubwawak.aim.aim_objects.AIM_GlobalConfiguration;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_ApplicationLog;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_GlobalConfiguration;
 import pl.jakubwawak.maintanance.ConsoleColors;
 
 import java.time.LocalDateTime;

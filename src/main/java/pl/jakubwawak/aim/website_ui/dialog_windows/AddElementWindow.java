@@ -10,6 +10,7 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.button.Button;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.InsertTaskWindow;
@@ -22,7 +23,7 @@ public class AddElementWindow {
 
     // variables for setting x and y of window
     public String width = "50%";
-    public String height = "50%";
+    public String height = "30%";
     public String backgroundStyle = "";
 
     // main login components
@@ -46,13 +47,13 @@ public class AddElementWindow {
     void prepare_components(){
         // set components
         addboard_button = new Button("Add Board", VaadinIcon.PLUS.create());
-        new ButtonStyler().primaryButtonStyle(addboard_button,"100%","");
+        new ButtonStyler().primaryButtonStyle(addboard_button,"200px","200px");
 
         addproject_button = new Button("Add Project", VaadinIcon.PLUS.create());
-        new ButtonStyler().primaryButtonStyle(addproject_button,"100%","");
+        new ButtonStyler().primaryButtonStyle(addproject_button,"200px","200px");
 
         addtask_button = new Button("Add Task", VaadinIcon.PLUS.create(),this::addtaskbutton_action);
-        new ButtonStyler().primaryButtonStyle(addtask_button,"100%","");
+        new ButtonStyler().primaryButtonStyle(addtask_button,"200px","200px");
     }
 
     /**
@@ -63,7 +64,13 @@ public class AddElementWindow {
         // set layout
         main_layout.add(new H6("Element creator"));
 
-        main_layout.add(addtask_button,addproject_button,addboard_button);
+        HorizontalLayout buttonLayout = new HorizontalLayout(addtask_button,addproject_button,addboard_button);
+
+        buttonLayout.setWidth("100");
+        buttonLayout.setMargin(true);
+        buttonLayout.setAlignItems(FlexComponent.Alignment.CENTER);
+
+        main_layout.add(buttonLayout);
 
         main_layout.setSizeFull();
         main_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);

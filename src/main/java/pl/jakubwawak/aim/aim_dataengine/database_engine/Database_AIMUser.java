@@ -3,14 +3,13 @@
  * all rights reserved
  * kubawawak@gmail.com
  */
-package pl.jakubwawak.database_engine;
+package pl.jakubwawak.aim.aim_dataengine.database_engine;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.model.Filters;
 import org.bson.Document;
 import pl.jakubwawak.aim.AimApplication;
-import pl.jakubwawak.aim.aim_objects.AIM_User;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_User;
 
 /**
  * Object for database

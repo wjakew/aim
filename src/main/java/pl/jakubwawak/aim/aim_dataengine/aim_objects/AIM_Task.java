@@ -3,7 +3,7 @@
  * all rights reserved
  * kubawawak@gmail.com
  */
-package pl.jakubwawak.aim.aim_objects;
+package pl.jakubwawak.aim.aim_dataengine.aim_objects;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -23,7 +23,7 @@ public class AIM_Task {
     public ObjectId aim_task_id;
     public String aim_task_name;
     public String aim_task_desc;
-    public AIM_User aim_task_owner;
+    public Document aim_task_owner;
 
     public String status; // NEW, IN PROGRESS, DONE
     public Date aim_task_timestamp;
@@ -39,7 +39,7 @@ public class AIM_Task {
         this.aim_task_name = "";
         this.aim_task_desc = "";
         this.status = "NEW";
-        this.aim_task_owner = AimApplication.loggedUser;
+        this.aim_task_owner = AimApplication.loggedUser.prepareDocument();
         this.aim_task_history = new ArrayList<>();
         this.aim_task_timestamp = new Date();
         this.aim_task_deadline = new Date();
@@ -53,7 +53,7 @@ public class AIM_Task {
         this.aim_task_name = task_document.getString("aim_task_name");
         this.aim_task_desc = task_document.getString("aim_task_desc");
         this.status = task_document.getString("status");
-        this.aim_task_owner = task_document.get("aim_task_owner",AIM_User.class);
+        this.aim_task_owner = task_document.get("aim_task_owner",Document.class);
         this.aim_task_history = task_document.getList("aim_task_history",String.class);
         this.aim_task_timestamp = task_document.get("aim_task_timestamp",Date.class);
         this.aim_task_deadline = task_document.get("aim_task_deadline",Date.class);
@@ -72,5 +72,13 @@ public class AIM_Task {
         task_document.append("aim_task_timestamp",aim_task_timestamp);
         task_document.append("aim_task_deadline",aim_task_deadline);
         return task_document;
+    }
+
+    /**
+     * Function for getting AIM_UserData
+     * @return AIM_User
+     */
+    public AIM_User getTaskOwner(){
+        return new AIM_User(aim_task_owner);
     }
 }

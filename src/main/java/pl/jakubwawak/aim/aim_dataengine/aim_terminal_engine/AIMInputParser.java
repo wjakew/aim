@@ -3,7 +3,7 @@
  * all rights reserved
  * kubawawak@gmail.com
  */
-package pl.jakubwawak.aim.aim_terminal_engine;
+package pl.jakubwawak.aim.aim_dataengine.aim_terminal_engine;
 
 import java.util.ArrayList;
 

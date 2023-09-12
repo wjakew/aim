@@ -16,9 +16,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import pl.jakubwawak.aim.AimApplication;
-import pl.jakubwawak.aim.aim_objects.AIM_User;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_User;
 import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
-import pl.jakubwawak.database_engine.Database_AIMUser;
+import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMUser;
 import pl.jakubwawak.maintanance.Password_Validator;
 
 import java.util.regex.Pattern;

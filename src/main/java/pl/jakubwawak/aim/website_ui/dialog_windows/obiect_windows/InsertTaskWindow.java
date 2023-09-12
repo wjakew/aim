@@ -15,16 +15,11 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.component.timepicker.TimePicker;
-import lombok.extern.java.Log;
 import pl.jakubwawak.aim.AimApplication;
-import pl.jakubwawak.aim.aim_objects.AIM_Task;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
 import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
-import pl.jakubwawak.database_engine.Database_AIMTask;
+import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
 
@@ -34,7 +29,7 @@ import java.util.Date;
 public class InsertTaskWindow {
 
     // variables for setting x and y of window
-    public String width = "50%";
+    public String width = "30%";
     public String height = "50%";
     public String backgroundStyle = "";
 

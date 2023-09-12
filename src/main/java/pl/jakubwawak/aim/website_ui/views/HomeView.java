@@ -21,6 +21,8 @@ import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.theme.lumo.Lumo;
 import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 import pl.jakubwawak.aim.AimApplication;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.CurrentTaskComposer;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.TaskColumnLayout;
 import pl.jakubwawak.aim.website_ui.dialog_windows.AddElementWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.UserWindow;
 import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
@@ -114,6 +116,10 @@ public class HomeView extends VerticalLayout {
             prepare_components();
             prepare_header();
             add(headerLayout);
+
+            // creating new task composer on main page
+            CurrentTaskComposer ctc = new CurrentTaskComposer();
+            add(ctc.mainLayout);
 
         }
         else{

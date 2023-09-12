@@ -5,8 +5,6 @@
  */
 package pl.jakubwawak.aim;
 
-import pl.jakubwawak.aim.aim_objects.AIM_ApplicationLog;
-
 /**
  * Object for testing application objects
  */

@@ -3,7 +3,7 @@
  * all rights reserved
  * kubawawak@gmail.com
  */
-package pl.jakubwawak.database_engine;
+package pl.jakubwawak.aim.aim_dataengine.database_engine;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -12,11 +12,10 @@ import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.conversions.Bson;
 import pl.jakubwawak.aim.AimApplication;
-import pl.jakubwawak.aim.aim_objects.AIM_Task;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_User;
 import org.bson.Document;
-import pl.jakubwawak.aim.aim_objects.AIM_User;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class Database_AIMTask {
             MongoCollection<Document> task_collection = database.get_data_collection("aim_task");
             FindIterable<Document> userTaskCollection = task_collection.find();
             for(Document task_document: userTaskCollection){
-                AIM_User aimUser = task_document.get("aim_task_owner",AIM_User.class);
+                AIM_User aimUser = new AIM_User(task_document.get("aim_task_owner",Document.class));
                 if ( aimUser.aim_user_email.equals(AimApplication.loggedUser.aim_user_email)){
                     data.add(new AIM_Task(task_document));
                 }
@@ -54,6 +53,54 @@ public class Database_AIMTask {
         }catch(Exception ex){
             database.log("DB-TASK-LOADCOLLECTION-FAILED","Failed to get user task collection ("+ex.toString()+")");
         }
+        return data;
+    }
+
+    /**
+     * Function for getting taskCollection
+     * @return ArrayList
+     */
+    public ArrayList<AIM_Task> getNewTaskCollection(){
+        ArrayList<AIM_Task> allUserTasks = getTaskCollection();
+        ArrayList<AIM_Task> data = new ArrayList<>();
+        for(AIM_Task task : allUserTasks){
+            if ( task.status.equals("NEW")){
+                data.add(task);
+            }
+        }
+        database.log("DB-LOAD-NEWTASKCOLLECTION","Loaded new "+data.size()+" tasks!");
+        return data;
+    }
+
+    /**
+     * Function for getting taskCollection
+     * @return ArrayList
+     */
+    public ArrayList<AIM_Task> getInProgressTaskCollection(){
+        ArrayList<AIM_Task> allUserTasks = getTaskCollection();
+        ArrayList<AIM_Task> data = new ArrayList<>();
+        for(AIM_Task task : allUserTasks){
+            if ( task.status.equals("IN PROGRESS")){
+                data.add(task);
+            }
+        }
+        database.log("DB-LOAD-INPROGRESSTASKCOLLECTION","Loaded new "+data.size()+" tasks!");
+        return data;
+    }
+
+    /**
+     * Function for getting taskCollection
+     * @return ArrayList
+     */
+    public ArrayList<AIM_Task> getDoneTaskCollection(){
+        ArrayList<AIM_Task> allUserTasks = getTaskCollection();
+        ArrayList<AIM_Task> data = new ArrayList<>();
+        for(AIM_Task task : allUserTasks){
+            if ( task.status.equals("DONE")){
+                data.add(task);
+            }
+        }
+        database.log("DB-LOAD-DONECOLLECTION","Loaded new "+data.size()+" tasks!");
         return data;
     }
 

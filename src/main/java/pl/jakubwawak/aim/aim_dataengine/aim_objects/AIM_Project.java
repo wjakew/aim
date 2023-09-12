@@ -3,7 +3,7 @@
  * all rights reserved
  * kubawawak@gmail.com
  */
-package pl.jakubwawak.aim.aim_objects;
+package pl.jakubwawak.aim.aim_dataengine.aim_objects;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
