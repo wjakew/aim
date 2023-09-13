@@ -5,13 +5,14 @@
  */
 package pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers;
 
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import pl.jakubwawak.aim.AimApplication;
-import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
-
-import java.util.ArrayList;
 
 /**
  * Object for creating current view of tasks
@@ -22,6 +23,8 @@ public class CurrentTaskComposer {
 
     public TaskColumnLayout newTaskColumn, inProgressTaskColumn, doneTaskColumn;
 
+
+
     /**
      * Constructor
      */
@@ -31,7 +34,6 @@ public class CurrentTaskComposer {
         newTaskColumn = new TaskColumnLayout(dat.getNewTaskCollection(),"black","NEW TASKS");
         inProgressTaskColumn = new TaskColumnLayout(dat.getInProgressTaskCollection(),"black","IN PROGRESS");
         doneTaskColumn = new TaskColumnLayout(dat.getDoneTaskCollection(),"black","DONE");
-
         prepareLayout();
     }
 
@@ -48,9 +50,20 @@ public class CurrentTaskComposer {
         mainLayout.getStyle().set("margin","75px");
         mainLayout.getStyle().set("background-color","gray");
         mainLayout.getStyle().set("--lumo-font-family","Monospace");
-
         mainLayout.add(newTaskColumn.columnLayout,inProgressTaskColumn.columnLayout,doneTaskColumn.columnLayout);
     }
 
+    /**
+     * Function for updating view
+     */
+    public void updateLayout(){
+        mainLayout.removeAll();
+        Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
+        newTaskColumn = new TaskColumnLayout(dat.getNewTaskCollection(),"black","NEW TASKS");
+        inProgressTaskColumn = new TaskColumnLayout(dat.getInProgressTaskCollection(),"black","IN PROGRESS");
+        doneTaskColumn = new TaskColumnLayout(dat.getDoneTaskCollection(),"black","DONE");
+        mainLayout.add(newTaskColumn.columnLayout,inProgressTaskColumn.columnLayout,doneTaskColumn.columnLayout);
+        Notification.show("Updated current view!");
+    }
 
 }

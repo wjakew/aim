@@ -16,6 +16,8 @@ import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_User;
 import org.bson.Document;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -142,13 +144,28 @@ public class Database_AIMTask {
     public int updateAIMTaskStatus(AIM_Task taskToUpdate, String newStatus){
         try{
             MongoCollection<Document> task_collection = database.get_data_collection("aim_task");
-            Bson updates = Updates.combine(
-                    Updates.set("status",newStatus)
-                    // TODO need to add record to task history
-            );
-            UpdateResult result = task_collection.updateOne(taskToUpdate.prepareDocument(), updates);
-            database.log("DB-TASK-UPDATESTATUS","Updated task ("+taskToUpdate.aim_task_id.toString()+"), set: "+newStatus);
-            return 1;
+            Document task_document = task_collection.find(new Document("_id",taskToUpdate.aim_task_id)).first();
+            if ( task_document != null ){
+                List<String> newHistory = taskToUpdate.aim_task_history;
+                newHistory.add(LocalDateTime.now(ZoneId.of("Europe/Warsaw"))+"-"+AimApplication.loggedUser.aim_user_email+" changed status to: "+newStatus);
+                Bson updates = Updates.combine(
+                        Updates.set("status",newStatus),
+                        Updates.set("aim_task_history",newHistory)
+                );
+                UpdateResult result = task_collection.updateOne(task_document, updates);
+                if ( result.getModifiedCount() >= 1){
+                    database.log("DB-TASK-UPDATESTATUS","Updated task ("+taskToUpdate.aim_task_id.toString()+"), set: "+newStatus);
+                    return 1;
+                }
+                else{
+                    database.log("DB-TASK-UPDATESTATUS","Update with no changes! ("+taskToUpdate.aim_task_id.toString()+") - (code:"+result.getModifiedCount()+")");
+                    return 0;
+                }
+            }
+            else{
+                database.log("DB-TASK-UPDATESTATUS","Cannot find task with _id ("+taskToUpdate.aim_task_id.toString()+")");
+                return -1;
+            }
         }catch(Exception ex){
             database.log("DB-TASK-UPDATEFAILED","Failed to update task ("+ex.toString()+")");
             return -1;

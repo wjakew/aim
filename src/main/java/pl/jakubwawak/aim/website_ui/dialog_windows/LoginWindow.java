@@ -6,6 +6,7 @@
 package pl.jakubwawak.aim.website_ui.dialog_windows;
 
 import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.*;
@@ -30,7 +31,7 @@ import pl.jakubwawak.maintanance.Password_Validator;
 public class LoginWindow {
 
     // variables for setting x and y of window
-    public String width = "30rem";
+    public String width = "35rem";
     public String height = "30rem";
     public String backgroundStyle = "";
 
@@ -127,6 +128,10 @@ public class LoginWindow {
         main_layout.getStyle().set("--lumo-font-family","Monospace");
         main_dialog.add(main_layout);
         main_dialog.setWidth(width);main_dialog.setHeight(height);
+
+        password_field.addKeyPressListener(Key.ENTER, e->{
+            login();
+        });
     }
 
     /**
@@ -145,6 +150,10 @@ public class LoginWindow {
      * @param ex
      */
     private void loginbutton_action(ClickEvent ex){
+        login();
+    }
+
+    void login(){
         if (!login_field.getValue().isEmpty() && !password_field.getValue().isEmpty()){
             // try to login
             try {
@@ -158,6 +167,7 @@ public class LoginWindow {
                             ui.navigate("/home"));
                 }
                 else if ( ans == 0 ){
+                    login_field.setValue("");password_field.setValue("");
                     Notification.show("Wrong login or password!");
                 }
                 else{
@@ -166,6 +176,9 @@ public class LoginWindow {
             }catch(Exception e){
                 Notification.show("Error: "+e.toString());
             }
+        }
+        else{
+            Notification.show("Empty user input");
         }
     }
 }

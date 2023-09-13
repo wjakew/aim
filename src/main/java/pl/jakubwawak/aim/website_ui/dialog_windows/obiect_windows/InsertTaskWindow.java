@@ -6,6 +6,7 @@
 package pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows;
 
 import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -20,6 +21,8 @@ import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
 import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
@@ -120,30 +123,52 @@ public class InsertTaskWindow {
     }
 
     /**
+     * Function for validating window components
+     * @return boolean
+     */
+    boolean validateWindow(){
+        try{
+            LocalDate date = taskdeadline_picker.getValue();
+            return !taskname_field.getValue().isEmpty() && !taskdesc_field.isEmpty() && date.isAfter(LocalDate.now());
+        }catch(Exception ex){
+            return false;
+        }
+    }
+
+    /**
      * addtask_button action
      * @param ex
      */
     private void addtaskbutton_action(ClickEvent ex){
-        Database_AIMTask dait = new Database_AIMTask(AimApplication.database);
-        if ( addtask_button.getText().equals("Update Task")){
-            int ans = dait.updateAIMTask(loadTaskObject());
-            if (ans == 1){
-                Notification.show("Task updated!");
-                main_dialog.close();
+        if (validateWindow()){
+            Database_AIMTask dait = new Database_AIMTask(AimApplication.database);
+            if ( addtask_button.getText().equals("Update Task")){
+                int ans = dait.updateAIMTask(loadTaskObject());
+                if (ans == 1){
+                    Notification.show("Task updated!");
+                    AimApplication.session_ctc.updateLayout();
+                    main_dialog.close();
+
+                }
+                else{
+                    Notification.show("Error updating task, check log!");
+                }
             }
             else{
-                Notification.show("Error updating task, check log!");
+                int ans = dait.insertAIMTask(loadTaskObject());
+                if ( ans == 1 ){
+                    Notification.show("Task added!");
+                    AimApplication.session_ctc.updateLayout();
+                    main_dialog.close();
+                }
+                else{
+                    Notification.show("Error updating task, check log!");
+                }
             }
         }
         else{
-            int ans = dait.insertAIMTask(loadTaskObject());
-            if ( ans == 1 ){
-                Notification.show("Task added!");
-                main_dialog.close();
-            }
-            else{
-                Notification.show("Error updating task, check log!");
-            }
+            Notification.show("Wrong user input. Check window!");
         }
+
     }
 }

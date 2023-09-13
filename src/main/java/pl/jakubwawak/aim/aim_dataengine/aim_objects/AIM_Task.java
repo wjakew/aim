@@ -9,8 +9,6 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import pl.jakubwawak.aim.AimApplication;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -49,7 +47,7 @@ public class AIM_Task {
      * Constructor with database support
      */
     public AIM_Task(Document task_document) {
-        this.aim_task_id = task_document.getObjectId("aim_task_id");
+        this.aim_task_id = task_document.getObjectId("_id");
         this.aim_task_name = task_document.getString("aim_task_name");
         this.aim_task_desc = task_document.getString("aim_task_desc");
         this.status = task_document.getString("status");

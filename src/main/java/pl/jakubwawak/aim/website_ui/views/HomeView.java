@@ -38,6 +38,7 @@ public class HomeView extends VerticalLayout {
     Button home_button, terminal_button, addelement_button,logout_button,user_button;
 
 
+
     /**
      * Constructor
      */
@@ -106,6 +107,7 @@ public class HomeView extends VerticalLayout {
 
         logout_button = new Button("Log out",VaadinIcon.EXIT.create(),this::logoutbutton_action);
         new ButtonStyler().primaryButtonStyle(logout_button,"80%","");
+
     }
 
     /**
@@ -118,8 +120,8 @@ public class HomeView extends VerticalLayout {
             add(headerLayout);
 
             // creating new task composer on main page
-            CurrentTaskComposer ctc = new CurrentTaskComposer();
-            add(ctc.mainLayout);
+            AimApplication.session_ctc = new CurrentTaskComposer();
+            add(AimApplication.session_ctc.mainLayout);
 
         }
         else{

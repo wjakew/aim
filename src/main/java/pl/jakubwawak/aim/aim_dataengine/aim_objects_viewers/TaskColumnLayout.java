@@ -5,9 +5,11 @@
  */
 package pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers;
 
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -43,8 +45,8 @@ public class TaskColumnLayout {
         this.header = header;
         currentPageNumber = 0;
 
-        previous_button = new Button("", VaadinIcon.ARROW_LEFT.create());
-        next_button = new Button("",VaadinIcon.ARROW_RIGHT.create());
+        previous_button = new Button("", VaadinIcon.ARROW_LEFT.create(),this::previousbutton_action);
+        next_button = new Button("",VaadinIcon.ARROW_RIGHT.create(),this::nextbutton_action);
 
         prepareLayout();
     }
@@ -88,8 +90,13 @@ public class TaskColumnLayout {
                 flag = 1;
             }
         }
-        if ( flag != 1)
+        if ( flag != 1) {
             taskContent.add(tcp);
+            tcp = new TaskColumnPage(99);
+        }
+        if ( !tcp.isEmpty() ){
+            taskContent.add(tcp);
+        }
     }
 
     void addTaskLayout(AIM_TaskLayout taskLayout){
@@ -112,12 +119,18 @@ public class TaskColumnLayout {
                 addTaskLayout(currentTCP.taskObject2);
                 addTaskLayout(currentTCP.taskObject3);
                 addTaskLayout(currentTCP.taskObject4);
-                columnLayout.add(new HorizontalLayout(previous_button,new H6(pageNumber+"/"+taskContent.size()),next_button));
+                columnLayout.add(new HorizontalLayout(previous_button,new H6(pageNumber+1 + "/"+taskContent.size()),next_button));
 
                 if ( pageNumber == 0 ){
                     previous_button.setEnabled(false);
                 }
-                if (pageNumber == taskContent.size()-1){
+                else{
+                    previous_button.setEnabled(true);
+                }
+                if (pageNumber < taskContent.size()-1){
+                    next_button.setEnabled(true);
+                }
+                else{
                     next_button.setEnabled(false);
                 }
             }
@@ -128,6 +141,29 @@ public class TaskColumnLayout {
         else{
             columnLayout.add(new H6("No tasks!"));
         }
+    }
 
+    /**
+     * Function for updating layout
+     */
+    public void update(ArrayList<AIM_Task> newTaskCollection){
+        this.taskCollection.clear();
+        this.taskCollection.addAll(newTaskCollection);
+        reloadTaskContent();
+        loadPage(0);
+    }
+
+    /**
+     * next_button action
+     * @param ex
+     */
+    private void nextbutton_action(ClickEvent ex){
+        currentPageNumber++;
+        loadPage(currentPageNumber);
+    }
+
+    private  void previousbutton_action(ClickEvent ex){
+        currentPageNumber--;
+        loadPage(currentPageNumber);
     }
 }
