@@ -19,6 +19,7 @@ import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
+import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.DetailsTaskWindow;
 import pl.jakubwawak.maintanance.GridElement;
 
 /**
@@ -55,7 +56,7 @@ public class AIM_TaskLayout {
         changestatus_button.getStyle().set("background-color","grey");
         changestatus_button.getStyle().set("color","white");
 
-        showDetails_button = new Button("", VaadinIcon.INFO_CIRCLE.create());
+        showDetails_button = new Button("", VaadinIcon.INFO_CIRCLE.create(),this::showdetailsbutton_action);
         showDetails_button.getStyle().set("background-color","grey");
         showDetails_button.getStyle().set("color","white");
 
@@ -125,5 +126,15 @@ public class AIM_TaskLayout {
             Notification.show("("+taskObject.aim_task_id.toString()+") set to: "+newStatus);
             AimApplication.session_ctc.updateLayout();
         }
+    }
+
+    /**
+     * showdetails_button action
+     * @param ex
+     */
+    private void showdetailsbutton_action(ClickEvent ex){
+        DetailsTaskWindow dtw = new DetailsTaskWindow(taskObject);
+        main_layout.add(dtw.main_dialog);
+        dtw.main_dialog.open();
     }
 }

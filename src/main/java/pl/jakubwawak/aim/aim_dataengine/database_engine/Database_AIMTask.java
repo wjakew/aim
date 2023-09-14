@@ -235,6 +235,7 @@ public class Database_AIMTask {
             UpdateResult result = task_collection.updateOne(currentTaskDocument, updates);
             database.log("DB-TASK-UPDATESTATUS","Updated task ("+aimTaskUpdate.aim_task_id.toString()+")");
             // TODO need to add record to task history
+            // TODO error when updating NullPointerException: Cannot invoke "org.bson.types.ObjectId.toString()" because "aimTaskUpdate.aim_task_id" is null
             return 1;
         }catch(Exception ex){
             database.log("DB-TASK-UPDATEFAILED","Failed to update task ("+ex.toString()+")");
