@@ -226,20 +226,46 @@ public class Database_AIMTask {
     public int updateAIMTask(AIM_Task aimTaskUpdate){
         try{
             MongoCollection<Document> task_collection = database.get_data_collection("aim_task");
-            Document currentTaskDocument = task_collection.find(new Document("_id",aimTaskUpdate.aim_task_id.toString())).first();
+            Document currentTaskDocument = task_collection.find(new Document("_id",aimTaskUpdate.aim_task_id)).first();
+            List<String> taskHistory = aimTaskUpdate.aim_task_history;
+            taskHistory.add(LocalDateTime.now(ZoneId.of("Europe/Warsaw"))+"-"+AimApplication.loggedUser.aim_user_email+" updated the task");
             Bson updates = Updates.combine(
                     Updates.set("aim_task_name",aimTaskUpdate.aim_task_name),
                     Updates.set("aim_task_desc",aimTaskUpdate.aim_task_desc),
-                    Updates.set("aim_task_deadline",aimTaskUpdate.aim_task_deadline)
+                    Updates.set("aim_task_deadline",aimTaskUpdate.aim_task_deadline),
+                    Updates.set("aim_task_history",taskHistory)
             );
             UpdateResult result = task_collection.updateOne(currentTaskDocument, updates);
-            database.log("DB-TASK-UPDATESTATUS","Updated task ("+aimTaskUpdate.aim_task_id.toString()+")");
-            // TODO need to add record to task history
-            // TODO error when updating NullPointerException: Cannot invoke "org.bson.types.ObjectId.toString()" because "aimTaskUpdate.aim_task_id" is null
+            database.log("DB-TASK-UPDATESTATUS","Updated task ("+currentTaskDocument.getObjectId("_id").toString()+")");
             return 1;
         }catch(Exception ex){
             database.log("DB-TASK-UPDATEFAILED","Failed to update task ("+ex.toString()+")");
             return -1;
         }
+    }
+
+    /**
+     * Function for changing owner
+     * @param aimTaskUpdate
+     * @param ownerEmail
+     * @return
+     */
+    public int changeOwnerAIMTask(AIM_Task aimTaskUpdate, String ownerEmail){
+        Database_AIMUser daiu = new Database_AIMUser(AimApplication.database);
+        if ( daiu.checkIfUserExists(ownerEmail) ){
+            MongoCollection<Document> task_collection = database.get_data_collection("aim_task");
+            Document currentTaskDocument = task_collection.find(new Document("_id",aimTaskUpdate.aim_task_id)).first();
+            List<String> taskHistory = aimTaskUpdate.aim_task_history;
+            taskHistory.add(LocalDateTime.now(ZoneId.of("Europe/Warsaw"))+"- Changed owner to "+ownerEmail);
+            Bson updates = Updates.combine(
+                    Updates.set("aim_task_owner",daiu.getAIMUser(ownerEmail).prepareDocument()),
+                    Updates.set("aim_task_history",taskHistory)
+            );
+            UpdateResult result = task_collection.updateOne(currentTaskDocument, updates);
+            database.log("DB-TASK-OWN-CHANGE","Changed task owner ("+ownerEmail+")");
+            return 1;
+        }
+        else
+            return 0;
     }
 }

@@ -23,9 +23,11 @@ import lombok.extern.java.Log;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
+import pl.jakubwawak.aim.website_ui.dialog_windows.MessageComponent;
 import pl.jakubwawak.maintanance.GridElement;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 /**
  * Window for logging user to the app
@@ -34,7 +36,7 @@ public class DetailsTaskWindow {
 
     // variables for setting x and y of window
     public String width = "50%";
-    public String height = "60%";
+    public String height = "70%";
     public String backgroundStyle = "";
 
     // main login components
@@ -103,13 +105,33 @@ public class DetailsTaskWindow {
         update_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_CONTRAST);
         update_button.setWidth("100%");
 
-        changeowner_button = new Button("Change Owner", VaadinIcon.USER.create());
+        changeowner_button = new Button("Change Owner", VaadinIcon.USER.create(),this::changeowner_button);
         changeowner_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_CONTRAST);
         changeowner_button.setWidth("100%");
 
         delete_button = new Button("Remove Task", VaadinIcon.TRASH.create(),this::deletebutton_action);
         delete_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_ERROR);
         delete_button.setWidth("100%");
+
+        status_combobox.addValueChangeListener(e->{
+            String newStatus = status_combobox.getValue().getGridelement_text();
+            Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
+            int ans = dat.updateAIMTaskStatus(taskObject,newStatus);
+            if (ans > 0){
+                Notification.show("Task status updated");
+                AimApplication.session_ctc.updateLayout();
+            }
+        });
+
+        history_grid.addSelectionListener(e->{
+            Set<GridElement> selected = history_grid.getSelectedItems();
+            for(GridElement element : selected){
+                MessageComponent mc = new MessageComponent(element.getGridelement_text());
+                main_layout.add(mc.main_dialog);
+                mc.main_dialog.open();
+                break;
+            }
+        });
 
     }
 
@@ -162,6 +184,18 @@ public class DetailsTaskWindow {
         main_layout.getStyle().set("--lumo-font-family","Monospace");
         main_dialog.add(main_layout);
         main_dialog.setWidth(width);main_dialog.setHeight(height);
+        main_dialog.setResizable(true);
+    }
+
+    /**
+     * changeowner_button action
+     * @param ex
+     */
+    private void changeowner_button(ClickEvent ex){
+        ChangeTaskOwnerWindow ctow = new ChangeTaskOwnerWindow(taskObject);
+        main_layout.add(ctow.main_dialog);
+        ctow.main_dialog.open();
+        main_dialog.close();
     }
 
     /**

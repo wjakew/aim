@@ -77,7 +77,7 @@ public class InsertTaskWindow {
             addtask_button.setText("Update Task");
             taskname_field.setValue(taskToUpdate.aim_task_name);
             taskdesc_field.setValue(taskToUpdate.aim_task_desc);
-            taskdeadline_picker.setValue(taskToUpdate.aim_task_timestamp.toInstant()
+            taskdeadline_picker.setValue(taskToUpdate.aim_task_deadline.toInstant()
                     .atZone(ZoneId.systemDefault())
                     .toLocalDate());
         }
@@ -114,6 +114,9 @@ public class InsertTaskWindow {
      */
     AIM_Task loadTaskObject(){
         AIM_Task aimTask = new AIM_Task();
+        if ( taskToUpdate!= null ){
+            aimTask.aim_task_id = taskToUpdate.aim_task_id;
+        }
         aimTask.aim_task_name = taskname_field.getValue();
         aimTask.aim_task_desc = taskdesc_field.getValue();
         aimTask.aim_task_deadline = Date.from(taskdeadline_picker.getValue().atStartOfDay()

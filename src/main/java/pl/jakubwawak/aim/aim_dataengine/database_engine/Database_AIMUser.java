@@ -9,6 +9,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 import pl.jakubwawak.aim.AimApplication;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_User;
 
 /**
@@ -30,7 +31,7 @@ public class Database_AIMUser {
      * @param email
      * @return boolean
      */
-    boolean checkIfUserExists(String email){
+    public boolean checkIfUserExists(String email){
         try{
             MongoCollection<Document> user_collection = database.get_data_collection("aim_user");
             long amount = user_collection.countDocuments(new Document("aim_user_email",email));
@@ -39,6 +40,27 @@ public class Database_AIMUser {
         }catch(Exception ex){
             database.log("DB-AIMUSER-CHECKMAIL-FAILED","Failed to check if user exists with that email ("+ex.toString()+")");
             return false;
+        }
+    }
+
+    /**
+     * Function for getting AIM_User from database
+     * @param email
+     * @return AIM_User
+     */
+    public AIM_User getAIMUser(String email){
+        try{
+            MongoCollection<Document> user_collection = database.get_data_collection("aim_user");
+            Document user_document = user_collection.find(new Document("aim_user_email",email)).first();
+            if ( user_document != null ){
+                database.log("DB-AIMUSER-GET","Found user with email: "+email);
+                return new AIM_User(user_document);
+            }
+            database.log("DB-AIMUSER-GET","Cannot find user with email: "+email);
+            return null;
+        }catch(Exception ex){
+            database.log("DB-AIMUSER-GET-FAILED","Failed to get user with that email ("+ex.toString()+")");
+            return null;
         }
     }
 

@@ -8,6 +8,7 @@ package pl.jakubwawak.aim.website_ui.views;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -34,8 +35,10 @@ import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
 @Route(value = "home")
 public class HomeView extends VerticalLayout {
 
-    HorizontalLayout headerLayout;
+    HorizontalLayout headerLayout, navigationLayout;
     Button home_button, terminal_button, addelement_button,logout_button,user_button;
+
+    Button taskview_button, projectview_button, boardview_button;
 
 
 
@@ -45,7 +48,6 @@ public class HomeView extends VerticalLayout {
     public HomeView(){
         this.getElement().setAttribute("theme", Lumo.DARK);
         prepare_view();
-
         setSizeFull();
         setJustifyContentMode(JustifyContentMode.CENTER);
         setDefaultHorizontalComponentAlignment(Alignment.CENTER);
@@ -91,6 +93,52 @@ public class HomeView extends VerticalLayout {
     }
 
     /**
+     * Function for preparing navigation bar
+     */
+    void prepareNavigationBar(){
+        taskview_button = new Button("Tasks",VaadinIcon.TASKS.create(),this::taskviewbutton_action);
+        projectview_button = new Button("Projects",VaadinIcon.BOOK.create(),this::projectviewbutton_action);
+        boardview_button = new Button("Boards", VaadinIcon.DASHBOARD.create(),this::boardviewbutton_action);
+
+        taskview_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_CONTRAST);
+        projectview_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_CONTRAST);
+        boardview_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_CONTRAST);
+
+        navigationLayout = new HorizontalLayout(taskview_button,projectview_button,boardview_button);
+        navigationLayout.setMargin(true);
+        navigationLayout.setAlignItems(Alignment.CENTER);
+    }
+
+    /**
+     * Function for loading main page component
+     */
+    void loadMainPageComponent(int viewIndex){
+        removeAll();
+        prepare_components();
+        prepare_header();
+        prepareNavigationBar();
+
+        add(headerLayout);
+        add(navigationLayout);
+
+        switch(viewIndex){
+            case 0: {
+                // task component
+                // creating new task composer on main page
+                AimApplication.session_ctc = new CurrentTaskComposer();
+                add(AimApplication.session_ctc.mainLayout);
+                Notification.show("Reload page view - tasks");
+                break;
+            }
+            default:{
+                add(new H6("VIEW ENGINE ERROR, WRONG ARGUMENT"));
+                Notification.show("Wrong argument, cannot reload page ("+viewIndex+")");
+                break;
+            }
+        }
+    }
+
+    /**
      * Function for preparing components
      */
     void prepare_components(){
@@ -115,14 +163,8 @@ public class HomeView extends VerticalLayout {
      */
     void prepare_view(){
         if (AimApplication.loggedUser != null){
-            prepare_components();
-            prepare_header();
-            add(headerLayout);
-
-            // creating new task composer on main page
-            AimApplication.session_ctc = new CurrentTaskComposer();
-            add(AimApplication.session_ctc.mainLayout);
-
+            // loading selected object on main page
+            loadMainPageComponent(0);
         }
         else{
             // user not logged
@@ -133,6 +175,22 @@ public class HomeView extends VerticalLayout {
     }
 
     //--button action functions
+
+    /**
+     * taskview_button action
+     * @param ex
+     */
+    private void taskviewbutton_action(ClickEvent ex){
+        loadMainPageComponent(0);
+    }
+
+    private void projectviewbutton_action(ClickEvent ex){
+        loadMainPageComponent(1);
+    }
+
+    private void boardviewbutton_action(ClickEvent ex){
+        loadMainPageComponent(2);
+    }
 
     /**
      * home_button action
