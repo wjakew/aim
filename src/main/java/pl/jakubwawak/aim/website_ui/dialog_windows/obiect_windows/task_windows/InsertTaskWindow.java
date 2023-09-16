@@ -3,7 +3,7 @@
  * kubawawak@gmail.com
  * all rights reserved
  */
-package pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows;
+package pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.task_windows;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.UI;

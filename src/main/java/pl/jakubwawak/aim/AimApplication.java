@@ -10,7 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_GlobalConfiguration;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_User;
-import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.CurrentTaskComposer;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task.CurrentTaskComposer;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_Connector;
 import pl.jakubwawak.maintanance.ConsoleColors;
 

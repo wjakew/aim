@@ -211,6 +211,7 @@ public class Database_AIMTask {
         try{
             MongoCollection<Document> task_collection = database.get_data_collection("aim_task");
             task_collection.insertOne(newaimTask.prepareDocument());
+            database.log("DB-AIM-TASK-INSERT","New task inserted for "+newaimTask.aim_task_owner.getString("aim_user_email"));
             return 1;
         }catch(Exception ex){
             database.log("DB-AIM-TASK-INSERT","Failed to insert task on database ("+ex.toString()+")");

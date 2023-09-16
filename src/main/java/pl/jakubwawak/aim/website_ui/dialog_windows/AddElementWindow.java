@@ -13,7 +13,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.button.Button;
-import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.InsertTaskWindow;
+import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.task_windows.InsertTaskWindow;
 import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
 
 /**

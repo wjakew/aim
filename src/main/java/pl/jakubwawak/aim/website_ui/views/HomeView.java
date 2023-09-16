@@ -6,7 +6,6 @@
 package pl.jakubwawak.aim.website_ui.views;
 
 import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H6;
@@ -18,12 +17,9 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.theme.lumo.Lumo;
-import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 import pl.jakubwawak.aim.AimApplication;
-import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.CurrentTaskComposer;
-import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.TaskColumnLayout;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task.CurrentTaskComposer;
 import pl.jakubwawak.aim.website_ui.dialog_windows.AddElementWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.UserWindow;
 import pl.jakubwawak.aim.website_ui.style.ButtonStyler;

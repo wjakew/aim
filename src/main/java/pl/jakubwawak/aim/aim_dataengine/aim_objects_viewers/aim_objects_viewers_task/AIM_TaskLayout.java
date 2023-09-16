@@ -3,11 +3,10 @@
  * kubawawak@gmail.com
  * all rights reserved
  */
-package pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers;
+package pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -15,12 +14,10 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
-import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.DetailsTaskWindow;
-import pl.jakubwawak.maintanance.GridElement;
+import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.task_windows.DetailsTaskWindow;
 
 /**
  * Object for creating layout for presenting AIM_Task data

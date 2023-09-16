@@ -5,7 +5,7 @@
  */
 package pl.jakubwawak.aim;
 
-import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.TaskColumnLayout;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task.TaskColumnLayout;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMUser;
 import pl.jakubwawak.maintanance.Password_Validator;

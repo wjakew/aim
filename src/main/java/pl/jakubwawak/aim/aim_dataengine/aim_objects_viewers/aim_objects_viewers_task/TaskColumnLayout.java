@@ -3,17 +3,15 @@
  * kubawawak@gmail.com
  * all rights reserved
  */
-package pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers;
+package pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
 
 import java.util.ArrayList;

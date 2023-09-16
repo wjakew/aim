@@ -3,7 +3,7 @@
  * kubawawak@gmail.com
  * all rights reserved
  */
-package pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers;
+package pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task;
 
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
 

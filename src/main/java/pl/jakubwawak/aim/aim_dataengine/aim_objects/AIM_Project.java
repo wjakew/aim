@@ -21,10 +21,12 @@ public class AIM_Project {
 
     public String aim_project_name;
     public String aim_project_desc;
-    public AIM_User aim_owner;
-    public List<AIM_Task> task_list;
+    public Document aim_owner;
+    public List<Document> task_list;
 
     public List<String> project_history;
+
+    public List<Document> project_members;
 
     /**
      * Constructor
@@ -33,9 +35,10 @@ public class AIM_Project {
         this.aim_project_id = null;
         this.aim_project_name = "";
         this.aim_project_desc = "";
-        this.aim_owner = AimApplication.loggedUser;
+        this.aim_owner = AimApplication.loggedUser.prepareDocument();
         this.task_list = new ArrayList<>();
         this.project_history = new ArrayList<>();
+        this.project_members = new ArrayList<>();
     }
 
     /**
@@ -45,9 +48,10 @@ public class AIM_Project {
         this.aim_project_id = project_document.getObjectId("_id");
         this.aim_project_name = project_document.getString("aim_project_name");
         this.aim_project_desc = project_document.getString("aim_project_desc");
-        this.aim_owner = project_document.get("aim_owner",AIM_User.class);
-        this.task_list = project_document.getList("task_list", AIM_Task.class);
+        this.aim_owner = project_document.get("aim_owner",Document.class);
+        this.task_list = project_document.getList("task_list", Document.class);
         this.project_history = project_document.getList("project_history",String.class);
+        this.project_members = project_document.getList("project_members",Document.class);
     }
 
     /**
@@ -61,6 +65,7 @@ public class AIM_Project {
         project_document.append("aim_owner",aim_owner);
         project_document.append("task_list",task_list);
         project_document.append("project_history",project_history);
+        project_document.append("project_members",project_members);
         return project_document;
     }
 }
