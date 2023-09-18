@@ -5,6 +5,7 @@
  */
 package pl.jakubwawak.aim.aim_dataengine.database_engine;
 
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
@@ -16,6 +17,7 @@ import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,6 +33,25 @@ public class Database_AIMProject {
      */
     public Database_AIMProject(Database_Connector database){
         this.database = database;
+    }
+
+    /**
+     * Function for loading AIM_Project collection of logged user
+     * @return ArrayList
+     */
+    public ArrayList<AIM_Project> getUserProjects(){
+        ArrayList<AIM_Project> data = new ArrayList<>();
+        try{
+            MongoCollection<Document> project_collection = database.get_data_collection("aim_project");
+            FindIterable<Document> project_documents = project_collection.find(new Document("aim_owner",AimApplication.loggedUser.prepareDocument()));
+            for(Document project_document : project_documents){
+                data.add(new AIM_Project(project_document));
+            }
+            database.log("DB-PROJECT-LIST","Loaded "+data.size()+" projects for "+AimApplication.loggedUser.aim_user_email);
+        }catch(Exception ex){
+            database.log("DB-PROJECT-GET-LIST-FAILED","Failed to get projects list ("+ex.toString()+")");
+        }
+        return data;
     }
 
     /**

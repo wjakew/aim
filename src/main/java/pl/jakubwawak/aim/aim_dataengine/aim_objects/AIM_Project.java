@@ -68,4 +68,16 @@ public class AIM_Project {
         project_document.append("project_members",project_members);
         return project_document;
     }
+
+    /**
+     * Function for loading tasks from documents
+     * @return ArrayList
+     */
+    public ArrayList<AIM_Task> getTaskCollection(){
+        ArrayList<AIM_Task> data = new ArrayList<>();
+        for(Document taskDocument : task_list){
+            data.add(new AIM_Task(taskDocument));
+        }
+        return data;
+    }
 }

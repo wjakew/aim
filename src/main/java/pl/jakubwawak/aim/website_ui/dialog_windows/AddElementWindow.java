@@ -13,6 +13,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.button.Button;
+import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.project_windows.InsertProjectWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.task_windows.InsertTaskWindow;
 import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
 
@@ -22,8 +23,8 @@ import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
 public class AddElementWindow {
 
     // variables for setting x and y of window
-    public String width = "50%";
-    public String height = "30%";
+    public String width = "80%";
+    public String height = "60%";
     public String backgroundStyle = "";
 
     // main login components
@@ -49,7 +50,7 @@ public class AddElementWindow {
         addboard_button = new Button("Add Board", VaadinIcon.PLUS.create());
         new ButtonStyler().primaryButtonStyle(addboard_button,"200px","200px");
 
-        addproject_button = new Button("Add Project", VaadinIcon.PLUS.create());
+        addproject_button = new Button("Add Project", VaadinIcon.PLUS.create(),this::addprojectbutton_action);
         new ButtonStyler().primaryButtonStyle(addproject_button,"200px","200px");
 
         addtask_button = new Button("Add Task", VaadinIcon.PLUS.create(),this::addtaskbutton_action);
@@ -92,6 +93,17 @@ public class AddElementWindow {
         InsertTaskWindow itw = new InsertTaskWindow(null);
         main_layout.add(itw.main_dialog);
         itw.main_dialog.open();
+        main_dialog.close();
+    }
+
+    /**
+     * paddproject_button
+     * @param ex
+     */
+    private void addprojectbutton_action(ClickEvent ex){
+        InsertProjectWindow ipw = new InsertProjectWindow(null);
+        main_layout.add(ipw.main_dialog);
+        ipw.main_dialog.open();
         main_dialog.close();
     }
 }

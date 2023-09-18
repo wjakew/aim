@@ -60,7 +60,7 @@ public class CurrentTaskComposer {
         inProgressTaskColumn = new TaskColumnLayout(dat.getInProgressTaskCollection(),"black","IN PROGRESS");
         doneTaskColumn = new TaskColumnLayout(dat.getDoneTaskCollection(),"black","DONE");
         mainLayout.add(newTaskColumn.columnLayout,inProgressTaskColumn.columnLayout,doneTaskColumn.columnLayout);
-        Notification.show("Updated current view!");
+        Notification.show("Updated current task view!");
     }
 
 }
