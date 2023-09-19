@@ -128,6 +128,12 @@ public class InsertProjectWindow {
         if (!projectname_field.getValue().isEmpty() && !projectdesc_field.getValue().isEmpty()){
             if ( projectToUpdate != null ){
                 // update project data
+                int ans = dip.updateProject(prepareProject());
+                if (ans == 1){
+                    Notification.show("Project updated!");
+                    main_dialog.close();
+                    AimApplication.session_cpc.updateLayout();
+                }
             }
             else{
                 // add new project
@@ -135,6 +141,7 @@ public class InsertProjectWindow {
                 if (ans == 1){
                     Notification.show("Project added!");
                     main_dialog.close();
+                    AimApplication.session_cpc.updateLayout();
                 }
                 else{
                     Notification.show("Error adding project, check application log!");

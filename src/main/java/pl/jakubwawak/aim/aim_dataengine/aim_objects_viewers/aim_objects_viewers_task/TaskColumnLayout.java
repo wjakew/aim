@@ -12,6 +12,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Project;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
 
 import java.util.ArrayList;
@@ -28,20 +29,25 @@ public class TaskColumnLayout {
     String header;
 
     Button next_button, previous_button;
+    String width,height;
 
     int currentPageNumber;
+    AIM_Project projectLinked;
 
     /**
      * Constructor
      * @param taskCollection
      */
-    public TaskColumnLayout(ArrayList<AIM_Task> taskCollection,String hexColor,String header){
+    public TaskColumnLayout(ArrayList<AIM_Task> taskCollection, String hexColor, String header, AIM_Project projectLinked,String width,String height){
         this.taskCollection = taskCollection;
         this.hexColor = hexColor;
         columnLayout = new VerticalLayout();
         taskContent = new ArrayList<>();
         this.header = header;
+        this.projectLinked = projectLinked;
         currentPageNumber = 0;
+        this.width = width;
+        this.height = height;
 
         previous_button = new Button("", VaadinIcon.ARROW_LEFT.create(),this::previousbutton_action);
         next_button = new Button("",VaadinIcon.ARROW_RIGHT.create(),this::nextbutton_action);
@@ -53,8 +59,14 @@ public class TaskColumnLayout {
      * Function for preparing layout
      */
     void prepareLayout(){
-        columnLayout.setWidth("30%");
-        columnLayout.setHeight("85%");
+        if ( width.isEmpty() && height.isEmpty()){
+            columnLayout.setWidth("30%");
+            columnLayout.setHeight("85%");
+        }
+        else{
+            columnLayout.setWidth(width);
+            columnLayout.setHeight(height);
+        }
         columnLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         columnLayout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
         columnLayout.getStyle().set("text-align", "center");
@@ -79,7 +91,14 @@ public class TaskColumnLayout {
         TaskColumnPage tcp = new TaskColumnPage(page);
         for(AIM_Task task : taskCollection){
             flag = 0;
-            int ans = tcp.addTask(task);
+            int ans = 5;
+            if ( projectLinked != null ){
+                ans = tcp.addTask(task,projectLinked);
+            }
+            else{
+                ans = tcp.addTask(task);
+            }
+
             if ( ans == 5 ){
                 taskContent.add(tcp);
                 page++;

@@ -28,9 +28,9 @@ public class CurrentTaskComposer {
     public CurrentTaskComposer(){
         mainLayout = new HorizontalLayout();
         Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
-        newTaskColumn = new TaskColumnLayout(dat.getNewTaskCollection(),"black","NEW TASKS");
-        inProgressTaskColumn = new TaskColumnLayout(dat.getInProgressTaskCollection(),"black","IN PROGRESS");
-        doneTaskColumn = new TaskColumnLayout(dat.getDoneTaskCollection(),"black","DONE");
+        newTaskColumn = new TaskColumnLayout(dat.getNewTaskCollection(),"black","NEW TASKS",null,"","");
+        inProgressTaskColumn = new TaskColumnLayout(dat.getInProgressTaskCollection(),"black","IN PROGRESS",null,"","");
+        doneTaskColumn = new TaskColumnLayout(dat.getDoneTaskCollection(),"black","DONE",null,"","");
         prepareLayout();
     }
 
@@ -56,9 +56,9 @@ public class CurrentTaskComposer {
     public void updateLayout(){
         mainLayout.removeAll();
         Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
-        newTaskColumn = new TaskColumnLayout(dat.getNewTaskCollection(),"black","NEW TASKS");
-        inProgressTaskColumn = new TaskColumnLayout(dat.getInProgressTaskCollection(),"black","IN PROGRESS");
-        doneTaskColumn = new TaskColumnLayout(dat.getDoneTaskCollection(),"black","DONE");
+        newTaskColumn = new TaskColumnLayout(dat.getNewTaskCollection(),"black","NEW TASKS",null,"","");
+        inProgressTaskColumn = new TaskColumnLayout(dat.getInProgressTaskCollection(),"black","IN PROGRESS",null,"","");
+        doneTaskColumn = new TaskColumnLayout(dat.getDoneTaskCollection(),"black","DONE",null,"","");
         mainLayout.add(newTaskColumn.columnLayout,inProgressTaskColumn.columnLayout,doneTaskColumn.columnLayout);
         Notification.show("Updated current task view!");
     }

@@ -20,7 +20,9 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import pl.jakubwawak.aim.AimApplication;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Project;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
+import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMProject;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
 import pl.jakubwawak.aim.website_ui.dialog_windows.MessageComponent;
 import pl.jakubwawak.maintanance.GridElement;
@@ -53,12 +55,27 @@ public class DetailsTaskWindow {
 
     Button update_button, changeowner_button, delete_button;
 
+    AIM_Project projectWithTask;
+
 
     /**
      * Constructor
      */
     public DetailsTaskWindow(AIM_Task taskObject){
         this.taskObject = taskObject;
+        main_dialog = new Dialog();
+        main_layout = new VerticalLayout();
+        prepare_dialog();
+    }
+
+    /**
+     * Constructor with project
+     * @param taskObject
+     * @param projectWithTask
+     */
+    public DetailsTaskWindow(AIM_Task taskObject,AIM_Project projectWithTask){
+        this.taskObject = taskObject;
+        this.projectWithTask = projectWithTask;
         main_dialog = new Dialog();
         main_layout = new VerticalLayout();
         prepare_dialog();
@@ -113,12 +130,25 @@ public class DetailsTaskWindow {
         delete_button.setWidth("100%");
 
         status_combobox.addValueChangeListener(e->{
-            String newStatus = status_combobox.getValue().getGridelement_text();
-            Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
-            int ans = dat.updateAIMTaskStatus(taskObject,newStatus);
-            if (ans > 0){
-                Notification.show("Task status updated");
-                AimApplication.session_ctc.updateLayout();
+            if ( projectWithTask == null ){
+                // task alone - not linked to project
+                String newStatus = status_combobox.getValue().getGridelement_text();
+                Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
+                int ans = dat.updateAIMTaskStatus(taskObject,newStatus);
+                if (ans > 0){
+                    Notification.show("Task status updated");
+                    AimApplication.session_ctc.updateLayout();
+                }
+            }
+            else{
+                // task linked to project
+                String newStatus = status_combobox.getValue().getGridelement_text();
+                Database_AIMProject dap = new Database_AIMProject(AimApplication.database);
+                int ans = dap.updateTaskStatus(projectWithTask,taskObject,newStatus);
+                if (ans > 0){
+                    Notification.show("Projects task status updated");
+                    AimApplication.session_cpc.updateLayout();
+                }
             }
         });
 
@@ -142,7 +172,13 @@ public class DetailsTaskWindow {
         prepare_components();
         // set layout
         main_layout.add(taskname_header);
-        main_layout.add(new H6(taskObject.aim_task_id.toString()));
+
+        if ( projectWithTask != null ){
+            main_layout.add(new H6("no id (belongs to "+projectWithTask.aim_project_name+")"));
+        }
+        else{
+            main_layout.add(new H6(taskObject.aim_task_id.toString()));
+        }
         main_layout.add(taskdesc_area);
 
         HorizontalLayout hl_down_layout = new HorizontalLayout();
@@ -184,6 +220,12 @@ public class DetailsTaskWindow {
         main_dialog.add(main_layout);
         main_dialog.setWidth(width);main_dialog.setHeight(height);
         main_dialog.setResizable(true);
+
+        // cannot change owner or update if task is in project
+        if ( taskObject.aim_task_id == null ){
+            changeowner_button.setEnabled(false);
+            update_button.setEnabled(false);
+        }
     }
 
     /**
@@ -212,10 +254,21 @@ public class DetailsTaskWindow {
      * @param ex
      */
     private void deletebutton_action(ClickEvent ex){
-        Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
-        String data = dat.remove(taskObject);
-        Notification.show("Removed ("+data+")");
-        AimApplication.session_ctc.updateLayout();
-        main_dialog.close();
+        if ( taskObject.aim_task_id != null ){
+            Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
+            String data = dat.remove(taskObject);
+            Notification.show("Removed ("+data+")");
+            AimApplication.session_ctc.updateLayout();
+            main_dialog.close();
+        }
+        else{
+            Database_AIMProject dap = new Database_AIMProject(AimApplication.database);
+            int ans = dap.removeTaskFromProject(projectWithTask,taskObject);
+            if ( ans == 1 ){
+                Notification.show("Removed from project ("+projectWithTask.aim_project_id+")");
+                main_dialog.close();
+                AimApplication.session_cpc.updateLayout();
+            }
+        }
     }
 }

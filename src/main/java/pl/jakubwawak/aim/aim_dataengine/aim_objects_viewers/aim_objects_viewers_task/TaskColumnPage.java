@@ -5,6 +5,7 @@
  */
 package pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task;
 
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Project;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
 
 /**
@@ -51,6 +52,31 @@ public class TaskColumnPage {
         }
         else if ( taskObject4 == null ){
             taskObject4 = new AIM_TaskLayout(taskToAdd);
+            return 4;
+        }
+        return 5;
+    }
+
+    /**
+     * Function for adding task to page
+     * @param taskToAdd
+     * @return Integer
+     */
+    public int addTask(AIM_Task taskToAdd, AIM_Project projectWithTask){
+        if ( taskObject1 == null ){
+            taskObject1 = new AIM_TaskLayout(taskToAdd,projectWithTask);
+            return 1;
+        }
+        else if ( taskObject2 == null ){
+            taskObject2 = new AIM_TaskLayout(taskToAdd,projectWithTask);
+            return 2;
+        }
+        else if ( taskObject3 == null ){
+            taskObject3 = new AIM_TaskLayout(taskToAdd,projectWithTask);
+            return 3;
+        }
+        else if ( taskObject4 == null ){
+            taskObject4 = new AIM_TaskLayout(taskToAdd,projectWithTask);
             return 4;
         }
         return 5;

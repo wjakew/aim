@@ -67,8 +67,8 @@ public class ProjectHorizontalColumnPage {
      */
     public void removeSelection(){
         try{
-            projectLayout1.selected = false;
-            projectLayout2.selected = false;
+            projectLayout1.unSelect();
+            projectLayout2.unSelect();
         }catch(Exception ex){}
     }
 }

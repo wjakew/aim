@@ -15,6 +15,7 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import pl.jakubwawak.aim.AimApplication;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Project;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.task_windows.DetailsTaskWindow;
@@ -30,6 +31,7 @@ public class AIM_TaskLayout {
     public VerticalLayout main_layout;
 
     AIM_Task taskObject;
+    AIM_Project projectLinked;
 
     Button changestatus_button;
 
@@ -42,6 +44,18 @@ public class AIM_TaskLayout {
     public AIM_TaskLayout(AIM_Task taskObject){
         main_layout = new VerticalLayout();
         this.taskObject = taskObject;
+        prepareLayout();
+    }
+
+    /**
+     * Constructor with project
+     * @param taskObject
+     * @param projectLinked
+     */
+    public AIM_TaskLayout(AIM_Task taskObject, AIM_Project projectLinked){
+        main_layout = new VerticalLayout();
+        this.taskObject = taskObject;
+        this.projectLinked = projectLinked;
         prepareLayout();
     }
 
@@ -130,8 +144,15 @@ public class AIM_TaskLayout {
      * @param ex
      */
     private void showdetailsbutton_action(ClickEvent ex){
-        DetailsTaskWindow dtw = new DetailsTaskWindow(taskObject);
-        main_layout.add(dtw.main_dialog);
-        dtw.main_dialog.open();
+        if ( projectLinked == null ){
+            DetailsTaskWindow dtw = new DetailsTaskWindow(taskObject);
+            main_layout.add(dtw.main_dialog);
+            dtw.main_dialog.open();
+        }
+        else{
+            DetailsTaskWindow dtw = new DetailsTaskWindow(taskObject,projectLinked);
+            main_layout.add(dtw.main_dialog);
+            dtw.main_dialog.open();
+        }
     }
 }

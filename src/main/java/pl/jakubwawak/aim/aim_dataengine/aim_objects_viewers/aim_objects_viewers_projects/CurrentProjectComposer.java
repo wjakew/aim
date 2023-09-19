@@ -47,7 +47,7 @@ public class CurrentProjectComposer {
         mainLayout.getStyle().set("margin","75px");
         mainLayout.getStyle().set("background-color","gray");
         mainLayout.getStyle().set("--lumo-font-family","Monospace");
-        mainLayout.add(currentProjectSelectionLayout.projectHorizontalColumnLayout);
+        updateLayout();
     }
 
     /**
@@ -59,6 +59,18 @@ public class CurrentProjectComposer {
         currentProjectSelectionLayout = new ProjectHorizontalColumnLayout(dat.getUserProjects(),this);
         mainLayout.add(currentProjectSelectionLayout.projectHorizontalColumnLayout);
         mainLayout.add(currentProjectLayout.projectLayout);
+        Notification.show("Updated current projects view!");
+    }
+
+    /**
+     * Function for updating view
+     */
+    public void updateLayout(){
+        mainLayout.removeAll();
+        Database_AIMProject dat = new Database_AIMProject(AimApplication.database);
+        currentProjectSelectionLayout = new ProjectHorizontalColumnLayout(dat.getUserProjects(),this);
+        mainLayout.add(currentProjectSelectionLayout.projectHorizontalColumnLayout);
+        mainLayout.add(currentProjectSelectionLayout.getDefaultLayout());
         Notification.show("Updated current projects view!");
     }
 

@@ -10,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_GlobalConfiguration;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_User;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_projects.CurrentProjectComposer;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task.CurrentTaskComposer;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_Connector;
 import pl.jakubwawak.maintanance.ConsoleColors;
@@ -21,7 +22,7 @@ import java.util.Scanner;
 public class AimApplication {
 
 	public static String version = "v1.0.0";
-	public static String build = "aim180923REV01";
+	public static String build = "aim190923REV01";
 
 	public static int test_flag = 0; // flag for enabling testing
 	public static int log_database_dump_flag = 0; // flag for enabling database log dump
@@ -34,6 +35,7 @@ public class AimApplication {
 	public static AIM_User loggedUser;
 
 	public static CurrentTaskComposer session_ctc;
+	public static CurrentProjectComposer session_cpc;
 
 	/**
 	 * Main application function
@@ -44,6 +46,7 @@ public class AimApplication {
 		Scanner scanner = new Scanner(System.in);
 		loggedUser = null;
 		session_ctc = null;
+		session_cpc = null;
 		database = new Database_Connector();
 		if ( test_flag == 0 ){
 			// run application in normal mode

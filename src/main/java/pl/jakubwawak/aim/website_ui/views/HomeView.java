@@ -129,8 +129,8 @@ public class HomeView extends VerticalLayout {
             }
             case 1:{
                 // projects component
-                CurrentProjectComposer cpc = new CurrentProjectComposer();
-                add(cpc.mainLayout);
+                AimApplication.session_cpc = new CurrentProjectComposer();
+                add(AimApplication.session_cpc.mainLayout);
                 Notification.show("Reload page view - projects");
                 break;
             }

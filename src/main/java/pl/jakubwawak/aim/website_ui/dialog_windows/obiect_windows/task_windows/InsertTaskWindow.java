@@ -19,6 +19,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Project;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_projects.AIM_ProjectLayout;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMProject;
 import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
@@ -113,6 +114,10 @@ public class InsertTaskWindow {
         prepare_components();
         // set layout
         main_layout.add(new H6("New task"));
+        if ( projectToInsert != null ){
+            main_layout.add(new H6("Adding to "+projectToInsert.aim_project_id));
+        }
+
         main_layout.add(taskname_field,taskdeadline_picker,taskdesc_field,addtask_button);
 
         main_layout.setSizeFull();
@@ -179,10 +184,6 @@ public class InsertTaskWindow {
                         Notification.show("Error updating task, check log!");
                     }
                 }
-                // update task in the project
-                else{
-                    //todo add updating task on project
-                }
             }
             else{
                 // add task without project
@@ -201,10 +202,12 @@ public class InsertTaskWindow {
                     // add task to the project
                     int ans = daip.insertTaskToProject(projectToInsert,loadTaskObject());
                     if (ans == 1){
-                        Notification.show("Task updated!");
-                        AimApplication.session_ctc.updateLayout();
+                        Notification.show("Task added to project ("+projectToInsert.aim_project_id+")!");
+                        AimApplication.session_cpc.updateLayout();
                         main_dialog.close();
-
+                    }
+                    else if ( ans == 0 ){
+                        Notification.show("Task cannot be added. No modification result!");
                     }
                     else{
                         Notification.show("Error updating task, check log!");

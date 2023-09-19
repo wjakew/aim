@@ -12,6 +12,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Project;
 import java.util.ArrayList;
 
@@ -149,6 +150,22 @@ public class ProjectHorizontalColumnLayout {
     void prepareLayout(){
         reloadProjectContent();
         loadPage(currentPageNumber);
+    }
+
+    /**
+     * Function for loading default layout of first data
+     * @return
+     */
+    public VerticalLayout getDefaultLayout(){
+        if ( projectContent.size() > 0 ){
+            AIM_ProjectLayout apl = new AIM_ProjectLayout(projectContent.get(0));
+            return apl.projectLayout;
+        }
+        else{
+            VerticalLayout hl = new VerticalLayout();
+            hl.add(new H6("NO PROJECT DATA"));
+            return hl;
+        }
     }
 
     /**
