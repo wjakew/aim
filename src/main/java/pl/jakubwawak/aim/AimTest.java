@@ -5,6 +5,8 @@
  */
 package pl.jakubwawak.aim;
 
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Project;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_projects.CurrentProjectComposer;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_projects.ProjectHorizontalColumnLayout;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task.TaskColumnLayout;
@@ -41,7 +43,10 @@ public class AimTest {
                 dau.loginAIMUser("kubawawak@gmail.com",pv.hash());
 
                 Database_AIMProject dip = new Database_AIMProject(AimApplication.database);
-                CurrentProjectComposer cpc = new CurrentProjectComposer();
+                AIM_Project project = dip.getUserProjects().get(0);
+                AIM_Task task = new AIM_Task(project.task_list.get(0));
+                int ans = dip.updateTaskStatus(project,task,"IN PROGRESS");
+                System.out.println(ans);
             }
         }catch(Exception ex){ex.printStackTrace();}
         // closing application

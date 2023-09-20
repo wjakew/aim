@@ -122,7 +122,7 @@ public class Database_AIMProject {
                     Updates.set("aim_project_desc",projectToUpdate.aim_project_desc),
                     Updates.set("project_history",projectToUpdate.project_history)
             );
-            UpdateResult result = project_collection.updateOne(projectToUpdate.prepareDocument(), updates);
+            UpdateResult result = project_collection.updateOne(project_document, updates);
             if ( result.getModifiedCount() > 0 ){
                 database.log("DB-PROJECT-UPDATE","Updated project data ("+result.getModifiedCount()+")");
                 return 1;
@@ -187,15 +187,14 @@ public class Database_AIMProject {
                 taskToUpdate.aim_task_history.add("Status changed to: "+newStatus);
                 taskList.add(taskToUpdate.prepareDocument());
                 List<String> projectHistory = project_document.getList("project_history",String.class);
+                projectHistory.add(LocalDateTime.now(ZoneId.of("Europe/Warsaw"))+"- Updated Status of "+taskToUpdate.aim_task_name);
                 Bson updates = Updates.combine(
                         Updates.set("task_list",taskList),
                         Updates.set("project_history",projectHistory)
                 );
-                projectHistory.add(LocalDateTime.now(ZoneId.of("Europe/Warsaw"))+"- Updated Status of "+taskToUpdate.aim_task_name);
-                UpdateResult result = project_collection.updateOne(projectToUpdate.prepareDocument(), updates);
+                UpdateResult result = project_collection.updateOne(project_document, updates);
                 database.log("DB-PROJECT-TASK-UPDATE", "Updated task status from project (" + projectToUpdate.aim_project_id.toString() + ") code (" + result.getModifiedCount() + ")");
                 return 1;
-
             }
             database.log("DB-PROJECT-TASK-UPDATE","Task status cannot be updated, result is 0 or project is empty!");
             return 0;

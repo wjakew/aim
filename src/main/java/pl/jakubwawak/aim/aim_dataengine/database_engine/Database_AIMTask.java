@@ -194,7 +194,6 @@ public class Database_AIMTask {
             if (workDone.wasAcknowledged()){
                 sources = sources + "general ";
             }
-            // TODO remove task from boards and projects
             return sources;
         }catch(Exception ex){
             database.log("DB-TASK-REMOVEFAILED","Failed to remove task ("+ex.toString()+")");
