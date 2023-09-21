@@ -177,7 +177,13 @@ public class DetailsTaskWindow {
             main_layout.add(new H6("no id (belongs to "+projectWithTask.aim_project_name+")"));
         }
         else{
-            main_layout.add(new H6(taskObject.aim_task_id.toString()));
+            if ( taskObject.aim_task_id != null ){
+                main_layout.add(new H6(taskObject.aim_task_id.toString()));
+            }
+            else{
+                main_layout.add(new H6("no id (null)"));
+            }
+
         }
         main_layout.add(taskdesc_area);
 

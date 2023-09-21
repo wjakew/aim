@@ -7,7 +7,10 @@ package pl.jakubwawak.aim.aim_dataengine.database_engine;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.ReplaceOptions;
 import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -58,7 +61,7 @@ public class Database_AIMProject {
     /**
      * Function for inserting project object to database
      * @param projectToInsert
-     * @return
+     * @return Integer
      */
     public int insertProject(AIM_Project projectToInsert){
         try{
@@ -68,6 +71,28 @@ public class Database_AIMProject {
             return 1;
         }catch(Exception ex){
             database.log("DB-PROJECT-INSERT-FAILED","Failed to add project ("+ex.toString()+")");
+            return -1;
+        }
+    }
+
+    /**
+     * Function for removing project
+     * @param projectToRemove
+     * @return Integer
+     */
+    public int removeProject(AIM_Project projectToRemove){
+        try{
+            MongoCollection<Document> project_collection = database.get_data_collection("aim_project");
+            Document project_document = project_collection.find(new Document("_id",projectToRemove.aim_project_id)).first();
+            DeleteResult result = project_collection.deleteOne(project_document);
+            if ( result.getDeletedCount() > 0 ){
+                database.log("DB-PROJECT-DELETE","Project ("+projectToRemove.aim_project_id.toString()+") removed!");
+                return 1;
+            }
+            database.log("DB-PROJECT-DELETE-EMPTY","Project cannot be deleted, not found!");
+            return 0;
+        }catch(Exception ex){
+            database.log("DB-PROJECT-DELETE-FAILED","Failed to delete project ("+ex.toString()+")");
             return -1;
         }
     }
@@ -112,17 +137,18 @@ public class Database_AIMProject {
      * @return Integer
      */
     public int updateProject(AIM_Project projectToUpdate){
-        // todo doesn't work correctly, return 0
         try {
             MongoCollection<Document> project_collection = database.get_data_collection("aim_project");
             Document project_document = project_collection.find(new Document("_id", projectToUpdate.aim_project_id)).first();
-            projectToUpdate.project_history.add("Updated project name and desc");
-            Bson updates = Updates.combine(
-                    Updates.set("aim_project_name",projectToUpdate.aim_project_name),
-                    Updates.set("aim_project_desc",projectToUpdate.aim_project_desc),
-                    Updates.set("project_history",projectToUpdate.project_history)
-            );
-            UpdateResult result = project_collection.updateOne(project_document, updates);
+            AIM_Project currentProject = new AIM_Project(project_document);
+            currentProject = projectToUpdate;
+            currentProject.project_history.add(LocalDateTime.now(ZoneId.of("Europe/Warsaw"))+" - updated project data");
+            // loading search query
+            Bson query = Filters.eq("_id", projectToUpdate.aim_project_id);
+            // replacing project data
+            ReplaceOptions opts = new ReplaceOptions().upsert(true);
+            UpdateResult result = project_collection.replaceOne(query,currentProject.prepareDocument(), opts);
+
             if ( result.getModifiedCount() > 0 ){
                 database.log("DB-PROJECT-UPDATE","Updated project data ("+result.getModifiedCount()+")");
                 return 1;
@@ -176,24 +202,27 @@ public class Database_AIMProject {
      * @return Integer
      */
     public int updateTaskStatus(AIM_Project projectToUpdate, AIM_Task taskToUpdate,String newStatus){
-        // todo repair updating status on project
         try{
             MongoCollection<Document> project_collection = database.get_data_collection("aim_project");
+            // loading project object
             Document project_document = project_collection.find(new Document("_id",projectToUpdate.aim_project_id)).first();
-            if ( project_document != null ){
-                List<Document> taskList = project_document.getList("task_list",Document.class);
-                taskList.remove(taskToUpdate.prepareDocument());
-                taskToUpdate.status = newStatus;
-                taskToUpdate.aim_task_history.add("Status changed to: "+newStatus);
-                taskList.add(taskToUpdate.prepareDocument());
-                List<String> projectHistory = project_document.getList("project_history",String.class);
-                projectHistory.add(LocalDateTime.now(ZoneId.of("Europe/Warsaw"))+"- Updated Status of "+taskToUpdate.aim_task_name);
-                Bson updates = Updates.combine(
-                        Updates.set("task_list",taskList),
-                        Updates.set("project_history",projectHistory)
-                );
-                UpdateResult result = project_collection.updateOne(project_document, updates);
-                database.log("DB-PROJECT-TASK-UPDATE", "Updated task status from project (" + projectToUpdate.aim_project_id.toString() + ") code (" + result.getModifiedCount() + ")");
+            AIM_Project currentProject = new AIM_Project(project_document);
+            // removing task from object
+            currentProject.task_list.remove(taskToUpdate.prepareDocument());
+            // setting new task status and adding history
+            taskToUpdate.status = newStatus;
+            taskToUpdate.aim_task_history.add(LocalDateTime.now(ZoneId.of("Europe/Warsaw"))+" - changed status to: "+newStatus);
+            currentProject.task_list.add(taskToUpdate.prepareDocument());
+            // adding data to project history
+            currentProject.project_history.add(LocalDateTime.now(ZoneId.of("Europe/Warsaw"))+" - updated status of task");
+            // loading replacing query
+            Bson query = Filters.eq("_id",projectToUpdate.aim_project_id);
+            // replacing project data
+            ReplaceOptions opts = new ReplaceOptions().upsert(true);
+            UpdateResult result = project_collection.replaceOne(query,currentProject.prepareDocument(),opts);
+            if (result.getModifiedCount() > 0){
+                database.log("DB-PROJECT-TASK-UPDATE","Task status on project ("+projectToUpdate.aim_project_id
+                        +") updated code ("+result.getModifiedCount()+","+result.getUpsertedId()+")");
                 return 1;
             }
             database.log("DB-PROJECT-TASK-UPDATE","Task status cannot be updated, result is 0 or project is empty!");

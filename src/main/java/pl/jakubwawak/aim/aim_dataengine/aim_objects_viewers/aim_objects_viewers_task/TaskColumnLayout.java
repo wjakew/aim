@@ -103,7 +103,7 @@ public class TaskColumnLayout {
                 taskContent.add(tcp);
                 page++;
                 tcp = new TaskColumnPage(page);
-                tcp.addTask(task);
+                tcp.addTask(task,projectLinked);
                 flag = 1;
             }
         }

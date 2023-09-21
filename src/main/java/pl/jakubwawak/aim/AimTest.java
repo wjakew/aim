@@ -7,11 +7,8 @@ package pl.jakubwawak.aim;
 
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Project;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
-import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_projects.CurrentProjectComposer;
-import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_projects.ProjectHorizontalColumnLayout;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task.TaskColumnLayout;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMProject;
-import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMUser;
 import pl.jakubwawak.maintanance.Password_Validator;
 
@@ -43,10 +40,7 @@ public class AimTest {
                 dau.loginAIMUser("kubawawak@gmail.com",pv.hash());
 
                 Database_AIMProject dip = new Database_AIMProject(AimApplication.database);
-                AIM_Project project = dip.getUserProjects().get(0);
-                AIM_Task task = new AIM_Task(project.task_list.get(0));
-                int ans = dip.updateTaskStatus(project,task,"IN PROGRESS");
-                System.out.println(ans);
+                TaskColumnLayout tcl = new TaskColumnLayout(dip.getUserProjects().get(0).getTaskCollection(),"green","LINKED TASKS",dip.getUserProjects().get(0),"","");
             }
         }catch(Exception ex){ex.printStackTrace();}
         // closing application

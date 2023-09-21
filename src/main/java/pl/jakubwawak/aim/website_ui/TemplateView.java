@@ -141,7 +141,7 @@ public class TemplateView extends VerticalLayout {
     private void logoutbutton_action(ClickEvent ex){
         home_button.getUI().ifPresent(ui ->
                 ui.navigate("/"));
-        Notification.show("User ("+AimApplication.loggedUser.aim_user_email+") looged out!");
+        Notification.show("User ("+AimApplication.loggedUser.aim_user_email+") logged out!");
         AimApplication.database.log("DB-AIMUSER-LOGOUT","User logged out from the app ("+AimApplication.loggedUser.aim_user_email+")");
         AimApplication.loggedUser = null;
     }

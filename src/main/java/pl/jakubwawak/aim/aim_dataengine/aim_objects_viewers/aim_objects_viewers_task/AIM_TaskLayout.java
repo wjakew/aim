@@ -17,6 +17,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Project;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
+import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMProject;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.task_windows.DetailsTaskWindow;
 
@@ -116,27 +117,53 @@ public class AIM_TaskLayout {
      * @param ex
      */
     private void changestatusbutton_action(ClickEvent ex){
-        Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
-        int ans = 0;
-        String newStatus = "";
-        switch(taskObject.status){
-            case "NEW":
-            {
-                ans = dat.updateAIMTaskStatus(taskObject,"IN PROGRESS");
-                newStatus = "IN PROGRESS";
-                break;
+        if (projectLinked == null){
+            Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
+            int ans = 0;
+            String newStatus = "";
+            switch(taskObject.status){
+                case "NEW":
+                {
+                    ans = dat.updateAIMTaskStatus(taskObject,"IN PROGRESS");
+                    newStatus = "IN PROGRESS";
+                    break;
+                }
+                case "IN PROGRESS":
+                {
+                    ans = dat.updateAIMTaskStatus(taskObject,"DONE");
+                    newStatus = "DONE";
+                    break;
+                }
             }
-            case "IN PROGRESS":
-            {
-                ans = dat.updateAIMTaskStatus(taskObject,"DONE");
-                newStatus = "DONE";
-                break;
+            if (ans!=0){
+                Notification.show("("+taskObject.aim_task_id.toString()+") set to: "+newStatus);
+                AimApplication.session_ctc.updateLayout();
             }
         }
-        if (ans!=0){
-            Notification.show("("+taskObject.aim_task_id.toString()+") set to: "+newStatus);
-            AimApplication.session_ctc.updateLayout();
+        else{
+            Database_AIMProject dap = new Database_AIMProject(AimApplication.database);
+            int ans = 0;
+            String newStatus = "";
+            switch(taskObject.status){
+                case "NEW":
+                {
+                    ans = dap.updateTaskStatus(projectLinked,taskObject,"IN PROGRESS");
+                    newStatus = "IN PROGRESS";
+                    break;
+                }
+                case "IN PROGRESS":
+                {
+                    ans = dap.updateTaskStatus(projectLinked,taskObject,"DONE");
+                    newStatus = "DONE";
+                    break;
+                }
+            }
+            if (ans!=0){
+                Notification.show("("+taskObject.aim_task_name+") set to: "+newStatus);
+                AimApplication.session_cpc.updateLayout();
+            }
         }
+
     }
 
     /**

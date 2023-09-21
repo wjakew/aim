@@ -80,4 +80,18 @@ public class AIM_Project {
         }
         return data;
     }
+
+    /**
+     * Function for opening task amount
+     * @return Integer
+     */
+    public int openTaskAmount(){
+        int amount = 0;
+        for(AIM_Task task : getTaskCollection()){
+            if ( task.status.equals("NEW") || task.status.equals("IN PROGRESS")){
+                amount++;
+            }
+        }
+        return amount;
+    }
 }

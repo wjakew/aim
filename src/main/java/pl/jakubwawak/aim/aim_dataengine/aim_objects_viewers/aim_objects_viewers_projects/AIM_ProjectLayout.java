@@ -19,6 +19,7 @@ import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Project;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task.TaskColumnLayout;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task.TaskColumnPage;
 import pl.jakubwawak.aim.website_ui.dialog_windows.MessageComponent;
+import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.project_windows.CloseProjectWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.project_windows.InsertProjectWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.task_windows.InsertTaskWindow;
 import pl.jakubwawak.maintanance.GridElement;
@@ -63,7 +64,7 @@ public class AIM_ProjectLayout {
         addtask_button.addThemeVariants(ButtonVariant.LUMO_SUCCESS,ButtonVariant.LUMO_PRIMARY);
         update_button = new Button("Update Project",this::updateprojectbutton_action);
         update_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
-        closeproject_button = new Button("Close Project");
+        closeproject_button = new Button("Close Project",this::closeprojectbutton_action);
         closeproject_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
         update_button.setWidth("100%");closeproject_button.setWidth("100%"); addtask_button.setWidth("100%");
 
@@ -126,5 +127,15 @@ public class AIM_ProjectLayout {
         InsertProjectWindow ipw = new InsertProjectWindow(projectObject);
         projectLayout.add(ipw.main_dialog);
         ipw.main_dialog.open();
+    }
+
+    /**
+     * closeproject_button
+     * @param ex
+     */
+    private void closeprojectbutton_action(ClickEvent ex){
+        CloseProjectWindow cpw = new CloseProjectWindow(projectObject);
+        projectLayout.add(cpw.main_dialog);
+        cpw.main_dialog.open();
     }
 }

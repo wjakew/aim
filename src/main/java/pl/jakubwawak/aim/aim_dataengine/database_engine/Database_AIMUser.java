@@ -101,7 +101,7 @@ public class Database_AIMUser {
                     return 1;
                 }
             }
-            database.log("DB-AIMUSER-LOGIN","Logged user to the app ("+login+")");
+            database.log("DB-AIMUSER-LOGIN-USNF","Cannot find user in application database ("+login+")");
             return 0;
         }catch(Exception ex){
             database.log("DB-AIMUSER-LOGIN-FAILED","Failed to login user to app ("+ex.toString()+")");
