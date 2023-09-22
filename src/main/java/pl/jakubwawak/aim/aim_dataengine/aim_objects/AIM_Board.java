@@ -17,11 +17,11 @@ import java.util.List;
 public class AIM_Board {
 
     public String board_name;
-    public AIM_User board_owner;
-    public List<AIM_User> board_members;
+    public Document board_owner;
+    public List<Document> board_members;
     public String board_desc;
-    public List<AIM_Task> task_list;
-    public ArrayList<String> board_history;
+    public List<Document> task_list;
+    public List<String> board_history;
 
 
     /**
@@ -29,7 +29,7 @@ public class AIM_Board {
      */
     public AIM_Board() {
         this.board_name = "";
-        this.board_owner = AimApplication.loggedUser;
+        this.board_owner = AimApplication.loggedUser.prepareDocument();
         this.board_members = new ArrayList<>();
         this.board_desc = "";
         this.task_list = new ArrayList<>();
@@ -41,11 +41,19 @@ public class AIM_Board {
      */
     public AIM_Board(Document board_document) {
         this.board_name = board_document.getString("board_name");
-        this.board_owner = board_document.get("board_owner",AIM_User.class);
-        this.board_members = new ArrayList<>();
+        this.board_owner = board_document.get("board_owner",Document.class);
+        this.board_members = board_document.getList("board_members",Document.class);
         this.board_desc = "";
-        this.task_list = new ArrayList<>();
-        this.board_history = new ArrayList<>();
+        this.task_list = board_document.getList("task_list",Document.class);
+        this.board_history = board_document.getList("board_history",String.class);
+    }
+
+    /**
+     * Function for checking if board isEmpty
+     * @return boolean
+     */
+    public boolean isEmpty(){
+        return board_name.isEmpty() && board_desc.isEmpty();
     }
 
     /**
@@ -61,5 +69,16 @@ public class AIM_Board {
         board_document.append("task_list",task_list);
         board_document.append("board_history",board_history);
         return board_document;
+    }
+
+    /**
+     * Function for generating owner label
+     * @return String
+     */
+    public String ownerLabel(){
+        if (board_owner.equals(AimApplication.loggedUser.prepareDocument())){
+            return "OWN";
+        }
+        return "MBR";
     }
 }

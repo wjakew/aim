@@ -13,6 +13,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.button.Button;
+import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.board_windows.InsertBoardWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.project_windows.InsertProjectWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.task_windows.InsertTaskWindow;
 import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
@@ -47,7 +48,7 @@ public class AddElementWindow {
      */
     void prepare_components(){
         // set components
-        addboard_button = new Button("Add Board", VaadinIcon.PLUS.create());
+        addboard_button = new Button("Add Board", VaadinIcon.PLUS.create(),this::addboardbutton_action);
         new ButtonStyler().primaryButtonStyle(addboard_button,"200px","200px");
 
         addproject_button = new Button("Add Project", VaadinIcon.PLUS.create(),this::addprojectbutton_action);
@@ -104,6 +105,17 @@ public class AddElementWindow {
         InsertProjectWindow ipw = new InsertProjectWindow(null);
         main_layout.add(ipw.main_dialog);
         ipw.main_dialog.open();
+        main_dialog.close();
+    }
+
+    /**
+     * addboard_button
+     * @param ex
+     */
+    private void addboardbutton_action(ClickEvent ex){
+        InsertBoardWindow ibw = new InsertBoardWindow(null);
+        main_layout.add(ibw.main_dialog);
+        ibw.main_dialog.open();
         main_dialog.close();
     }
 }
