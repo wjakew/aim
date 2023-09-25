@@ -19,6 +19,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.Lumo;
 import pl.jakubwawak.aim.AimApplication;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_board.CurrentBoardComposer;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_projects.CurrentProjectComposer;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task.CurrentTaskComposer;
 import pl.jakubwawak.aim.website_ui.dialog_windows.AddElementWindow;
@@ -135,8 +136,9 @@ public class HomeView extends VerticalLayout {
                 break;
             }
             default:{
-                add(new H6("VIEW ENGINE ERROR, WRONG ARGUMENT"));
-                Notification.show("Wrong argument, cannot reload page ("+viewIndex+")");
+                AimApplication.session_cbc = new CurrentBoardComposer();
+                add(AimApplication.session_cbc.mainLayout);
+                Notification.show("Reload page view - boards");
                 break;
             }
         }

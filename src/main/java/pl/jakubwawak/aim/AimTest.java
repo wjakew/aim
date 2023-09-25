@@ -7,6 +7,7 @@ package pl.jakubwawak.aim;
 
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Project;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_board.CurrentBoardComposer;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task.TaskColumnLayout;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMProject;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMUser;
@@ -40,7 +41,8 @@ public class AimTest {
                 dau.loginAIMUser("kubawawak@gmail.com",pv.hash());
 
                 Database_AIMProject dip = new Database_AIMProject(AimApplication.database);
-                TaskColumnLayout tcl = new TaskColumnLayout(dip.getUserProjects().get(0).getTaskCollection(),"green","LINKED TASKS",dip.getUserProjects().get(0),"","");
+                CurrentBoardComposer cbc = new CurrentBoardComposer();
+
             }
         }catch(Exception ex){ex.printStackTrace();}
         // closing application
