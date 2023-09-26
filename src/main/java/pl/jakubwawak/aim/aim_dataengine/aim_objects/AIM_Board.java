@@ -6,6 +6,7 @@
 package pl.jakubwawak.aim.aim_dataengine.aim_objects;
 
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import pl.jakubwawak.aim.AimApplication;
 
 import java.util.ArrayList;
@@ -15,6 +16,8 @@ import java.util.List;
  * Object for storing board data
  */
 public class AIM_Board {
+
+    public ObjectId board_id;
 
     public String board_name;
     public Document board_owner;
@@ -28,6 +31,7 @@ public class AIM_Board {
      * Constructor
      */
     public AIM_Board() {
+        this.board_id = null;
         this.board_name = "";
         this.board_owner = AimApplication.loggedUser.prepareDocument();
         this.board_members = new ArrayList<>();
@@ -40,6 +44,7 @@ public class AIM_Board {
      * Constructor with database support
      */
     public AIM_Board(Document board_document) {
+        this.board_id = board_document.getObjectId("_id");
         this.board_name = board_document.getString("board_name");
         this.board_owner = board_document.get("board_owner",Document.class);
         this.board_members = board_document.getList("board_members",Document.class);
@@ -62,6 +67,7 @@ public class AIM_Board {
      */
     public Document prepareDocument(){
         Document board_document = new Document();
+        board_document.append("board_id",board_id);
         board_document.append("board_name",board_name);
         board_document.append("board_owner",board_owner);
         board_document.append("board_members",board_members);
@@ -77,8 +83,8 @@ public class AIM_Board {
      */
     public String ownerLabel(){
         if (board_owner.equals(AimApplication.loggedUser.prepareDocument())){
-            return "OWN";
+            return "Owner";
         }
-        return "MBR";
+        return "Member";
     }
 }

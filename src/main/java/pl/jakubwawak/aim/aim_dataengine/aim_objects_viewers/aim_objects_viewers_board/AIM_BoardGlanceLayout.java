@@ -5,7 +5,9 @@
  */
 package pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_board;
 
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -15,6 +17,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Board;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_BoardTask;
+import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.board_windows.DetailsBoardWindow;
 
 public class AIM_BoardGlanceLayout {
 
@@ -37,23 +40,29 @@ public class AIM_BoardGlanceLayout {
      * Function for preparing layout data
      */
     void prepareLayout(){
-        showDetails_button = new Button("", VaadinIcon.INFO_CIRCLE.create());
-        showDetails_button.getStyle().set("background-color","grey");
+        showDetails_button = new Button("", VaadinIcon.INFO_CIRCLE.create(),this::detailsbutton_action);
+        showDetails_button.getStyle().set("background-image","linear-gradient(#FFC0CB, #FFD4C0)");
         showDetails_button.getStyle().set("color","white");
 
         FlexLayout left_layout = new FlexLayout();
         left_layout.setSizeFull();
         left_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.START);
         left_layout.setAlignItems(FlexComponent.Alignment.START);
-        left_layout.add(new H6(boardObject.board_name));
+        left_layout.add(new H6(boardObject.ownerLabel()));
+
+        FlexLayout center_layout = new FlexLayout();
+        center_layout.setSizeFull();
+        center_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+        center_layout.setAlignItems(FlexComponent.Alignment.CENTER);
+        center_layout.add(new H2(boardObject.board_name));
 
         FlexLayout right_layout = new FlexLayout();
         right_layout.setSizeFull();
         right_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
         right_layout.setAlignItems(FlexComponent.Alignment.END);
-        right_layout.add(new H4(boardObject.ownerLabel()),showDetails_button);
+        right_layout.add(showDetails_button);
 
-        HorizontalLayout hl_center = new HorizontalLayout(left_layout,right_layout);
+        HorizontalLayout hl_center = new HorizontalLayout(left_layout,center_layout,right_layout);
 
         hl_center.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
         hl_center.setWidth("100%");
@@ -67,8 +76,24 @@ public class AIM_BoardGlanceLayout {
         main_layout.getStyle().set("text-align", "center");
         main_layout.getStyle().set("border-radius","25px");
 
-        main_layout.getStyle().set("background-color","#48b869");
+        if ( boardObject.ownerLabel().equals("Member")){
+            main_layout.getStyle().set("background-image","linear-gradient(#e38ad9, #199f97)");
+        }
+        else if (boardObject.ownerLabel().equals("Owner")){
+            main_layout.getStyle().set("background-image","linear-gradient(#bce38a, #19849f)");
+        }
+
         main_layout.getStyle().set("color","#FFFFFF");
         main_layout.getStyle().set("--lumo-font-family","Monospace");
+    }
+
+    /**
+     * Function for showing details
+     * @param ex
+     */
+    private void detailsbutton_action(ClickEvent ex){
+        DetailsBoardWindow dbw = new DetailsBoardWindow(boardObject);
+        main_layout.add(dbw.main_dialog);
+        dbw.main_dialog.open();
     }
 }

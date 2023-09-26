@@ -23,9 +23,9 @@ import java.util.Scanner;
 public class AimApplication {
 
 	public static String version = "v1.0.0";
-	public static String build = "aim250923REV01";
+	public static String build = "aim260923REV01";
 
-	public static int test_flag = 0; // flag for enabling testing
+	public static int test_flag = 1; // flag for enabling testing
 	public static int log_database_dump_flag = 0; // flag for enabling database log dump
 
 	public static Database_Connector database;
