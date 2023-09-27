@@ -54,6 +54,8 @@ public class InsertBoardWindow {
 
     Button add_button, addmember_button, removemember_button;
 
+    int newBoard;
+
     /**
      * Constructor
      */
@@ -62,9 +64,12 @@ public class InsertBoardWindow {
         main_layout = new VerticalLayout();
         if ( boardToAdd!= null ){
             this.boardToAdd = boardToAdd;
+            newBoard = 0;
         }
-        else
+        else {
             this.boardToAdd = new AIM_Board();
+            newBoard = 1;
+        }
         prepare_dialog();
     }
 
@@ -87,6 +92,10 @@ public class InsertBoardWindow {
         add_button = new Button("Create Board",this::addboardbutton_action);
         add_button.setWidth("100%");
         add_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+
+        if ( newBoard == 0 ){
+            add_button.setText("Update Board");
+        }
 
         addmember_button = new Button("", VaadinIcon.PLUS.create(),this::addmemberbutton_action);
         addmember_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
@@ -132,7 +141,16 @@ public class InsertBoardWindow {
         hl_right.add(members_grid,new HorizontalLayout(addmember_button,removemember_button));
 
         mainhorizontal_layout.add(hl_left,hl_right);
-        main_layout.add(new H3("New Board"));
+        if ( newBoard == 0){
+            main_layout.add(new H3("Update Board"));
+            boardname_field.setValue(boardToAdd.board_name);
+            boarddesc_field.setValue(boardToAdd.board_desc);
+            reloadMembersGrid();
+        }
+        else{
+            main_layout.add(new H3("New Board"));
+        }
+
         main_layout.add(mainhorizontal_layout);
         main_layout.add(add_button);
 
@@ -185,14 +203,28 @@ public class InsertBoardWindow {
         if ( !boardToAdd.isEmpty() ){
             // add board object to database
             Database_AIMBoard dab = new Database_AIMBoard(AimApplication.database);
-            int ans = dab.insertBoard(boardToAdd);
-            if ( ans == 1 ){
-                Notification.show("Board added!");
-                main_dialog.close();
+            if ( newBoard == 1){
+                int ans = dab.insertBoard(boardToAdd);
+                if ( ans == 1 ){
+                    Notification.show("Board added!");
+                    AimApplication.session_cbc.updateLayout(0);
+                    main_dialog.close();
+                }
+                else{
+                    Notification.show("Failed to add board, check log!");
+                }
             }
             else{
-                Notification.show("Failed to add board, check log!");
+                int ans = dab.updateBoard(boardToAdd);
+                if (ans == 1){
+                    AimApplication.session_cbc.updateLayout(0);
+                    main_dialog.close();
+                }
+                else{
+                    Notification.show("Failed to update board, check log");
+                }
             }
+
         }
         else{
             Notification.show("Board object is empty!");

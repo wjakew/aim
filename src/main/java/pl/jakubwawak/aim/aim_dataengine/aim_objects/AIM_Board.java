@@ -48,7 +48,7 @@ public class AIM_Board {
         this.board_name = board_document.getString("board_name");
         this.board_owner = board_document.get("board_owner",Document.class);
         this.board_members = board_document.getList("board_members",Document.class);
-        this.board_desc = "";
+        this.board_desc = board_document.getString("board_desc");
         this.task_list = board_document.getList("task_list",Document.class);
         this.board_history = board_document.getList("board_history",String.class);
     }

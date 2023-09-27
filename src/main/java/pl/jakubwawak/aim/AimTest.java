@@ -43,6 +43,7 @@ public class AimTest {
                 dau.loginAIMUser("kubawawak@gmail.com",pv.hash());
 
                 Database_AIMBoard dib = new Database_AIMBoard(AimApplication.database);
+                Database_AIMProject dip = new Database_AIMProject(AimApplication.database);
                 AIM_BoardTask abt = new AIM_BoardTask();
                 abt.aim_task_name = "test";
                 abt.aim_task_desc = "test desc";

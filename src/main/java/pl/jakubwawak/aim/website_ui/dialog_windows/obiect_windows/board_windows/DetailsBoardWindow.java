@@ -16,6 +16,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Board;
 
@@ -25,7 +26,7 @@ public class DetailsBoardWindow {
     public Dialog main_dialog;
     AIM_Board board;
 
-    Button members_button,update_button,addtask_button,changeowner_button;
+    Button members_button,update_button,addtask_button,changeowner_button, boardhistory_button;
 
 
 
@@ -43,17 +44,20 @@ public class DetailsBoardWindow {
      * Function for preparing components
      */
     void prepareComponents(){
-        members_button = new Button("Members", VaadinIcon.USERS.create());
+        members_button = new Button("Members("+board.board_members.size()+")", VaadinIcon.USERS.create(),this::membersbutton_action);
         members_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
 
-        update_button = new Button("Update Data",VaadinIcon.DATABASE.create());
+        update_button = new Button("Update Data",VaadinIcon.DATABASE.create(),this::updatebutton_action);
         update_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
 
-        changeowner_button = new Button("Change Owner",VaadinIcon.USER.create());
+        changeowner_button = new Button("Change Owner",VaadinIcon.USER.create(),this::changeownerbutton_action);
         changeowner_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
 
         addtask_button = new Button("Add Task",VaadinIcon.PLUS.create(),this::addtaskbutton_action);
         addtask_button.addThemeVariants(ButtonVariant.LUMO_SUCCESS,ButtonVariant.LUMO_PRIMARY);
+
+        boardhistory_button = new Button("History",VaadinIcon.TIME_BACKWARD.create(),this::historybutton_action);
+        boardhistory_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
    }
 
     /**
@@ -85,11 +89,34 @@ public class DetailsBoardWindow {
         right_layout.setSizeFull();
         right_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
         right_layout.setAlignItems(FlexComponent.Alignment.END);
-        right_layout.add(addtask_button);
+        right_layout.add(boardhistory_button,addtask_button);
 
         hl.add(left_layout,center_layout,right_layout);
+
+        // adding upper horizontal layout
         boardDetailsLayout.add(hl);
-        boardDetailsLayout.add(new H6(board.board_id.toString()));
+
+        // creating lower horizontal data layout
+        FlexLayout leftdown_layout = new FlexLayout();
+        leftdown_layout.setSizeFull();
+        leftdown_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.START);
+        leftdown_layout.setAlignItems(FlexComponent.Alignment.START);
+        leftdown_layout.add(new H6("ID: "+board.board_id.toString()));
+
+        FlexLayout rightdown_layout = new FlexLayout();
+        rightdown_layout.setSizeFull();
+        rightdown_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
+        rightdown_layout.setAlignItems(FlexComponent.Alignment.END);
+        rightdown_layout.add(new H6("OWNER: "+board.board_owner.getString("aim_user_email")));
+
+        HorizontalLayout hl_down = new HorizontalLayout();
+        hl_down.setWidth("100%");
+        hl_down.setMargin(true);
+        hl_down.getStyle().set("color","black");
+        hl_down.getStyle().set("border-radius","15px");
+        hl_down.add(leftdown_layout,rightdown_layout);
+        // adding lower horizontal layout
+        boardDetailsLayout.add(hl_down);
 
         //setup permission
         if ( !board.board_owner.equals(AimApplication.loggedUser.prepareDocument()) ){
@@ -109,6 +136,36 @@ public class DetailsBoardWindow {
     }
 
     /**
+     * history_button action
+     * @param ex
+     */
+    private void historybutton_action(ClickEvent ex){
+        BoardHistoryWindow bhw = new BoardHistoryWindow(board);
+        boardDetailsLayout.add(bhw.main_dialog);
+        bhw.main_dialog.open();
+    }
+
+    /**
+     * members_button action
+     * @param ex
+     */
+    private void membersbutton_action(ClickEvent ex){
+        BoardMembersWindow bmw = new BoardMembersWindow(board);
+        boardDetailsLayout.add(bmw.main_dialog);
+        bmw.main_dialog.open();
+    }
+
+    /**
+     * updateboard_button action
+     * @param ex
+     */
+    private void updatebutton_action(ClickEvent ex){
+        InsertBoardWindow ibw = new InsertBoardWindow(board);
+        boardDetailsLayout.add(ibw.main_dialog);
+        ibw.main_dialog.open();
+    }
+
+    /**
      * addtask_button action
      * @param ex
      */
@@ -116,5 +173,15 @@ public class DetailsBoardWindow {
         AddTaskBoardWindow atbw = new AddTaskBoardWindow(board,null);
         boardDetailsLayout.add(atbw.main_dialog);
         atbw.main_dialog.open();
+    }
+
+    /**
+     * changeowner_button
+     * @param ex
+     */
+    private void changeownerbutton_action(ClickEvent ex){
+        ChangeBoardOwnerWindow cbow = new ChangeBoardOwnerWindow(this);
+        boardDetailsLayout.add(cbow.main_dialog);
+        cbow.main_dialog.open();
     }
 }
