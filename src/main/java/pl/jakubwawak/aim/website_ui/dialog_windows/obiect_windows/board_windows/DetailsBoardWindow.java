@@ -19,6 +19,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Board;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_board.AIM_BoardTaskListLayout;
 
 public class DetailsBoardWindow {
 
@@ -27,6 +28,8 @@ public class DetailsBoardWindow {
     AIM_Board board;
 
     Button members_button,update_button,addtask_button,changeowner_button, boardhistory_button;
+
+    AIM_BoardTaskListLayout currentBoardTaskLayout;
 
 
 
@@ -58,6 +61,8 @@ public class DetailsBoardWindow {
 
         boardhistory_button = new Button("History",VaadinIcon.TIME_BACKWARD.create(),this::historybutton_action);
         boardhistory_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+
+        currentBoardTaskLayout = new AIM_BoardTaskListLayout(board);
    }
 
     /**
@@ -118,6 +123,9 @@ public class DetailsBoardWindow {
         // adding lower horizontal layout
         boardDetailsLayout.add(hl_down);
 
+        // add task list layout to window
+        boardDetailsLayout.add(currentBoardTaskLayout.main_layout);
+
         //setup permission
         if ( !board.board_owner.equals(AimApplication.loggedUser.prepareDocument()) ){
             members_button.setEnabled(false);
@@ -170,7 +178,7 @@ public class DetailsBoardWindow {
      * @param ex
      */
     private void addtaskbutton_action(ClickEvent ex){
-        AddTaskBoardWindow atbw = new AddTaskBoardWindow(board,null);
+        AddTaskBoardWindow atbw = new AddTaskBoardWindow(board,null,currentBoardTaskLayout);
         boardDetailsLayout.add(atbw.main_dialog);
         atbw.main_dialog.open();
     }

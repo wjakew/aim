@@ -87,4 +87,16 @@ public class AIM_Board {
         }
         return "Member";
     }
+
+    /**
+     * Function for loading task list
+     * @return ArrayList
+     */
+    public ArrayList<AIM_BoardTask> getTaskList(){
+        ArrayList<AIM_BoardTask> data = new ArrayList<>();
+        for(Document taskboard_document : task_list){
+            data.add(new AIM_BoardTask(taskboard_document));
+        }
+        return data;
+    }
 }

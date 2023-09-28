@@ -11,6 +11,7 @@ import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import org.springframework.cglib.core.Local;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Board;
@@ -56,6 +57,27 @@ public class Database_AIMBoard {
             database.log("DB-LIST-BOARD-FAILED","Failed to list board objects for user ("+ex.toString()+")");
         }
         return data;
+    }
+
+    /**
+     * Function for loading board object
+     * @param board_id
+     * @return AIM_Board
+     */
+    public AIM_Board getBoard(ObjectId board_id){
+        try{
+            MongoCollection<Document> board_collection = database.get_data_collection("aim_board");
+            Document board_document = board_collection.find(new Document("_id",board_id)).first();
+            if (board_document != null){
+                database.log("DB-GET-BOARD","Found board for given id ("+board_id.toString()+") task size: "+board_document.getList("task_list",Document.class).size());
+                return new AIM_Board(board_document);
+            }
+            database.log("DB-GET-BOARD","Cannot find board for id ("+board_id.toString()+")");
+            return null;
+        }catch(Exception ex){
+            database.log("DB-GET-BOARD-FAILED","Failed to get board data ("+ex.toString()+")");
+            return null;
+        }
     }
 
     /**
@@ -178,4 +200,5 @@ public class Database_AIMBoard {
             return -1;
         }
     }
+
 }

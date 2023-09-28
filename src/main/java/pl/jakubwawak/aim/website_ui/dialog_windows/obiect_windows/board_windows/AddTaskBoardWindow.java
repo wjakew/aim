@@ -24,6 +24,7 @@ import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Board;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_BoardTask;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_board.AIM_BoardTaskListLayout;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMBoard;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMUser;
 import pl.jakubwawak.maintanance.GridElement;
@@ -59,15 +60,18 @@ public class AddTaskBoardWindow {
 
     int newTask;
 
+    AIM_BoardTaskListLayout currentBoardTaskList;
+
 
     /**
      * Constructor
      */
-    public AddTaskBoardWindow(AIM_Board board, AIM_BoardTask task){
+    public AddTaskBoardWindow(AIM_Board board, AIM_BoardTask task, AIM_BoardTaskListLayout currentBoardTaskList){
         main_dialog = new Dialog();
         main_layout = new VerticalLayout();
         this.board = board;
         this.task = task;
+        this.currentBoardTaskList = currentBoardTaskList;
         newTask = 0;
         prepare_dialog();
     }
@@ -209,6 +213,7 @@ public class AddTaskBoardWindow {
                 int ans = dab.insertTaskToBoard(board,task);
                 if ( ans == 1 ){
                     Notification.show("Task added to board ("+board.board_id.toString()+")");
+                    currentBoardTaskList.reloadView(); // updating task view
                     main_dialog.close();
                 }
                 else{
