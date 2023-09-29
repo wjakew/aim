@@ -59,6 +59,8 @@ public class AIM_BoardTaskListLayout {
         // todo bug - 10 task in board not showing another page onlu the first
         Database_AIMBoard dab = new Database_AIMBoard(AimApplication.database);
         boardTaskContent.clear();
+        currentCollection.clear();
+        pages.clear();
         boardTaskContent = dab.getBoard(board.board_id).getTaskList();
         for(AIM_BoardTask abtObject : boardTaskContent){
             currentCollection.add(new AIM_BoardTaskLayout(abtObject,board));
@@ -66,26 +68,21 @@ public class AIM_BoardTaskListLayout {
 
         // creating pages
         int pageIndex = 1;
-        boolean addFlag = false;
         BoardTaskListPage btlp = new BoardTaskListPage(pageIndex,board);
-
+        int ans = 0;
         for(AIM_BoardTaskLayout abtl : currentCollection){
-            int ans = btlp.addLayout(abtl);
+            ans = btlp.addLayout(abtl);
             if ( ans == 10 ){
                 btlp.prepareLayout();
                 pages.add(btlp);
                 pageIndex++;
                 btlp = new BoardTaskListPage(pageIndex,board);
-                addFlag = true;
-            }
-            else{
-                addFlag = false;
+                btlp.addLayout(abtl);
             }
         }
-        if (!addFlag){
-            btlp.prepareLayout();
-            pages.add(btlp);
-        }
+
+        btlp.prepareLayout();
+        pages.add(btlp);
     }
 
     /**
@@ -105,7 +102,8 @@ public class AIM_BoardTaskListLayout {
         reloadTaskBoardCollection();
         main_layout.removeAll();
         main_layout.add(pages.get(pageIndex).main_layout);
-        main_layout.add(new HorizontalLayout(previous_button,new H6(currentPage+1 + "/" + pages.size()),next_button));
+        int pageIndexLabel = currentPage+1;
+        main_layout.add(new HorizontalLayout(previous_button,new H6(pageIndexLabel + "/" + pages.size()),next_button));
 
         if ( currentPage == 0 ){
             previous_button.setEnabled(false);
