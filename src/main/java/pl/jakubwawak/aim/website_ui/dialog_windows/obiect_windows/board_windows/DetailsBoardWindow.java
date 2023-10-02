@@ -29,7 +29,6 @@ public class DetailsBoardWindow {
 
     Button members_button,update_button,addtask_button,changeowner_button, boardhistory_button;
 
-    AIM_BoardTaskListLayout currentBoardTaskLayout;
 
 
 
@@ -62,7 +61,7 @@ public class DetailsBoardWindow {
         boardhistory_button = new Button("History",VaadinIcon.TIME_BACKWARD.create(),this::historybutton_action);
         boardhistory_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
 
-        currentBoardTaskLayout = new AIM_BoardTaskListLayout(board);
+        AimApplication.currentBoardTaskList = new AIM_BoardTaskListLayout(board);
    }
 
     /**
@@ -124,7 +123,7 @@ public class DetailsBoardWindow {
         boardDetailsLayout.add(hl_down);
 
         // add task list layout to window
-        boardDetailsLayout.add(currentBoardTaskLayout.main_layout);
+        boardDetailsLayout.add(AimApplication.currentBoardTaskList.main_layout);
 
         //setup permission
         if ( !board.board_owner.equals(AimApplication.loggedUser.prepareDocument()) ){
@@ -178,7 +177,7 @@ public class DetailsBoardWindow {
      * @param ex
      */
     private void addtaskbutton_action(ClickEvent ex){
-        AddTaskBoardWindow atbw = new AddTaskBoardWindow(board,null,currentBoardTaskLayout);
+        AddTaskBoardWindow atbw = new AddTaskBoardWindow(board,null);
         boardDetailsLayout.add(atbw.main_dialog);
         atbw.main_dialog.open();
     }

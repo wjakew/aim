@@ -7,7 +7,6 @@ package pl.jakubwawak.aim.website_ui.views;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -17,11 +16,11 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.theme.lumo.Lumo;
+import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 import pl.jakubwawak.aim.AimApplication;
-import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_board.CurrentBoardComposer;
-import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_projects.CurrentProjectComposer;
-import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task.CurrentTaskComposer;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.UserDashboardLayout;
 import pl.jakubwawak.aim.website_ui.dialog_windows.AddElementWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.UserWindow;
 import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
@@ -29,23 +28,21 @@ import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
 /**
  * Object for showing welcome view
  */
-@PageTitle("aim home")
-@Route(value = "home")
-public class HomeView extends VerticalLayout {
+@PageTitle("aim dashboard")
+@Route(value = "dashboard")
+public class DashboardView extends VerticalLayout {
 
-    HorizontalLayout headerLayout, navigationLayout;
+    HorizontalLayout headerLayout;
     Button home_button, terminal_button, addelement_button,logout_button,user_button;
-
-    Button taskview_button, projectview_button, boardview_button;
-
 
 
     /**
      * Constructor
      */
-    public HomeView(){
+    public DashboardView(){
         this.getElement().setAttribute("theme", Lumo.DARK);
         prepare_view();
+
         setSizeFull();
         setJustifyContentMode(JustifyContentMode.CENTER);
         setDefaultHorizontalComponentAlignment(Alignment.CENTER);
@@ -91,60 +88,6 @@ public class HomeView extends VerticalLayout {
     }
 
     /**
-     * Function for preparing navigation bar
-     */
-    void prepareNavigationBar(){
-        taskview_button = new Button("Tasks",VaadinIcon.TASKS.create(),this::taskviewbutton_action);
-        projectview_button = new Button("Projects",VaadinIcon.BOOK.create(),this::projectviewbutton_action);
-        boardview_button = new Button("Boards", VaadinIcon.DASHBOARD.create(),this::boardviewbutton_action);
-
-        taskview_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_CONTRAST);
-        projectview_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_CONTRAST);
-        boardview_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_CONTRAST);
-
-        navigationLayout = new HorizontalLayout(taskview_button,projectview_button,boardview_button);
-        navigationLayout.setMargin(true);
-        navigationLayout.setAlignItems(Alignment.CENTER);
-    }
-
-    /**
-     * Function for loading main page component
-     */
-    void loadMainPageComponent(int viewIndex){
-        removeAll();
-        prepare_components();
-        prepare_header();
-        prepareNavigationBar();
-
-        add(headerLayout);
-        add(navigationLayout);
-
-        switch(viewIndex){
-            case 0: {
-                // task component
-                // creating new task composer on main page
-                AimApplication.session_ctc = new CurrentTaskComposer();
-                add(AimApplication.session_ctc.mainLayout);
-                Notification.show("Reload page view - tasks");
-                break;
-            }
-            case 1:{
-                // projects component
-                AimApplication.session_cpc = new CurrentProjectComposer();
-                add(AimApplication.session_cpc.mainLayout);
-                Notification.show("Reload page view - projects");
-                break;
-            }
-            default:{
-                AimApplication.session_cbc = new CurrentBoardComposer();
-                add(AimApplication.session_cbc.mainLayout);
-                Notification.show("Reload page view - boards");
-                break;
-            }
-        }
-    }
-
-    /**
      * Function for preparing components
      */
     void prepare_components(){
@@ -161,7 +104,6 @@ public class HomeView extends VerticalLayout {
 
         logout_button = new Button("Log out",VaadinIcon.EXIT.create(),this::logoutbutton_action);
         new ButtonStyler().primaryButtonStyle(logout_button,"80%","");
-
     }
 
     /**
@@ -169,8 +111,11 @@ public class HomeView extends VerticalLayout {
      */
     void prepare_view(){
         if (AimApplication.loggedUser != null){
-            // loading selected object on main page
-            loadMainPageComponent(0);
+            prepare_components();
+            prepare_header();
+            add(headerLayout);
+            UserDashboardLayout udl = new UserDashboardLayout();
+            add(udl.main_dashboard_layout);
         }
         else{
             // user not logged
@@ -183,28 +128,12 @@ public class HomeView extends VerticalLayout {
     //--button action functions
 
     /**
-     * taskview_button action
-     * @param ex
-     */
-    private void taskviewbutton_action(ClickEvent ex){
-        loadMainPageComponent(0);
-    }
-
-    private void projectviewbutton_action(ClickEvent ex){
-        loadMainPageComponent(1);
-    }
-
-    private void boardviewbutton_action(ClickEvent ex){
-        loadMainPageComponent(2);
-    }
-
-    /**
      * home_button action
      * @param ex
      */
     private void homebutton_action(ClickEvent ex){
         home_button.getUI().ifPresent(ui ->
-                ui.navigate("/dashboard"));
+                ui.navigate("/home"));
     }
 
     /**

@@ -211,7 +211,7 @@ public class Database_AIMProject {
             currentProject.task_list.remove(taskToUpdate.prepareDocument());
             // setting new task status and adding history
             taskToUpdate.status = newStatus;
-            taskToUpdate.aim_task_history.add(LocalDateTime.now(ZoneId.of("Europe/Warsaw"))+" - changed status to: "+newStatus);
+            taskToUpdate.aim_task_history.add(AimApplication.loggedUser.aim_user_email+" - "+LocalDateTime.now(ZoneId.of("Europe/Warsaw"))+" - changed status to: "+newStatus);
             currentProject.task_list.add(taskToUpdate.prepareDocument());
             // adding data to project history
             currentProject.project_history.add(LocalDateTime.now(ZoneId.of("Europe/Warsaw"))+" - updated status of task");
@@ -228,7 +228,7 @@ public class Database_AIMProject {
             database.log("DB-PROJECT-TASK-UPDATE","Task status cannot be updated, result is 0 or project is empty!");
             return 0;
         }catch(Exception ex){
-            database.log("DB-PROJECT-TASK-UPDATE","Failed to update task status from project ("+ex.toString()+")");
+            database.log("DB-PROJECT-TASK-UPDATE-FAILED","Failed to update task status from project ("+ex.toString()+")");
             return -1;
         }
     }

@@ -5,7 +5,9 @@
  */
 package pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_board;
 
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -16,6 +18,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Board;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_BoardTask;
+import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.task_windows.DetailsTaskWindow;
 
 /**
  * Object for showing board task layout data
@@ -31,6 +34,8 @@ public class AIM_BoardTaskLayout{
     Button showDetails_button;
 
     Button addtask_button;
+    AIM_BoardTaskListLayout currentBoardTaskList;
+
 
     /**
      * Constructor
@@ -55,7 +60,7 @@ public class AIM_BoardTaskLayout{
      */
     void prepareLayout(){
         if ( taskObject != null ){
-            showDetails_button = new Button("", VaadinIcon.INFO_CIRCLE.create());
+            showDetails_button = new Button("", VaadinIcon.INFO_CIRCLE.create(),this::showdetailsbutton_action);
             showDetails_button.getStyle().set("background-color","grey");
             showDetails_button.getStyle().set("color","white");
 
@@ -63,7 +68,7 @@ public class AIM_BoardTaskLayout{
             left_layout.setSizeFull();
             left_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.START);
             left_layout.setAlignItems(FlexComponent.Alignment.START);
-            left_layout.add(new H4(taskObject.aim_task_name));
+            left_layout.add(new H3(taskObject.aim_task_name));
 
             FlexLayout right_layout = new FlexLayout();
             right_layout.setSizeFull();
@@ -74,20 +79,64 @@ public class AIM_BoardTaskLayout{
             HorizontalLayout hl_center = new HorizontalLayout(left_layout,right_layout);
 
             hl_center.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
-            hl_center.setWidth("100%");
-            hl_center.addClassNames("py-0", "px-m");
+            hl_center.setWidth("100%");hl_center.setHeight("10%");
 
             main_layout.add(hl_center);
 
+            HorizontalLayout hl_center_low = new HorizontalLayout(left_layout,right_layout);
+
+            hl_center_low.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+            hl_center_low.setWidth("100%");hl_center_low.setHeight("10%");
+
+            String ownLabel = "";
+            if ( taskObject.aim_user_assigned != null ){
+                ownLabel = taskObject.aim_user_assigned.getString("aim_user_email");
+            }
+
+            if ( ownLabel.isEmpty()){
+                hl_center_low.add(new H6(taskObject.status));
+            }
+            else{
+                hl_center_low.add(new H6(taskObject.status+"/"+ownLabel));
+            }
+
+            main_layout.add(hl_center_low);
+
+            // show by colors assigned to and current status
+            String assignedColorHex = "";
+            String currentStatusColorHex = "";
             if ( taskObject.aim_user_assigned == null){
-                main_layout.getStyle().set("background-color","green");
+                // task assigned to no one
+                assignedColorHex = "#EACBD2";
             }
             else if ( taskObject.aim_user_assigned.equals(AimApplication.loggedUser.prepareDocument())){
-                main_layout.getStyle().set("background-color","blue");
+                // task assigned to logged user
+                assignedColorHex = "#DD9AC2";
             }
             else {
-                main_layout.getStyle().set("background-color","grey");
+                // task assigned to other user
+                assignedColorHex = "#82667F";
             }
+
+            switch(taskObject.status){
+                case "NEW":
+                {
+                    currentStatusColorHex = "#DBFCFF";
+                    break;
+                }
+                case "IN PROGRESS":
+                {
+                    currentStatusColorHex = "#8390FA";
+                    break;
+                }
+                case "DONE":
+                {
+                    currentStatusColorHex = "#1D2F6F";
+                    break;
+                }
+            }
+            String backgroundValue = "radial-gradient("+assignedColorHex +","+ currentStatusColorHex+")";
+            main_layout.getStyle().set("background-image",backgroundValue);
         }
         else{
             addtask_button = new Button("", VaadinIcon.PLUS.create());
@@ -104,6 +153,16 @@ public class AIM_BoardTaskLayout{
 
         main_layout.getStyle().set("color","#FFFFFF");
         main_layout.getStyle().set("--lumo-font-family","Monospace");
+    }
+
+    /**
+     * showdetails_button action
+     * @param ex
+     */
+    private void showdetailsbutton_action(ClickEvent ex){
+        DetailsTaskWindow dtw = new DetailsTaskWindow(taskObject,boardObject);
+        main_layout.add(dtw.main_dialog);
+        dtw.main_dialog.open();
     }
 
 

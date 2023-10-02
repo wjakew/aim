@@ -27,8 +27,8 @@ import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMUser;
 public class ChangeTaskOwnerWindow {
 
     // variables for setting x and y of window
-    public String width = "";
-    public String height = "";
+    public String width = "50%";
+    public String height = "30%";
     public String backgroundStyle = "";
 
     // main login components
@@ -58,10 +58,11 @@ public class ChangeTaskOwnerWindow {
         // set components
         ownerlogin_field = new TextField("User Email");
         ownerlogin_field.setPrefixComponent(VaadinIcon.USER.create());
+        ownerlogin_field.setPlaceholder("New Owner Email...");
         ownerlogin_field.setWidth("100%");
 
         change_button = new Button("Change Owner",this::changebutton_action);
-        change_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        change_button.addThemeVariants(ButtonVariant.LUMO_ERROR,ButtonVariant.LUMO_PRIMARY);
         change_button.setWidth("100%");
 
     }
@@ -75,6 +76,7 @@ public class ChangeTaskOwnerWindow {
 
         main_layout.add(new H6("CHANGE TASK OWNER"));
         main_layout.add(ownerlogin_field);
+        main_layout.add(new H6("WARNING! YOU CANNOT UNDO THIS OPERATION WITHOUT NEW OWNER!"));
         main_layout.add(change_button);
 
         main_layout.setSizeFull();

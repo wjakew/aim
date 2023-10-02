@@ -10,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_GlobalConfiguration;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_User;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_board.AIM_BoardTaskListLayout;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_board.CurrentBoardComposer;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_projects.CurrentProjectComposer;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task.CurrentTaskComposer;
@@ -23,7 +24,7 @@ import java.util.Scanner;
 public class AimApplication {
 
 	public static String version = "v1.0.0";
-	public static String build = "aim290923REV01";
+	public static String build = "aim021023REV01";
 	public static int test_flag = 0; // flag for enabling testing
 	public static int log_database_dump_flag = 0; // flag for enabling database log dump
 
@@ -37,6 +38,7 @@ public class AimApplication {
 	public static CurrentTaskComposer session_ctc;
 	public static CurrentProjectComposer session_cpc;
 	public static CurrentBoardComposer session_cbc;
+	public static AIM_BoardTaskListLayout currentBoardTaskList;
 
 	/**
 	 * Main application function
@@ -49,6 +51,7 @@ public class AimApplication {
 		session_ctc = null;
 		session_cpc = null;
 		session_cbc = null;
+		currentBoardTaskList = null;
 		database = new Database_Connector();
 		if ( test_flag == 0 ){
 			// run application in normal mode

@@ -56,7 +56,6 @@ public class AIM_BoardTaskListLayout {
      * Function for reloading task board collection
      */
     void reloadTaskBoardCollection(){
-        // todo bug - 10 task in board not showing another page onlu the first
         Database_AIMBoard dab = new Database_AIMBoard(AimApplication.database);
         boardTaskContent.clear();
         currentCollection.clear();
@@ -98,7 +97,6 @@ public class AIM_BoardTaskListLayout {
      * @param pageIndex
      */
     public void reloadView(int pageIndex){
-        // todo bug after showing another next page page number increases by ^2
         reloadTaskBoardCollection();
         main_layout.removeAll();
         main_layout.add(pages.get(pageIndex).main_layout);

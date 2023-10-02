@@ -60,18 +60,15 @@ public class AddTaskBoardWindow {
 
     int newTask;
 
-    AIM_BoardTaskListLayout currentBoardTaskList;
-
 
     /**
      * Constructor
      */
-    public AddTaskBoardWindow(AIM_Board board, AIM_BoardTask task, AIM_BoardTaskListLayout currentBoardTaskList){
+    public AddTaskBoardWindow(AIM_Board board, AIM_BoardTask task){
         main_dialog = new Dialog();
         main_layout = new VerticalLayout();
         this.board = board;
         this.task = task;
-        this.currentBoardTaskList = currentBoardTaskList;
         newTask = 0;
         prepare_dialog();
     }
@@ -213,7 +210,7 @@ public class AddTaskBoardWindow {
                 int ans = dab.insertTaskToBoard(board,task);
                 if ( ans == 1 ){
                     Notification.show("Task added to board ("+board.board_id.toString()+")");
-                    currentBoardTaskList.reloadView(); // updating task view
+                    AimApplication.currentBoardTaskList.reloadView(); // updating task view
                     main_dialog.close();
                 }
                 else{

@@ -19,12 +19,18 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
+import org.bson.Document;
 import pl.jakubwawak.aim.AimApplication;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Board;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_BoardTask;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Project;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_board.AIM_BoardTaskListLayout;
+import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMBoard;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMProject;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
 import pl.jakubwawak.aim.website_ui.dialog_windows.MessageComponent;
+import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.board_windows.AddTaskBoardWindow;
 import pl.jakubwawak.maintanance.GridElement;
 
 import java.util.ArrayList;
@@ -56,7 +62,11 @@ public class DetailsTaskWindow {
     Button update_button, changeowner_button, delete_button;
 
     AIM_Project projectWithTask;
+    AIM_Board boardWithTask;
+    Document assignedUser;
+    AIM_BoardTask boardTask;
 
+    ComboBox<GridElement> assignedmember_combobox;
 
     /**
      * Constructor
@@ -65,6 +75,9 @@ public class DetailsTaskWindow {
         this.taskObject = taskObject;
         main_dialog = new Dialog();
         main_layout = new VerticalLayout();
+        assignedUser = null;
+        projectWithTask = null;
+        boardWithTask = null;
         prepare_dialog();
     }
 
@@ -76,6 +89,24 @@ public class DetailsTaskWindow {
     public DetailsTaskWindow(AIM_Task taskObject,AIM_Project projectWithTask){
         this.taskObject = taskObject;
         this.projectWithTask = projectWithTask;
+        boardWithTask = null;
+        assignedUser = null;
+        main_dialog = new Dialog();
+        main_layout = new VerticalLayout();
+        prepare_dialog();
+    }
+
+    /**
+     * Constuctor with board
+     * @param taskObject
+     * @param boardWithTask
+     */
+    public DetailsTaskWindow(AIM_BoardTask taskObject, AIM_Board boardWithTask){
+        this.taskObject = taskObject;
+        this.boardTask = taskObject;
+        assignedUser = taskObject.aim_user_assigned;
+        this.projectWithTask = null;
+        this.boardWithTask = boardWithTask;
         main_dialog = new Dialog();
         main_layout = new VerticalLayout();
         prepare_dialog();
@@ -129,8 +160,32 @@ public class DetailsTaskWindow {
         delete_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_ERROR);
         delete_button.setWidth("100%");
 
+        assignedmember_combobox = new ComboBox<>("Assigned User");
+
+        if ( boardWithTask != null ){
+            ArrayList<GridElement> membersData = new ArrayList<>();
+
+            membersData.add(new GridElement("All"));
+
+            for(Document member: boardWithTask.board_members){
+                membersData.add(new GridElement(member.getString("aim_user_email")));
+            }
+
+            membersData.add(new GridElement(AimApplication.loggedUser.aim_user_email));
+            assignedmember_combobox.setItems(membersData);
+            assignedmember_combobox.setItemLabelGenerator(GridElement::getGridelement_text);
+
+            if ( assignedUser!= null ){
+                assignedmember_combobox.setValue(new GridElement(assignedUser.getString("aim_user_email")));
+            }
+            else{
+                assignedmember_combobox.setValue(new GridElement("All"));
+            }
+        }
+
+        // action change listeren on status combobox
         status_combobox.addValueChangeListener(e->{
-            if ( projectWithTask == null ){
+            if ( projectWithTask == null && boardWithTask == null){
                 // task alone - not linked to project
                 String newStatus = status_combobox.getValue().getGridelement_text();
                 Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
@@ -140,15 +195,38 @@ public class DetailsTaskWindow {
                     AimApplication.session_ctc.updateLayout();
                 }
             }
-            else{
+            else if ( projectWithTask != null && boardWithTask == null){
                 // task linked to project
                 String newStatus = status_combobox.getValue().getGridelement_text();
                 Database_AIMProject dap = new Database_AIMProject(AimApplication.database);
                 int ans = dap.updateTaskStatus(projectWithTask,taskObject,newStatus);
                 if (ans > 0){
-                    Notification.show("Projects task status updated");
+                    Notification.show("Project's task status updated");
                     AimApplication.session_cpc.updateLayout();
                 }
+            }
+            else if (projectWithTask == null && boardWithTask != null){
+                // task linked to board
+                //todo update task on status on board
+                String newStatus = status_combobox.getValue().getGridelement_text();
+                Database_AIMBoard dab = new Database_AIMBoard(AimApplication.database);
+                int ans = dab.changeTaskStatusOnBoard(boardWithTask,boardTask,newStatus);
+                if (ans > 0){
+                    Notification.show("Board's task status updated!");
+                    AimApplication.currentBoardTaskList.reloadView();
+                }
+            }
+        });
+
+        // action change listener on assigned combobox
+        assignedmember_combobox.addValueChangeListener(e ->{
+            String email = assignedmember_combobox.getValue().getGridelement_text();
+            Database_AIMBoard dab = new Database_AIMBoard(AimApplication.database);
+            int ans = dab.changeAssinedUserToTask(boardWithTask,boardTask,email);
+            if ( ans > 0 ){
+                Notification.show("Board's task assigned changed!");
+                AimApplication.currentBoardTaskList.reloadView();
+                main_dialog.close();
             }
         });
 
@@ -161,7 +239,6 @@ public class DetailsTaskWindow {
                 break;
             }
         });
-
     }
 
     /**
@@ -176,6 +253,9 @@ public class DetailsTaskWindow {
         if ( projectWithTask != null ){
             main_layout.add(new H6("no id (belongs to "+projectWithTask.aim_project_name+")"));
         }
+        else if ( boardWithTask != null ){
+            main_layout.add(new H6("no id (belongs to "+boardWithTask.board_name+")"));
+        }
         else{
             if ( taskObject.aim_task_id != null ){
                 main_layout.add(new H6(taskObject.aim_task_id.toString()));
@@ -183,7 +263,6 @@ public class DetailsTaskWindow {
             else{
                 main_layout.add(new H6("no id (null)"));
             }
-
         }
         main_layout.add(taskdesc_area);
 
@@ -207,6 +286,10 @@ public class DetailsTaskWindow {
         vl_left.add(history_grid);
 
         vl_right.add(new H6("Created: "+taskObject.aim_task_timestamp),new H6("Deadline: "+taskObject.aim_task_deadline),status_combobox,update_button,changeowner_button);
+
+        if ( boardWithTask != null ){
+            vl_right.add(assignedmember_combobox);
+        }
 
         hl_down_layout.add(vl_left,vl_right);
         hl_down_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
@@ -232,6 +315,10 @@ public class DetailsTaskWindow {
             changeowner_button.setEnabled(false);
             update_button.setEnabled(false);
         }
+
+        if ( boardWithTask == null ){
+            assignedmember_combobox.setEnabled(false);
+        }
     }
 
     /**
@@ -250,9 +337,11 @@ public class DetailsTaskWindow {
      * @param ex
      */
     private void updatebutton_action(ClickEvent ex){
-        InsertTaskWindow itw = new InsertTaskWindow(taskObject);
-        main_layout.add(itw.main_dialog);
-        itw.main_dialog.open();
+        if ( boardWithTask == null ){
+            InsertTaskWindow itw = new InsertTaskWindow(taskObject);
+            main_layout.add(itw.main_dialog);
+            itw.main_dialog.open();
+        }
     }
 
     /**
@@ -260,6 +349,7 @@ public class DetailsTaskWindow {
      * @param ex
      */
     private void deletebutton_action(ClickEvent ex){
+
         if ( taskObject.aim_task_id != null ){
             Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
             String data = dat.remove(taskObject);
@@ -267,13 +357,24 @@ public class DetailsTaskWindow {
             AimApplication.session_ctc.updateLayout();
             main_dialog.close();
         }
-        else{
+
+        else if (projectWithTask != null){
             Database_AIMProject dap = new Database_AIMProject(AimApplication.database);
             int ans = dap.removeTaskFromProject(projectWithTask,taskObject);
             if ( ans == 1 ){
                 Notification.show("Removed from project ("+projectWithTask.aim_project_id+")");
                 main_dialog.close();
                 AimApplication.session_cpc.updateLayout();
+            }
+        }
+
+        else if (boardWithTask != null){
+            Database_AIMBoard dab = new Database_AIMBoard(AimApplication.database);
+            int ans = dab.removeTaskFromBoard(boardWithTask,boardTask);
+            if ( ans == 1 ){
+                Notification.show("Removed from board ("+boardWithTask.board_id+")");
+                main_dialog.close();
+                AimApplication.currentBoardTaskList.reloadView();
             }
         }
     }

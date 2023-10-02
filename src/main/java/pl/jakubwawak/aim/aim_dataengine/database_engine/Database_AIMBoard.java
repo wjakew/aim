@@ -7,6 +7,8 @@ package pl.jakubwawak.aim.aim_dataengine.database_engine;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.ReplaceOptions;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
@@ -197,6 +199,119 @@ public class Database_AIMBoard {
 
         }catch (Exception ex){
             database.log("DB-INSERT-BOARD-TASK-INSERT-FAILED","Failed to insert task to board ("+ex.toString()+")");
+            return -1;
+        }
+    }
+
+    /**
+     * Function for changing task status
+     * @param board
+     * @param taskToUpdate
+     * @param newStatus
+     * @return Integer
+     */
+    public int changeTaskStatusOnBoard(AIM_Board board, AIM_BoardTask taskToUpdate, String newStatus){
+        try{
+            MongoCollection<Document> board_collection = database.get_data_collection("aim_board");
+            // loading board object
+            Document board_document = board_collection.find(new Document("_id",board.board_id)).first();
+            AIM_Board currentBoard = new AIM_Board(board_document);
+            // removing task from object
+            currentBoard.task_list.remove(taskToUpdate.prepareDocument());
+            // setting new task status and adding history
+            taskToUpdate.status = newStatus;
+            taskToUpdate.aim_task_history.add(AimApplication.loggedUser.aim_user_email+" - "+LocalDateTime.now(ZoneId.of("Europe/Warsaw"))+" - changed status to: "+newStatus);
+            currentBoard.task_list.add(taskToUpdate.prepareDocument());
+            // adding data to board history
+            currentBoard.board_history.add(AimApplication.loggedUser.aim_user_email+" - "+LocalDateTime.now().toString()+" - updated task ("+taskToUpdate.aim_task_name+")");
+            // loading replacing query
+            Bson query = Filters.eq("_id",board.board_id);
+            // replacing board data
+            ReplaceOptions opts = new ReplaceOptions().upsert(true);
+            UpdateResult result = board_collection.replaceOne(query,currentBoard.prepareDocument(),opts);
+            if ( result.getModifiedCount() > 0 ){
+                database.log("DB-BOARD-TASK-UPDATE","Task status on board ("+board.board_id.toString()+") updated!");
+                return 1;
+            }
+            database.log("DB-BOARD-TASK-UPDATE","Nothing on update while changing status ("+taskToUpdate.aim_task_id.toString()+") on board ("+board.board_id+")");
+            return 0;
+        }catch(Exception ex){
+            database.log("DB-BOARD-TASK-UPDATE-FAILED","Failed to update task status on project ("+ex.toString()+")");
+            return -1;
+        }
+    }
+
+    /**
+     * Function for changing assigned user to task
+     * @param board
+     * @param taskToUpdate
+     * @param newAssignedEmail
+     * @return Integer
+     */
+    public int changeAssinedUserToTask(AIM_Board board, AIM_BoardTask taskToUpdate, String newAssignedEmail){
+        Document newAssignedUserDocument = null;
+        if ( !newAssignedEmail.equals("All") ){
+            Database_AIMUser dau = new Database_AIMUser(AimApplication.database);
+            newAssignedUserDocument = dau.getAIMUser(newAssignedEmail).prepareDocument();
+        }
+        try{
+            MongoCollection<Document> board_collection = database.get_data_collection("aim_board");
+            // loading board object
+            Document board_document = board_collection.find(new Document("_id",board.board_id)).first();
+            AIM_Board currentBoard = new AIM_Board(board_document);
+            // removing task from object
+            currentBoard.task_list.remove(taskToUpdate.prepareDocument());
+            // setting new task status and adding history
+            taskToUpdate.aim_user_assigned = newAssignedUserDocument;
+            taskToUpdate.aim_task_history.add(AimApplication.loggedUser.aim_user_email+" - "+LocalDateTime.now(ZoneId.of("Europe/Warsaw"))+" - assigned user changed to: "+newAssignedEmail);
+            currentBoard.task_list.add(taskToUpdate.prepareDocument());
+            // adding data to board history
+            currentBoard.board_history.add(AimApplication.loggedUser.aim_user_email+" - "+LocalDateTime.now().toString()+" - updated task ("+taskToUpdate.aim_task_name+")");
+            // loading replacing query
+            Bson query = Filters.eq("_id",board.board_id);
+            // replacing board data
+            ReplaceOptions opts = new ReplaceOptions().upsert(true);
+            UpdateResult result = board_collection.replaceOne(query,currentBoard.prepareDocument(),opts);
+            if ( result.getModifiedCount() > 0 ){
+                database.log("DB-BOARD-TASK-CHANGEASSIGNED","Task assigned on board ("+board.board_id.toString()+") updated!");
+                return 1;
+            }
+            database.log("DB-BOARD-TASK-CHANGEASSIGNED","Nothing on update while changing assigned user ("+taskToUpdate.aim_task_id.toString()+") on board ("+board.board_id+")");
+            return 0;
+        }catch(Exception ex){
+            database.log("DB-BOARD-TASK-CHANGEASSIGNED-FAILED","Failed to update task assigned user on project ("+ex.toString()+")");
+            return -1;
+        }
+    }
+
+    /**
+     * Function for removing task from board
+     * @param taskToRemove
+     * @return Integer
+     */
+    public int removeTaskFromBoard(AIM_Board board, AIM_BoardTask taskToRemove){
+        try{
+            MongoCollection<Document> board_collection = database.get_data_collection("aim_board");
+            Document board_document = board_collection.find(new Document("_id",board.board_id)).first();
+            if (board_document != null){
+                List<Document> taskList = board_document.getList("task_list",Document.class);
+                taskList.remove(taskToRemove.prepareDocument());
+                List<String> board_history = board_document.getList("board_history",String.class);
+                board_history.add(AimApplication.loggedUser.aim_user_email+" - "+LocalDateTime.now().toString()+" - removed task ("+taskToRemove.aim_task_name+")");
+                Bson updates = Updates.combine(
+                        Updates.set("task_list",taskList),
+                        Updates.set("board_history",board_history)
+                );
+                UpdateResult result = board_collection.updateOne(board.prepareDocument(), updates);
+                if ( result.getModifiedCount() > 0) {
+                    database.log("DB-BOARD-TASK-REMOVE", "Removed task from board (" + board.board_id.toString() + ") code (" + result.getModifiedCount() + ")");
+                    return 1;
+                }
+            }
+            database.log("DB-BOARD-TASK-REMOVE","Task cannot be removed, result is 0 or board is empty!");
+            return 0;
+        }catch(Exception ex){
+            database.log("DB-BOARD-TASK-REMOVE-FAILED","Failed to remove task from board ("+ex.toString()+")");
             return -1;
         }
     }
