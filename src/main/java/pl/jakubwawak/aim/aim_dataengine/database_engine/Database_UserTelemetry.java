@@ -46,7 +46,6 @@ public class Database_UserTelemetry {
         for(AIM_Task userTask : dat.getTaskCollection()){
             if ( !userTask.status.equals("DONE") ){
                 openTasks++;
-                openTasksInProjects++;
             }
         }
         for(AIM_Project userProject : dap.getUserProjects()){
@@ -54,6 +53,7 @@ public class Database_UserTelemetry {
             for(AIM_Task userTaskInProject : userProject.getTaskCollection()){
                 if (!userTaskInProject.status.equals("DONE")){
                     openTasks++;
+                    openTasksInProjects++;
                 }
             }
         }
@@ -89,5 +89,15 @@ public class Database_UserTelemetry {
         data.add(projectCount);
         data.add(boardCount);
         return data;
+    }
+
+    /**
+     * Function for calculating open task percent
+     * @return String
+     */
+    public String calculateTaskPercent(){
+        ArrayList<Integer> data = userTaskStatistic();
+        double percent = (double) data.get(1) /data.get(0)*100;
+        return Double.toString(percent).substring(0,2) + "%";
     }
 }
