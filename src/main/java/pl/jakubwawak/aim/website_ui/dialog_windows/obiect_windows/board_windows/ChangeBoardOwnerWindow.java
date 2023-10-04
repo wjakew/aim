@@ -58,6 +58,7 @@ public class ChangeBoardOwnerWindow {
         email_field = new TextField("New Owner Mail");
         email_field.setPlaceholder("Aim User Email...");
         email_field.setWidth("100%");
+        email_field.setMaxLength(50);
 
         change_button = new Button("Change Owner", VaadinIcon.USER_CARD.create(),this::changebutton_action);
         change_button.addThemeVariants(ButtonVariant.LUMO_ERROR,ButtonVariant.LUMO_PRIMARY);

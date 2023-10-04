@@ -81,10 +81,12 @@ public class AddTaskBoardWindow {
         taskname_field = new TextField("Task Name");
         taskname_field.setPlaceholder("Your New Board Task!");
         taskname_field.setWidth("100%");
+        taskname_field.setMaxLength(30);
 
         taskdesc_field = new TextArea("Task Description");
         taskdesc_field.setPlaceholder("Tell me something about that task...");
         taskdesc_field.setWidth("100%");
+        taskdesc_field.setMaxLength(150);
 
         status_combobox = new ComboBox<>("Task Status");
 

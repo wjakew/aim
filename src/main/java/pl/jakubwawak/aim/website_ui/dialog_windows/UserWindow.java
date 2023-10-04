@@ -5,6 +5,7 @@
  */
 package pl.jakubwawak.aim.website_ui.dialog_windows;
 
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H6;
@@ -30,7 +31,7 @@ public class UserWindow {
     public Dialog main_dialog;
     VerticalLayout main_layout;
 
-    Button removeaccount_button, changepassword_button;
+    Button removeaccount_button, changepassword_button, adminconsole_button;
 
     /**
      * Constructor
@@ -49,8 +50,10 @@ public class UserWindow {
         removeaccount_button = new Button("Remove Account", VaadinIcon.USER.create());
         new ButtonStyler().primaryButtonStyle(removeaccount_button,"100%","");
 
-        changepassword_button = new Button("Change Password", VaadinIcon.PENCIL.create());
+        changepassword_button = new Button("Change Password", VaadinIcon.PENCIL.create(),this::changepasswordbutton);
         new ButtonStyler().primaryButtonStyle(changepassword_button,"100%","");
+        adminconsole_button = new Button("Admin Console", VaadinIcon.UMBRELLA.create(),this::adminconsolebutton_action);
+        new ButtonStyler().primaryButtonStyle(adminconsole_button,"100%","");
     }
 
     /**
@@ -65,6 +68,10 @@ public class UserWindow {
         main_layout.add(removeaccount_button);
         main_layout.add(changepassword_button);
 
+        if(AimApplication.loggedUser.aim_user_type.equals("SERVERADM")){
+            main_layout.add(adminconsole_button);
+        }
+
         main_layout.setSizeFull();
         main_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         main_layout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
@@ -75,5 +82,25 @@ public class UserWindow {
         main_layout.getStyle().set("--lumo-font-family","Monospace");
         main_dialog.add(main_layout);
         main_dialog.setWidth(width);main_dialog.setHeight(height);
+    }
+
+    /**
+     * changepassword_button action
+     * @param ex
+     */
+    private void changepasswordbutton(ClickEvent ex){
+        ResetUserPasswordWindow rupw = new ResetUserPasswordWindow(1);
+        main_layout.add(rupw.main_dialog);
+        rupw.main_dialog.open();
+    }
+
+    /**
+     * adminconsole_button action
+     * @param ex
+     */
+    private void adminconsolebutton_action(ClickEvent ex){
+        AdminConsoleWindow acw = new AdminConsoleWindow();
+        main_layout.add(acw.main_dialog);
+        acw.main_dialog.open();
     }
 }

@@ -59,26 +59,32 @@ public class CreateAccountWindow {
         email_field = new TextField("User Mail");
         email_field.setPlaceholder("mail");
         email_field.setWidth("100%");
+        email_field.setMaxLength(40);
 
         name_field = new TextField("Name");
         name_field.setPlaceholder("your name");
         name_field.setWidth("100%");
+        name_field.setMaxLength(40);
 
         surname_field = new TextField("Surname");
         surname_field.setPlaceholder("your surname");
         surname_field.setWidth("100%");
+        surname_field.setMaxLength(60);
 
         telephone_field = new TextField("Telephone");
         telephone_field.setPlaceholder("your telephone");
         telephone_field.setWidth("100%");
+        telephone_field.setMaxLength(19);
 
         password_field = new PasswordField("Account Password");
         password_field.setPlaceholder("secret password");
         password_field.setWidth("100%");
+        password_field.setMaxLength(50);
 
         confirmpassword_field = new PasswordField("Confirm Password");
         confirmpassword_field.setPlaceholder("secret password 2");
         confirmpassword_field.setWidth("100%");
+        confirmpassword_field.setMaxLength(50);
 
         create_button = new Button("Create Account!",this::createbutton_action);
         new ButtonStyler().primaryButtonStyle(create_button,"200px","75px");

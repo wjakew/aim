@@ -65,11 +65,13 @@ public class LoginWindow {
         login_field.setPlaceholder("login");
         login_field.setPrefixComponent(VaadinIcon.USER.create());
         login_field.setWidth("100%");
+        login_field.setMaxLength(19);
 
         password_field = new PasswordField();
         password_field.setPlaceholder("password");
         password_field.setPrefixComponent(VaadinIcon.LOCK.create());
         password_field.setWidth("100%");
+        password_field.setMaxLength(100);
 
         login_button = new Button("Login",VaadinIcon.ARROW_RIGHT.create(),this::loginbutton_action);
         createaccount_button = new Button("Create Account",VaadinIcon.PLUS.create(),this::createaccoutnbutton_action);

@@ -59,10 +59,12 @@ public class InsertProjectWindow {
         projectname_field = new TextField("Project Name");
         projectname_field.setPlaceholder("My New Project");
         projectname_field.setWidth("100%");
+        projectname_field.setMaxLength(40);
 
         projectdesc_field = new TextArea("Project Description");
         projectdesc_field.setPlaceholder("That's gonna be awesome!");
         projectdesc_field.setWidth("100%");
+        projectname_field.setMaxLength(40);
 
         addproject_button = new Button("Create Project", VaadinIcon.PLUS.create(),this::addprojectbutton_action);
         addproject_button.setWidth("100%");

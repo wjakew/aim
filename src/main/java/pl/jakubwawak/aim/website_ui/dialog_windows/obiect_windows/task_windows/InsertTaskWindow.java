@@ -86,11 +86,15 @@ public class InsertTaskWindow {
         taskname_field = new TextField("Task Name");
         taskname_field.setWidth("100%");
         taskname_field.setPlaceholder("My New Amazing Task");
+        taskname_field.setMaxLength(40);
+
         taskdeadline_picker = new DatePicker("Task Deadline");
         taskdeadline_picker.setWidth("100%");
+
         taskdeadline_picker.setPlaceholder("29.11.1996");
         taskdesc_field = new TextArea("Task Description");
         taskdesc_field.setWidth("100%");
+        taskdesc_field.setMaxLength(200);
         taskdesc_field.setPlaceholder("Tell me something about this task!");
         addtask_button = new Button("",this::addtaskbutton_action);
         if ( taskToUpdate != null ){

@@ -7,10 +7,17 @@ package pl.jakubwawak.aim.aim_dataengine.database_engine;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_User;
+import pl.jakubwawak.maintanance.Password_Validator;
+
+import java.util.ArrayList;
 
 /**
  * Object for database
@@ -24,6 +31,25 @@ public class Database_AIMUser {
      */
     public Database_AIMUser(Database_Connector database){
         this.database = database;
+    }
+
+    /**
+     * Function for loading user collection from database
+     * @return ArrayList
+     */
+    public ArrayList<AIM_User> getUserCollection(){
+        ArrayList<AIM_User> data = new ArrayList<>();
+        try{
+            MongoCollection<Document> user_collection = database.get_data_collection("aim_user");
+            FindIterable<Document> user_documents = user_collection.find();
+            for(Document user_document : user_documents){
+                data.add(new AIM_User(user_document));
+            }
+            database.log("DB-USER-LIST","Loaded list of users ("+data.size()+")");
+        }catch (Exception ex){
+            database.log("DB-USER-LIST-FAILED","Failed to load list of users ("+ex.toString()+")");
+        }
+        return data;
     }
 
     /**
@@ -105,6 +131,37 @@ public class Database_AIMUser {
             return 0;
         }catch(Exception ex){
             database.log("DB-AIMUSER-LOGIN-FAILED","Failed to login user to app ("+ex.toString()+")");
+            return -1;
+        }
+    }
+
+    /**
+     * Function for resetting password for user
+     * @param aim_user_id
+     * @param newPassword
+     * @return Integer
+     */
+    public int resetAIMUserPassword(ObjectId aim_user_id, String newPassword){
+        try{
+            MongoCollection<Document> user_collection = database.get_data_collection("aim_user");
+            Document user_document = user_collection.find(new Document("_id",aim_user_id)).first();
+            if ( user_document != null ){
+                Password_Validator pv = new Password_Validator(newPassword);
+                Bson updates = Updates.combine(
+                        Updates.set("aim_user_password",pv.hash())
+                );
+                UpdateResult result = user_collection.updateOne(user_document,updates);
+                if ( result.getModifiedCount() > 0 ){
+                    database.log("DB-AIMUSER-PASSCHANGE","Password for user ("+aim_user_id.toString()+") changed!");
+                    return 1;
+                }
+                database.log("DB-AIMUSER-PASSCHANGE","Nothing to change for user ("+aim_user_id.toString()+") changed!");
+                return 0;
+            }
+            database.log("DB-AIMUSER-PASSCHANGE-NOUSER","Cannot find user ("+aim_user_id.toString()+") changed!");
+            return 0;
+        }catch(Exception ex){
+            database.log("DB-AIMUSER-PASSCHANGE-FAILED","Failed to change user password ("+ex.toString()+")");
             return -1;
         }
     }

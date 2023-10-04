@@ -58,6 +58,7 @@ public class AddMemberBoardWindow {
         email_field = new TextField("E-Mail");
         email_field.setPlaceholder("Your friend email...");
         email_field.setWidth("100%");
+        email_field.setMaxLength(30);
 
         add_button = new Button("Add Member", VaadinIcon.PLUS.create(),this::addbutton_action);
         add_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);

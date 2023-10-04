@@ -81,10 +81,12 @@ public class InsertBoardWindow {
         boardname_field = new TextField("Board Name");
         boardname_field.setPlaceholder("My new amazing board :)");
         boardname_field.setWidth("100%");
+        boardname_field.setMaxLength(60);
         membersContent = new ArrayList<>();
         boarddesc_field = new TextArea("Board Description");
         boarddesc_field.setPlaceholder("Oh my god such a cute board!");
         boarddesc_field.setWidth("100%");
+        boardname_field.setMaxLength(200);
         members_grid = new Grid<>();
         members_grid.addColumn(GridElement::getGridelement_text).setHeader("Members");
         reloadMembersGrid();
