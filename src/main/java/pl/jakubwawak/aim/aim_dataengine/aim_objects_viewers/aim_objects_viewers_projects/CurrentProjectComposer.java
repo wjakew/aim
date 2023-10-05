@@ -40,12 +40,12 @@ public class CurrentProjectComposer {
     void prepareLayout(){
         mainLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         mainLayout.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
-        mainLayout.setWidth("80%");
-        mainLayout.setHeight("80%");
+        mainLayout.setWidth("90%");
+        mainLayout.setHeight("90%");
         mainLayout.getStyle().set("text-align", "center");
         mainLayout.getStyle().set("border-radius","25px");
         mainLayout.getStyle().set("margin","75px");
-        mainLayout.getStyle().set("background-color","gray");
+        mainLayout.getStyle().set("background-image","radial-gradient(#90e9e4,#cca8b2)");
         mainLayout.getStyle().set("--lumo-font-family","Monospace");
         updateLayout();
     }
