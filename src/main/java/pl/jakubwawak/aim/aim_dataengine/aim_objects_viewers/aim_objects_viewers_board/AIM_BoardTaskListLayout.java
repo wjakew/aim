@@ -65,23 +65,25 @@ public class AIM_BoardTaskListLayout {
             currentCollection.add(new AIM_BoardTaskLayout(abtObject,board));
         }
 
-        // creating pages
-        int pageIndex = 1;
-        BoardTaskListPage btlp = new BoardTaskListPage(pageIndex,board);
-        int ans = 0;
-        for(AIM_BoardTaskLayout abtl : currentCollection){
-            ans = btlp.addLayout(abtl);
-            if ( ans == 10 ){
-                btlp.prepareLayout();
-                pages.add(btlp);
-                pageIndex++;
-                btlp = new BoardTaskListPage(pageIndex,board);
-                btlp.addLayout(abtl);
+        if ( currentCollection.size() > 0 ){
+            // creating pages
+            int pageIndex = 1;
+            BoardTaskListPage btlp = new BoardTaskListPage(pageIndex,board);
+            int ans = 0;
+            for(AIM_BoardTaskLayout abtl : currentCollection){
+                ans = btlp.addLayout(abtl);
+                if ( ans == 10 ){
+                    btlp.prepareLayout();
+                    pages.add(btlp);
+                    pageIndex++;
+                    btlp = new BoardTaskListPage(pageIndex,board);
+                    btlp.addLayout(abtl);
+                }
             }
-        }
 
-        btlp.prepareLayout();
-        pages.add(btlp);
+            btlp.prepareLayout();
+            pages.add(btlp);
+        }
     }
 
     /**
@@ -98,23 +100,28 @@ public class AIM_BoardTaskListLayout {
      */
     public void reloadView(int pageIndex){
         reloadTaskBoardCollection();
-        main_layout.removeAll();
-        main_layout.add(pages.get(pageIndex).main_layout);
-        int pageIndexLabel = currentPage+1;
-        main_layout.add(new HorizontalLayout(previous_button,new H6(pageIndexLabel + "/" + pages.size()),next_button));
+        if (pages.size() >0){
+            main_layout.removeAll();
+            main_layout.add(pages.get(pageIndex).main_layout);
+            int pageIndexLabel = currentPage+1;
+            main_layout.add(new HorizontalLayout(previous_button,new H6(pageIndexLabel + "/" + pages.size()),next_button));
 
-        if ( currentPage == 0 ){
-            previous_button.setEnabled(false);
+            if ( currentPage == 0 ){
+                previous_button.setEnabled(false);
+            }
+            else{
+                previous_button.setEnabled(true);
+            }
+
+            if ( currentPage+1 == pages.size() ){
+                next_button.setEnabled(false);
+            }
+            else{
+                next_button.setEnabled(true);
+            }
         }
         else{
-            previous_button.setEnabled(true);
-        }
-
-        if ( currentPage+1 == pages.size() ){
-            next_button.setEnabled(false);
-        }
-        else{
-            next_button.setEnabled(true);
+            main_layout.add(new H6("NO BOARDS"));
         }
     }
 

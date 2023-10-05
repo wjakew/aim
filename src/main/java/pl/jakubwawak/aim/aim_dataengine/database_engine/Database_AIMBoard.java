@@ -10,6 +10,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -18,6 +19,7 @@ import org.springframework.cglib.core.Local;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Board;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_BoardTask;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_User;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -313,6 +315,24 @@ public class Database_AIMBoard {
         }catch(Exception ex){
             database.log("DB-BOARD-TASK-REMOVE-FAILED","Failed to remove task from board ("+ex.toString()+")");
             return -1;
+        }
+    }
+
+    /**
+     * Function for removing user boards
+     * @param userToRemove
+     * @return Integer
+     */
+    public int removeUserBoards(AIM_User userToRemove){
+        MongoCollection<Document> board_collection = database.get_data_collection("aim_board");
+        DeleteResult result = board_collection.deleteMany(new Document("board_owner",userToRemove));
+        if ( result.getDeletedCount() > 0 ){
+            database.log("DB-BOARD-USER-REMOVE","User ("+userToRemove.aim_user_id.toString()+") boards removed!");
+            return 1;
+        }
+        else {
+            database.log("DB-BOARD-USER-REMOVE", "Nothing to remove from user boards!");
+            return 0;
         }
     }
 

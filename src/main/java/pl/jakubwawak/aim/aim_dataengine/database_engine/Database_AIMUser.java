@@ -8,6 +8,7 @@ package pl.jakubwawak.aim.aim_dataengine.database_engine;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -106,6 +107,86 @@ public class Database_AIMUser {
             return 0;
         }catch(Exception ex){
             database.log("DB-AIMUSER-INSERT-FAILED","Failed to insert new user ("+ex.toString()+")");
+            return -1;
+        }
+    }
+
+    /**
+     * Function for removing users
+     * @param userToDelete
+     * @return Integer
+     */
+    public int removeAIMUser(AIM_User userToDelete){
+        try{
+            MongoCollection<Document> user_collection = database.get_data_collection("aim_user");
+            DeleteResult result = user_collection.deleteMany(userToDelete.prepareDocument());
+            if ( result.getDeletedCount() > 0 ){
+                database.log("DB-AIMUSER-DELETE","Removed user ("+userToDelete.aim_user_id.toString()+")");
+                return 1;
+            }
+            database.log("DB-AIMUSER-DELETE","Cannot remove. No deletion data!");
+            return 0;
+        }catch(Exception ex){
+            database.log("DB-AIMUSER-DELETE-FAILED","Failed to remove user ("+userToDelete.aim_user_id.toString()+")");
+            return -1;
+        }
+    }
+
+
+    /**
+     * Function for setting user admin data
+     * @param userToChange
+     * @return Integer
+     */
+    public int setUserAdmin(AIM_User userToChange){
+        try{
+            MongoCollection<Document> user_collection = database.get_data_collection("aim_user");
+            Document user_document = user_collection.find(new Document("_id",userToChange.aim_user_id)).first();
+            if (user_document != null){
+                Bson updates = Updates.combine(
+                        Updates.set("aim_user_type","SERVERADM")
+                );
+                UpdateResult result = user_collection.updateOne(user_document,updates);
+                if ( result.getModifiedCount() > 0 ){
+                    database.log("DB-AIMUSER-ADMUPDATE","Updated user ("+userToChange.aim_user_id.toString()+") to ADM.");
+                    return 1;
+                }
+                database.log("DB-AIMUSER-ADMUPDATE","Cannot update user ("+userToChange.aim_user_id.toString()+"), no changes!");
+                return 0;
+            }
+            database.log("DB-AIMUSER-ADMUPDATE","Cannot find user ("+userToChange.aim_user_id.toString()+")");
+            return 0;
+        }catch(Exception ex){
+            database.log("DB-AIMUSER-ADMUPDATE-FAILED","Failed to set admin for user ("+ex.toString()+")");
+            return -1;
+        }
+    }
+
+    /**
+     * Function for setting user normal data
+     * @param userToChange
+     * @return Integer
+     */
+    public int setUserNRM(AIM_User userToChange){
+        try{
+            MongoCollection<Document> user_collection = database.get_data_collection("aim_user");
+            Document user_document = user_collection.find(new Document("_id",userToChange.aim_user_id)).first();
+            if (user_document != null){
+                Bson updates = Updates.combine(
+                        Updates.set("aim_user_type","NRLUSER")
+                );
+                UpdateResult result = user_collection.updateOne(user_document,updates);
+                if ( result.getModifiedCount() > 0 ){
+                    database.log("DB-AIMUSER-ADMUPDATE","Updated user ("+userToChange.aim_user_id.toString()+") to ADM.");
+                    return 1;
+                }
+                database.log("DB-AIMUSER-ADMUPDATE","Cannot update user ("+userToChange.aim_user_id.toString()+"), no changes!");
+                return 0;
+            }
+            database.log("DB-AIMUSER-ADMUPDATE","Cannot find user ("+userToChange.aim_user_id.toString()+")");
+            return 0;
+        }catch(Exception ex){
+            database.log("DB-AIMUSER-ADMUPDATE-FAILED","Failed to set admin for user ("+ex.toString()+")");
             return -1;
         }
     }

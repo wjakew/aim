@@ -53,6 +53,7 @@ public class ProjectHorizontalColumnLayout {
 
         projectHorizontalColumnLayout.setMargin(true);
         projectHorizontalColumnLayout.setAlignItems(FlexComponent.Alignment.CENTER);
+        projectHorizontalColumnLayout.setVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
 
         // engine for selecting projects in horizontal layout
         projectHorizontalColumnLayout.addClickListener(e->{
@@ -135,6 +136,8 @@ public class ProjectHorizontalColumnLayout {
             }
             else{
                 projectHorizontalColumnLayout.add(new H6("No projects!"));
+                previous_button.setEnabled(false);
+                next_button.setEnabled(false);
                 currentPageNumber = 0;
             }
         }

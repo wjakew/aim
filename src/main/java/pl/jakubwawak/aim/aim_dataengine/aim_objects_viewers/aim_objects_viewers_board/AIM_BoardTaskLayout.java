@@ -18,6 +18,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Board;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_BoardTask;
+import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.board_windows.AddTaskBoardWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.task_windows.DetailsTaskWindow;
 
 /**
@@ -163,6 +164,16 @@ public class AIM_BoardTaskLayout{
         DetailsTaskWindow dtw = new DetailsTaskWindow(taskObject,boardObject);
         main_layout.add(dtw.main_dialog);
         dtw.main_dialog.open();
+    }
+
+    /**
+     * addtask_button
+     * @param ex
+     */
+    private void addtaskbutton_action(ClickEvent ex){
+        AddTaskBoardWindow atbw = new AddTaskBoardWindow(boardObject,null);
+        main_layout.add(atbw.main_dialog);
+
     }
 
 

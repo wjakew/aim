@@ -14,7 +14,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Board;
-import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_projects.CurrentProjectComposer;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMBoard;
 
 import java.util.ArrayList;
@@ -92,25 +91,30 @@ public class CurrentBoardComposer {
     public void updateLayout(int index){
         reloadBoardCollection();
         mainLayout.removeAll();
-        BoardFullColumnPage current_bfcp = layoutPages.get(index);
-        addToLayout(current_bfcp.boardLayout1);
-        addToLayout(current_bfcp.boardLayout2);
-        addToLayout(current_bfcp.boardLayout3);
-        addToLayout(current_bfcp.boardLayout4);
-        mainLayout.add(new HorizontalLayout(previous_button,new H6(current_bfcp.page+"/"+layoutPages.size()),next_button));
+        if ( layoutPages.size() > 0 ){
+            BoardFullColumnPage current_bfcp = layoutPages.get(index);
+            addToLayout(current_bfcp.boardLayout1);
+            addToLayout(current_bfcp.boardLayout2);
+            addToLayout(current_bfcp.boardLayout3);
+            addToLayout(current_bfcp.boardLayout4);
+            mainLayout.add(new HorizontalLayout(previous_button,new H6(current_bfcp.page+"/"+layoutPages.size()),next_button));
 
-        if ( index < layoutPages.size()-1 ){
-            next_button.setEnabled(true);
+            if ( index < layoutPages.size()-1 ){
+                next_button.setEnabled(true);
+            }
+            else{
+                next_button.setEnabled(false);
+            }
+
+            if (index == 0){
+                previous_button.setEnabled(false);
+            }
+            else{
+                previous_button.setEnabled(true);
+            }
         }
         else{
-            next_button.setEnabled(false);
-        }
-
-        if (index == 0){
-            previous_button.setEnabled(false);
-        }
-        else{
-            previous_button.setEnabled(true);
+            mainLayout.add(new H6("NO BOARD DATA"));
         }
     }
 

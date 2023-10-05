@@ -152,6 +152,7 @@ public class HomeView extends VerticalLayout {
         new ButtonStyler().primaryButtonStyle(home_button,"20%","");
         terminal_button = new Button("",VaadinIcon.TERMINAL.create(),this::terminalbutton_action);
         new ButtonStyler().primaryButtonStyle(terminal_button,"20%","");
+        terminal_button.setEnabled(false);
 
         addelement_button= new Button("", VaadinIcon.PLUS.create(),this::addelementbutton_action);
         new ButtonStyler().primaryButtonStyle(addelement_button,"20%","");

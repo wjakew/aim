@@ -65,7 +65,7 @@ public class LoginWindow {
         login_field.setPlaceholder("login");
         login_field.setPrefixComponent(VaadinIcon.USER.create());
         login_field.setWidth("100%");
-        login_field.setMaxLength(19);
+        login_field.setMaxLength(100);
 
         password_field = new PasswordField();
         password_field.setPlaceholder("password");
@@ -76,6 +76,10 @@ public class LoginWindow {
         login_button = new Button("Login",VaadinIcon.ARROW_RIGHT.create(),this::loginbutton_action);
         createaccount_button = new Button("Create Account",VaadinIcon.PLUS.create(),this::createaccoutnbutton_action);
         resetpassword_button = new Button("Reset Password",VaadinIcon.LOCK.create());
+
+        if ( AimApplication.globalConfiguration.userCreationFlag == 0 ){
+            createaccount_button.setEnabled(false);
+        }
 
         // styling buttons
         new ButtonStyler().primaryButtonStyle(login_button,"100%","");

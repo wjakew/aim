@@ -130,10 +130,11 @@ public class UserDashboardLayout {
             headerLayout.add(left_layout,new H6("NO TASKS TO SHOW"),right_layout);
         }
 
-        int randomIndex = ThreadLocalRandom.current().nextInt(0, taskContentData.size());
-
-        center_layout.add(new H6("LET'S MAKE SOMETHING TOGETHER"));
-        center_layout.add(taskContentData.get(randomIndex).main_layout);
+        if (taskContentData.size() > 0){
+            int randomIndex = ThreadLocalRandom.current().nextInt(0, taskContentData.size());
+            center_layout.add(new H6("LET'S MAKE SOMETHING TOGETHER"));
+            center_layout.add(taskContentData.get(randomIndex).main_layout);
+        }
 
         getrandomtask_button = new Button("FIND OTHER", VaadinIcon.REFRESH.create(),this::getrandomtaskbutton_action);
         getrandomtask_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
