@@ -79,4 +79,36 @@ public class AIM_Task {
     public AIM_User getTaskOwner(){
         return new AIM_User(aim_task_owner);
     }
+
+    public ObjectId getAim_task_id() {
+        return aim_task_id;
+    }
+
+    public String getAim_task_name() {
+        return aim_task_name;
+    }
+
+    public String getAim_task_desc() {
+        return aim_task_desc;
+    }
+
+    public Document getAim_task_owner() {
+        return aim_task_owner;
+    }
+
+    public String getAim_task_owner_glance(){
+        return aim_task_owner.getString("aim_user_email");
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public Date getAim_task_timestamp() {
+        return aim_task_timestamp;
+    }
+
+    public Date getAim_task_deadline() {
+        return aim_task_deadline;
+    }
 }

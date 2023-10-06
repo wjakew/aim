@@ -59,6 +59,25 @@ public class Database_AIMProject {
     }
 
     /**
+     * Function for loading all projects from database
+     * @return ArrayList
+     */
+    public ArrayList<AIM_Project> getAllProjects(){
+        ArrayList<AIM_Project> data = new ArrayList<>();
+        try{
+            MongoCollection<Document> project_collection = database.get_data_collection("aim_project");
+            FindIterable<Document> project_documents = project_collection.find();
+            for(Document project_document : project_documents){
+                data.add(new AIM_Project(project_document));
+            }
+            database.log("DB-PROJECT-LIST","Loaded "+data.size()+" projects for "+AimApplication.loggedUser.aim_user_email);
+        }catch(Exception ex){
+            database.log("DB-PROJECT-GET-LIST-FAILED","Failed to get projects list ("+ex.toString()+")");
+        }
+        return data;
+    }
+
+    /**
      * Function for inserting project object to database
      * @param projectToInsert
      * @return Integer

@@ -26,7 +26,6 @@ public class AIM_Board {
     public List<Document> task_list;
     public List<String> board_history;
 
-
     /**
      * Constructor
      */
@@ -98,5 +97,25 @@ public class AIM_Board {
             data.add(new AIM_BoardTask(taskboard_document));
         }
         return data;
+    }
+
+    public String getBoard_name() {
+        return board_name;
+    }
+
+    public Document getBoard_owner() {
+        return board_owner;
+    }
+
+    public String getBoard_owner_glance(){
+        return board_owner.getString("aim_user_email");
+    }
+
+    public List<Document> getBoard_members() {
+        return board_members;
+    }
+
+    public int getBoard_members_size(){
+        return board_members.size();
     }
 }

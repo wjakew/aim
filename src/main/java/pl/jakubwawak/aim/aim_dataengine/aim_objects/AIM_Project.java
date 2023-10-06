@@ -94,4 +94,16 @@ public class AIM_Project {
         }
         return amount;
     }
+
+    public String getAim_project_name() {
+        return aim_project_name;
+    }
+
+    public Document getAim_owner() {
+        return aim_owner;
+    }
+
+    public String getAim_owner_glance(){
+        return aim_owner.getString("aim_user_email");
+    }
 }

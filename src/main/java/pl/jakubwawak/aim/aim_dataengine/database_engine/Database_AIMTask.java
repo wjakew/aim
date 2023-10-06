@@ -59,6 +59,25 @@ public class Database_AIMTask {
     }
 
     /**
+     * Function for loading all tasks from database
+     * @return ArrayList
+     */
+    public ArrayList<AIM_Task> getAllTaskCollection(){
+        ArrayList<AIM_Task> data = new ArrayList<>();
+        try{
+            MongoCollection<Document> task_collection = database.get_data_collection("aim_task");
+            FindIterable<Document> userTaskCollection = task_collection.find();
+            for(Document task_document: userTaskCollection){
+                data.add(new AIM_Task(task_document));
+            }
+            database.log("DB-TASK-LOADCOLLECTION","Loaded "+data.size()+" objects from database");
+        }catch(Exception ex){
+            database.log("DB-TASK-LOADCOLLECTION-FAILED","Failed to get user task collection ("+ex.toString()+")");
+        }
+        return data;
+    }
+
+    /**
      * Function for getting taskCollection
      * @return ArrayList
      */

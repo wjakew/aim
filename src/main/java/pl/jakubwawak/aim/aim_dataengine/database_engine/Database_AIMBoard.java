@@ -64,6 +64,26 @@ public class Database_AIMBoard {
     }
 
     /**
+     * Function for getting all board collection
+     * @return ArrayList
+     */
+    public ArrayList<AIM_Board> getAllBoardList(){
+        ArrayList<AIM_Board> data = new ArrayList<>();
+        try{
+            MongoCollection<Document> board_collection = database.get_data_collection("aim_board");
+            FindIterable<Document> board_documents = board_collection.find();
+            for(Document board_document : board_documents){
+                data.add(new AIM_Board(board_document));
+
+            }
+            database.log("DB-LIST-BOARD","Loaded "+data.size()+" objects from database for "+AimApplication.loggedUser.aim_user_id.toString());
+        }catch(Exception ex){
+            database.log("DB-LIST-BOARD-FAILED","Failed to list board objects for user ("+ex.toString()+")");
+        }
+        return data;
+    }
+
+    /**
      * Function for loading board object
      * @param board_id
      * @return AIM_Board

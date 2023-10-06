@@ -20,10 +20,13 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.server.StreamResource;
 import pl.jakubwawak.aim.AimApplication;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_User;
 import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
 import pl.jakubwawak.aim.website_ui.views.WelcomeView;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMUser;
 import pl.jakubwawak.maintanance.Password_Validator;
+
+import java.util.ArrayList;
 
 /**
  * Window for logging user to the app
@@ -75,7 +78,7 @@ public class LoginWindow {
 
         login_button = new Button("Login",VaadinIcon.ARROW_RIGHT.create(),this::loginbutton_action);
         createaccount_button = new Button("Create Account",VaadinIcon.PLUS.create(),this::createaccoutnbutton_action);
-        resetpassword_button = new Button("Reset Password",VaadinIcon.LOCK.create());
+        resetpassword_button = new Button("Reset Password",VaadinIcon.LOCK.create(),this::resetpasswordbutton_action);
 
         if ( AimApplication.globalConfiguration.userCreationFlag == 0 ){
             createaccount_button.setEnabled(false);
@@ -159,6 +162,20 @@ public class LoginWindow {
         login();
     }
 
+    /**
+     * resetpassword_button action
+     * @param ex
+     */
+    private void resetpasswordbutton_action(ClickEvent ex){
+        Database_AIMUser dau = new Database_AIMUser(AimApplication.database);
+        ArrayList<AIM_User> adm_users = dau.getAdminList();
+        if ( adm_users.size() > 0 ){
+            MessageComponent mc = new MessageComponent("Contact instance administrator: "+adm_users.get(0).aim_user_email);
+            main_layout.add(mc.main_dialog);
+            mc.main_dialog.open();
+        }
+    }
+
     void login(){
         if (!login_field.getValue().isEmpty() && !password_field.getValue().isEmpty()){
             // try to login
@@ -187,4 +204,6 @@ public class LoginWindow {
             Notification.show("Empty user input");
         }
     }
+
+
 }

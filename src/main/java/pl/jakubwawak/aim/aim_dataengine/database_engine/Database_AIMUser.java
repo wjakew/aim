@@ -54,6 +54,27 @@ public class Database_AIMUser {
     }
 
     /**
+     * Function for loading admin user collection
+     * @return ArrayList
+     */
+    public ArrayList<AIM_User> getAdminList(){
+        ArrayList<AIM_User> data = new ArrayList<>();
+        try{
+            MongoCollection<Document> user_collection = database.get_data_collection("aim_user");
+            FindIterable<Document> user_documents = user_collection.find();
+            for(Document user_document : user_documents){
+                if ( user_document.getString("aim_user_type").equals("SERVERADM") ){
+                    data.add(new AIM_User(user_document));
+                }
+            }
+            database.log("DB-GETADMILIST","Loaded list of admin accounts");
+        }catch(Exception ex){
+            database.log("DB-GETADMLIST","Failed to get admin list ("+ex.toString()+")");
+        }
+        return data;
+    }
+
+    /**
      * Function for checking if user exists
      * @param email
      * @return boolean

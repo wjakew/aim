@@ -85,6 +85,9 @@ public class AdminConsoleWindow {
         logasuser_button.addThemeVariants(ButtonVariant.LUMO_ERROR,ButtonVariant.LUMO_PRIMARY);
         logasuser_button.setWidth("100%");
 
+        remove_button.addThemeVariants(ButtonVariant.LUMO_ERROR,ButtonVariant.LUMO_PRIMARY);
+        enableaccountcreation_button.addThemeVariants(ButtonVariant.LUMO_ERROR,ButtonVariant.LUMO_PRIMARY);
+
         if ( AimApplication.globalConfiguration.userCreationFlag == 0){
             enableaccountcreation_button.setText("Enable Account Creation");
         }

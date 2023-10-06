@@ -31,7 +31,7 @@ public class UserWindow {
     public Dialog main_dialog;
     VerticalLayout main_layout;
 
-    Button removeaccount_button, changepassword_button, adminconsole_button;
+    Button removeaccount_button, changepassword_button, adminconsole_button, datamanagment_button;
 
     /**
      * Constructor
@@ -54,6 +54,9 @@ public class UserWindow {
         new ButtonStyler().primaryButtonStyle(changepassword_button,"100%","");
         adminconsole_button = new Button("Admin Console", VaadinIcon.UMBRELLA.create(),this::adminconsolebutton_action);
         new ButtonStyler().primaryButtonStyle(adminconsole_button,"100%","");
+
+        datamanagment_button = new Button("Data Managment", VaadinIcon.DATABASE.create(),this::datamanagmentbutton_action);
+        new ButtonStyler().primaryButtonStyle(datamanagment_button,"100%","");
     }
 
     /**
@@ -70,6 +73,7 @@ public class UserWindow {
 
         if(AimApplication.loggedUser.aim_user_type.equals("SERVERADM")){
             main_layout.add(adminconsole_button);
+            main_layout.add(datamanagment_button);
         }
 
         main_layout.setSizeFull();
@@ -102,5 +106,15 @@ public class UserWindow {
         AdminConsoleWindow acw = new AdminConsoleWindow();
         main_layout.add(acw.main_dialog);
         acw.main_dialog.open();
+    }
+
+    /**
+     * datamanagment_button action
+     * @param ex
+     */
+    private void datamanagmentbutton_action(ClickEvent ex){
+        AdminDataManagmentWindow admw = new AdminDataManagmentWindow();
+        main_layout.add(admw.main_dialog);
+        admw.main_dialog.open();
     }
 }

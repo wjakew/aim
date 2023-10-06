@@ -105,20 +105,22 @@ public class Database_Connector {
     public int disableAccountCreation(){
         try{
             MongoCollection<Document> configuration_collection = get_data_collection("aim_globalconfiguration");
-            if ( AimApplication.globalConfiguration.prepareDocument() == null ){
+            Document configuration_document = configuration_collection.find().first();
+            if ( configuration_document != null ){
                 Bson updates = Updates.combine(
                         Updates.set("userCreationFlag",0)
                 );
                 AimApplication.globalConfiguration.userCreationFlag =0;
-                UpdateResult result = configuration_collection.updateOne(AimApplication.globalConfiguration.prepareDocument(),updates);
+                UpdateResult result = configuration_collection.updateOne(configuration_document,updates);
                 if (result.getModifiedCount() > 0){
                     log("DB-DISABLEACCCREATION","Updated account creation flag. Set to 0");
                     return 1;
                 }
+                AimApplication.globalConfiguration = new AIM_GlobalConfiguration(configuration_document);
                 log("DB-DISABLEACCOUNTCREATION","Cannot update global configuration, nothing to update");
                 return 0;
             }
-            log("DB-ENABLEACCREATION-NULL","Nothing to change, no document data!");
+            log("DB-DISABLEACCREATION-NULL","Nothing to change, no document data!");
             return 0;
         }catch(Exception ex){
             log("DB-DISABLEACCOUNTCREATION-FAILED","Failed to disable account creation ("+ex.toString()+")");
@@ -133,23 +135,25 @@ public class Database_Connector {
     public int enableAccountCreation(){
         try{
             MongoCollection<Document> configuration_collection = get_data_collection("aim_globalconfiguration");
-            if ( AimApplication.globalConfiguration.prepareDocument() == null ){
+            Document configuration_document = configuration_collection.find().first();
+            if ( configuration_document != null ){
                 Bson updates = Updates.combine(
                         Updates.set("userCreationFlag",1)
                 );
-                UpdateResult result = configuration_collection.updateOne(AimApplication.globalConfiguration.prepareDocument(),updates);
-                AimApplication.globalConfiguration.userCreationFlag = 1;
+                AimApplication.globalConfiguration.userCreationFlag =1;
+                UpdateResult result = configuration_collection.updateOne(configuration_document,updates);
                 if (result.getModifiedCount() > 0){
                     log("DB-ENABLEACCCREATION","Updated account creation flag. Set to 1");
                     return 1;
                 }
-                log("DB-ENABLEACCCREATION","Cannot update global configuration, nothing to update");
+                AimApplication.globalConfiguration = new AIM_GlobalConfiguration(configuration_document);
+                log("DB-ENABLEACCOUNTCREATION","Cannot update global configuration, nothing to update");
                 return 0;
             }
             log("DB-ENABLEACCREATION-NULL","Nothing to change, no document data!");
             return 0;
         }catch(Exception ex){
-            log("DB-ENABLEACCCREATION-FAILED","Failed to enable account creation ("+ex.toString()+")");
+            log("DB-ENABLEACCOUNTCREATION-FAILED","Failed to disable account creation ("+ex.toString()+")");
             return -1;
         }
     }

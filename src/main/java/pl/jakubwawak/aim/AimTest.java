@@ -43,9 +43,9 @@ public class AimTest {
                 Password_Validator pv = new Password_Validator("Vigor2710Vn");
                 dau.loginAIMUser("kubawawak@gmail.com",pv.hash());
 
-                Database_AIMBoard dib = new Database_AIMBoard(AimApplication.database);
+                AimApplication.globalConfiguration = AimApplication.database.getGlobalConfiguration();
 
-                AIM_BoardTaskListLayout abtll = new AIM_BoardTaskListLayout(dib.getUserBoardList().get(0));
+                System.out.println(AimApplication.database.disableAccountCreation());
 
             }
         }catch(Exception ex){ex.printStackTrace();}
