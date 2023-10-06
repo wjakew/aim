@@ -6,6 +6,7 @@
 package pl.jakubwawak.aim.website_ui.views;
 
 import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H6;
@@ -15,6 +16,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.Lumo;
@@ -22,6 +24,7 @@ import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_board.CurrentBoardComposer;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_projects.CurrentProjectComposer;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task.CurrentTaskComposer;
+import pl.jakubwawak.aim.aim_dataengine.aim_terminal_engine.AIMInputParser;
 import pl.jakubwawak.aim.website_ui.dialog_windows.AddElementWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.UserWindow;
 import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
@@ -37,6 +40,8 @@ public class HomeView extends VerticalLayout {
     Button home_button, terminal_button, addelement_button,logout_button,user_button;
 
     Button taskview_button, projectview_button, boardview_button;
+
+    TextField terminal_field;
 
 
 
@@ -117,6 +122,7 @@ public class HomeView extends VerticalLayout {
         prepareNavigationBar();
 
         add(headerLayout);
+        add(terminal_field);
         add(navigationLayout);
 
         switch(viewIndex){
@@ -163,6 +169,18 @@ public class HomeView extends VerticalLayout {
         logout_button = new Button("Log out",VaadinIcon.EXIT.create(),this::logoutbutton_action);
         new ButtonStyler().primaryButtonStyle(logout_button,"80%","");
 
+        terminal_field = new TextField();
+        terminal_field.setPrefixComponent(VaadinIcon.TERMINAL.create());
+        terminal_field.setPlaceholder("type command...");
+        terminal_field.setWidth("50%");
+
+        terminal_field.addKeyPressListener(Key.ENTER, e->
+        {
+            AIMInputParser aip = new AIMInputParser(this);
+            aip.setUserInput(terminal_field.getValue());
+            aip.parse();
+            terminal_field.setValue("");
+        });
     }
 
     /**
