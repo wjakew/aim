@@ -15,8 +15,10 @@ import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_projects.CurrentProjectComposer;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task.CurrentTaskComposer;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_Connector;
+import pl.jakubwawak.aim.website_ui.views.HomeView;
 import pl.jakubwawak.maintanance.ConsoleColors;
 
+import java.time.LocalDateTime;
 import java.util.Scanner;
 
 @SpringBootApplication
@@ -24,7 +26,8 @@ import java.util.Scanner;
 public class AimApplication {
 
 	public static String version = "v1.0.0";
-	public static String build = "aim061023REV01";
+	public static String build = "aim061023REV02";
+	public static String applicationStartup;
 	public static int test_flag = 0; // flag for enabling testing
 	public static int log_database_dump_flag = 0; // flag for enabling database log dump
 
@@ -40,11 +43,13 @@ public class AimApplication {
 	public static CurrentBoardComposer session_cbc;
 	public static AIM_BoardTaskListLayout currentBoardTaskList;
 
+
 	/**
 	 * Main application function
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		applicationStartup = LocalDateTime.now().toString();
 		show_header();
 		Scanner scanner = new Scanner(System.in);
 		loggedUser = null;
