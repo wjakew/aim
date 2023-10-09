@@ -20,6 +20,15 @@ public class AIM_BoardTask extends AIM_Task{
     }
 
     /**
+     * Constuctor from AIM_Task
+     * @param task
+     */
+    public AIM_BoardTask(AIM_Task task){
+        super(task);
+        aim_user_assigned = null;
+    }
+
+    /**
      * Constructor from document
      * @param taskBDocument
      */

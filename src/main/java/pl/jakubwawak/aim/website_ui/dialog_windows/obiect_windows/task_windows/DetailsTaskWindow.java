@@ -207,7 +207,6 @@ public class DetailsTaskWindow {
             }
             else if (projectWithTask == null && boardWithTask != null){
                 // task linked to board
-                //todo update task on status on board
                 String newStatus = status_combobox.getValue().getGridelement_text();
                 Database_AIMBoard dab = new Database_AIMBoard(AimApplication.database);
                 int ans = dab.changeTaskStatusOnBoard(boardWithTask,boardTask,newStatus);

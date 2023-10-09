@@ -15,6 +15,7 @@ import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+import org.springframework.cglib.core.Local;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Project;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
@@ -78,6 +79,27 @@ public class Database_AIMProject {
     }
 
     /**
+     * Function for listing projects by name
+     * @param projectName
+     * @return AIM_Project
+     */
+    public AIM_Project getProjectByName(String projectName){
+        try{
+            MongoCollection<Document> project_collection = database.get_data_collection("aim_project");
+            Document project_documents = project_collection.find(new Document("aim_project_name",projectName)).first();
+            if ( project_documents != null ){
+                database.log("DB-PROJECT-GETSINGLE","Found project with given name ("+projectName+")");
+                return new AIM_Project(project_documents);
+            }
+            database.log("DB-PROJECT-GETSINGLE","Project with given name ("+projectName+") not found..");
+            return null;
+        }catch(Exception ex){
+            database.log("DB-PROJECT-GETSINGLE-FAILED","Failed to get project by name ("+ex.toString()+")");
+            return null;
+        }
+    }
+
+    /**
      * Function for inserting project object to database
      * @param projectToInsert
      * @return Integer
@@ -90,6 +112,33 @@ public class Database_AIMProject {
             return 1;
         }catch(Exception ex){
             database.log("DB-PROJECT-INSERT-FAILED","Failed to add project ("+ex.toString()+")");
+            return -1;
+        }
+    }
+
+    /**
+     * Function for linking task to project
+     * @param projectToLink
+     * @param taskObject
+     * @return Integer
+     */
+    public int linkTaskProject(AIM_Project projectToLink, AIM_Task taskObject){
+        try{
+            taskObject.aim_task_id = null;
+            taskObject.aim_task_history.add(AimApplication.loggedUser.aim_user_email+" - "+ LocalDateTime.now().toString()+" - task linked to project");
+            int ans = insertTaskToProject(projectToLink,taskObject);
+            if (ans == 1){
+                Database_AIMTask dat = new Database_AIMTask(database);
+                dat.remove(taskObject);
+                database.log("DB-PROJECT-LINK-TASK","Task ("+taskObject.aim_task_id.toString()+") linked to project ("+projectToLink.aim_project_id.toString()+")");
+                return 1;
+            }
+            else{
+                database.log("DB-PROJECT-LINK-TASK","Cannot link task, check other log!");
+                return 0;
+            }
+        }catch(Exception ex){
+            database.log("DB-PROJECT-LINK-FAILED","Failed to link task to project ("+ex.toString()+")");
             return -1;
         }
     }

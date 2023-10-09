@@ -37,7 +37,7 @@ import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
 public class HomeView extends VerticalLayout {
 
     HorizontalLayout headerLayout, navigationLayout;
-    Button home_button, terminal_button, addelement_button,logout_button,user_button;
+    Button home_button, addelement_button,logout_button,user_button;
 
     Button taskview_button, projectview_button, boardview_button;
 
@@ -75,7 +75,7 @@ public class HomeView extends VerticalLayout {
         left_layout.setJustifyContentMode(JustifyContentMode.END);
         left_layout.setAlignItems(FlexComponent.Alignment.START);
         left_layout.setWidth("80%");
-        left_layout.add(home_button,terminal_button,user_button,addelement_button);
+        left_layout.add(home_button,user_button,addelement_button);
 
         FlexLayout right_layout = new FlexLayout();
         right_layout.setSizeFull();
@@ -156,9 +156,6 @@ public class HomeView extends VerticalLayout {
     void prepare_components(){
         home_button = new Button("Dash", VaadinIcon.DASHBOARD.create(),this::homebutton_action);
         new ButtonStyler().primaryButtonStyle(home_button,"20%","");
-        terminal_button = new Button("Term",VaadinIcon.TERMINAL.create(),this::terminalbutton_action);
-        new ButtonStyler().primaryButtonStyle(terminal_button,"20%","");
-        terminal_button.setEnabled(false);
 
         addelement_button= new Button("Add", VaadinIcon.PLUS.create(),this::addelementbutton_action);
         new ButtonStyler().primaryButtonStyle(addelement_button,"20%","");
@@ -256,15 +253,6 @@ public class HomeView extends VerticalLayout {
         UserWindow uw = new UserWindow();
         add(uw.main_dialog);
         uw.main_dialog.open();
-    }
-
-    /**
-     * terminal_button action
-     * @param ex
-     */
-    private void terminalbutton_action(ClickEvent ex){
-        terminal_button.getUI().ifPresent(ui ->
-                ui.navigate("/terminal"));
     }
 
 }

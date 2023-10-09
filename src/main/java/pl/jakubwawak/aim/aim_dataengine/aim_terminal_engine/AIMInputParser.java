@@ -12,10 +12,16 @@ import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import org.apache.commons.lang3.StringUtils;
 import pl.jakubwawak.aim.AimApplication;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Board;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Project;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_User;
+import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMBoard;
+import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMProject;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
+import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.PictureViewerWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.task_windows.InsertTaskWindow;
 
 import java.util.ArrayList;
@@ -74,7 +80,14 @@ public class AIMInputParser {
      */
     public void task_mind_creator(String user_input){
         Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
+        Database_AIMProject dap = new Database_AIMProject(AimApplication.database);
+        Database_AIMBoard dab = new Database_AIMBoard(AimApplication.database);
         String[] user_word_collection = user_input.split(" ");
+        if ( user_input.contains("-help")){
+            PictureViewerWindow pvw = new PictureViewerWindow("images/task_schema.png","Task Terminal Command");
+            secondaryLayout.add(pvw.main_dialog);
+            pvw.main_dialog.open();
+        }
         // task -create
         if ( user_input.contains("-create")){
             // task -create
@@ -86,7 +99,7 @@ public class AIMInputParser {
             // task -create -n name -d description
             else if (user_word_collection.length > 6){
                 AIM_Task task = new AIM_Task();
-                task.aim_task_name = user_word_collection[3];
+                task.aim_task_name = StringUtils.substringBetween(user_input,"-n","-d");
                 String []  subarray = IntStream.range(5, user_word_collection.length)
                         .mapToObj(i -> user_word_collection[i])
                         .toArray(String[]::new);
@@ -104,8 +117,48 @@ public class AIMInputParser {
                 createNotificationResponse("Wrong input for the task, check help!",3);
             }
         }
+        // task -link -t task_name -s board/project
         else if (user_input.contains("-link")){
-
+            //todo bug with searching tasks - cannot find data
+            if ( user_word_collection.length == 6 ){
+                String sourceObject = user_word_collection[5];
+                String taskName = StringUtils.substringBetween(user_input,"-t","-s");
+                AIM_Board board = dab.getBoardByName(sourceObject);
+                AIM_Project project = dap.getProjectByName(sourceObject);
+                AIM_Task task = dat.getTask(taskName);
+                if (task!=null){
+                    if ( board != null ){
+                        // board is selected
+                        int ans = dab.linkTaskToBoard(board,task);
+                        if ( ans == 1 ){
+                            createNotificationResponse("Task linked to board ("+board.board_id.toString()+")",2);
+                        }
+                        else{
+                            createNotificationResponse("Cannot linked, check log!",1);
+                        }
+                    }
+                    else if (project != null){
+                        // project is selected
+                        int ans = dap.linkTaskProject(project,task);
+                        if ( ans == 1 ){
+                            createNotificationResponse("Task linked to project ("+project.aim_project_id.toString()+")",2);
+                        }
+                        else{
+                            createNotificationResponse("Cannot linked, check log!",1);
+                        }
+                    }
+                    else{
+                        // nothing is selected
+                        createNotificationResponse("Cannot find task named "+taskName,3);
+                    }
+                }
+                else{
+                    createNotificationResponse("No task named ("+taskName+")",3);
+                }
+            }
+            else{
+                createNotificationResponse("Wrong input for the task, check help!",3);
+            }
         }
         else if (user_input.contains("-status")){
 
@@ -132,7 +185,7 @@ public class AIMInputParser {
      */
     void createNotificationResponse(String notificationMessage, int notificationState){
 
-        Notification notification = Notification.show(notificationMessage,10, Notification.Position.MIDDLE);
+        Notification notification = Notification.show(notificationMessage,5000, Notification.Position.MIDDLE);
         if (notificationState == 1){
             notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
         }

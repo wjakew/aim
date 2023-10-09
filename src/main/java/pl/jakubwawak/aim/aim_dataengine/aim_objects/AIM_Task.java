@@ -44,6 +44,21 @@ public class AIM_Task {
     }
 
     /**
+     * Constructor for coping objects
+     * @param taskToCopy
+     */
+    public AIM_Task(AIM_Task taskToCopy){
+        this.aim_task_id = taskToCopy.aim_task_id;
+        this.aim_task_name = taskToCopy.aim_task_name;
+        this.aim_task_desc = taskToCopy.aim_task_desc;
+        this.status = taskToCopy.status;
+        this.aim_task_owner = taskToCopy.aim_task_owner;
+        this.aim_task_history = taskToCopy.aim_task_history;
+        this.aim_task_timestamp = taskToCopy.aim_task_timestamp;
+        this.aim_task_deadline = taskToCopy.aim_task_deadline;
+    }
+
+    /**
      * Constructor with database support
      */
     public AIM_Task(Document task_document) {

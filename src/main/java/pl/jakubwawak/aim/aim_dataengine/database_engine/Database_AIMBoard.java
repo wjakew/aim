@@ -17,9 +17,7 @@ import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.springframework.cglib.core.Local;
 import pl.jakubwawak.aim.AimApplication;
-import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Board;
-import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_BoardTask;
-import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_User;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -100,6 +98,27 @@ public class Database_AIMBoard {
             return null;
         }catch(Exception ex){
             database.log("DB-GET-BOARD-FAILED","Failed to get board data ("+ex.toString()+")");
+            return null;
+        }
+    }
+
+    /**
+     * Function for getting board by name
+     * @param boardName
+     * @return
+     */
+    public AIM_Board getBoardByName(String boardName){
+        try{
+            MongoCollection<Document> board_collection = database.get_data_collection("aim_board");
+            Document board_document = board_collection.find(new Document("board_name",boardName)).first();
+            if ( board_document != null ){
+                database.log("DB-GET-BOARD-SINGLE","Found board for given name ("+boardName+")");
+                return new AIM_Board(board_document);
+            }
+            database.log("DB-GET-BOARD","Cannot find board for id ("+boardName+")");
+            return null;
+        }catch(Exception ex) {
+            database.log("DB-GET-BOARD-FAILED", "Failed to get board data (" + ex.toString() + ")");
             return null;
         }
     }
@@ -221,6 +240,33 @@ public class Database_AIMBoard {
 
         }catch (Exception ex){
             database.log("DB-INSERT-BOARD-TASK-INSERT-FAILED","Failed to insert task to board ("+ex.toString()+")");
+            return -1;
+        }
+    }
+
+    /**
+     * Function for linking task to board
+     * @param board
+     * @param task
+     * @return Integer
+     */
+    public int linkTaskToBoard(AIM_Board board, AIM_Task task){
+        try{
+            task.aim_task_id = null;
+            task.aim_task_history.add(AimApplication.loggedUser.aim_user_email+" - "+ LocalDateTime.now().toString()+" - task linked to board");
+            int ans = insertTaskToBoard(board,new AIM_BoardTask(task));
+            if ( ans == 1 ){
+                Database_AIMTask dat = new Database_AIMTask(database);
+                dat.remove(task);
+                database.log("DB-BOARD-LINK-TASK","Task ("+task.aim_task_name+") linked to board ("+board.board_id.toString()+")");
+                return 1;
+            }
+            else{
+                database.log("DB-BOARD-LINK-TASK-FAILED","Failed to link task to board, check log.");
+                return 0;
+            }
+        }catch(Exception ex){
+            database.log("DB-BOARD-LINK-TASK-FAILED","Failed to link task to board ("+ex.toString()+")");
             return -1;
         }
     }

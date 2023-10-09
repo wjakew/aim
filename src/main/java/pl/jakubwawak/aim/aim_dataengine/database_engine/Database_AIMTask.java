@@ -136,21 +136,25 @@ public class Database_AIMTask {
             FindIterable<Document> userTaskCollection = task_collection.find();
             for(Document task_document : userTaskCollection){
                 if ( task_document.getString("aim_task_name").equals(aimTaskName) ){
+                    database.log("BD-GETTASK","Found task ("+aimTaskName+") as ("+task_document.getObjectId("_id").toString()+")");
                     data = new AIM_Task(task_document);
                     break;
                 }
             }
-
             if ( data == null ){
                 for(Document task_document : userTaskCollection){
                     if ( task_document.getString("aim_task_name").contains(aimTaskName) ){
                         data = new AIM_Task(task_document);
+                        database.log("BD-GETTASK","Found task ("+aimTaskName+") as ("+task_document.getObjectId("_id").toString()+")");
                         break;
                     }
                 }
             }
         }catch(Exception ex){
             database.log("DB-GETTASK-FAILED","Failed to get task object ("+ex.toString()+")");
+        }
+        if ( data == null ){
+            database.log("DB-GETTASK", "No task found for name ("+aimTaskName+")");
         }
         return data;
     }
