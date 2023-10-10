@@ -88,6 +88,9 @@ public class AIMInputParser {
             secondaryLayout.add(pvw.main_dialog);
             pvw.main_dialog.open();
         }
+        if ( user_input.contains("-view") ){
+
+        }
         // task -create
         if ( user_input.contains("-create")){
             // task -create
@@ -99,7 +102,7 @@ public class AIMInputParser {
             // task -create -n name -d description
             else if (user_word_collection.length > 6){
                 AIM_Task task = new AIM_Task();
-                task.aim_task_name = StringUtils.substringBetween(user_input,"-n","-d");
+                task.aim_task_name = StringUtils.substringBetween(user_input,"-n","-d").strip().stripLeading().stripTrailing();
                 String []  subarray = IntStream.range(5, user_word_collection.length)
                         .mapToObj(i -> user_word_collection[i])
                         .toArray(String[]::new);
@@ -122,7 +125,7 @@ public class AIMInputParser {
             //todo bug with searching tasks - cannot find data
             if ( user_word_collection.length == 6 ){
                 String sourceObject = user_word_collection[5];
-                String taskName = StringUtils.substringBetween(user_input,"-t","-s");
+                String taskName = StringUtils.substringBetween(user_input,"-t","-s").strip().stripLeading().stripTrailing();
                 AIM_Board board = dab.getBoardByName(sourceObject);
                 AIM_Project project = dap.getProjectByName(sourceObject);
                 AIM_Task task = dat.getTask(taskName);
@@ -160,8 +163,38 @@ public class AIMInputParser {
                 createNotificationResponse("Wrong input for the task, check help!",3);
             }
         }
+        //task -status -t task_name -st new/in progress/done
         else if (user_input.contains("-status")){
-
+            if ( user_word_collection.length == 5 ){
+                String taskName = StringUtils.substringBetween(user_input,"-t","-st");
+                String []  subarray = IntStream.range(3, user_word_collection.length)
+                        .mapToObj(i -> user_word_collection[i])
+                        .toArray(String[]::new);
+                String taskStatus = String.join(" ",subarray);
+                ArrayList<String> statusCollection = new ArrayList<>();
+                statusCollection.add("NEW");
+                statusCollection.add("IN PROGRESS");
+                statusCollection.add("DONE");
+                if (statusCollection.contains(taskStatus)){
+                    AIM_Task task = dat.getTask(taskName);
+                    if (task!=null){
+                        // task found
+                        int ans = dat.changeOwnerAIMTask(task,taskStatus);
+                        if ( ans == 1 ){
+                            createNotificationResponse("Task ("+task.aim_task_id.toString()+") status updated to"+taskStatus,1);
+                        }
+                        else{
+                            createNotificationResponse("No task found with name "+taskName,3);
+                        }
+                    }
+                }
+                else{
+                    createNotificationResponse("Status "+taskStatus+" is not accepted!",3);
+                }
+            }
+            else{
+                createNotificationResponse("Wrong command usage, check -help",3);
+            }
         }
         else if (user_input.contains("-remove")){
 

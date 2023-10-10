@@ -13,6 +13,7 @@ import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task.TaskColumnLayout;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMBoard;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMProject;
+import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMUser;
 import pl.jakubwawak.maintanance.Password_Validator;
 
@@ -45,7 +46,8 @@ public class AimTest {
 
                 AimApplication.globalConfiguration = AimApplication.database.getGlobalConfiguration();
 
-                System.out.println(AimApplication.database.disableAccountCreation());
+                Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
+                System.out.println(dat.getTask("test"));
 
             }
         }catch(Exception ex){ex.printStackTrace();}
