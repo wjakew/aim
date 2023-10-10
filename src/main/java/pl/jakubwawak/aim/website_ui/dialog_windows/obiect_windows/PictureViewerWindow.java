@@ -20,7 +20,7 @@ import pl.jakubwawak.aim.website_ui.views.WelcomeView;
 public class PictureViewerWindow {
 
     // variables for setting x and y of window
-    public String width = "60%";
+    public String width = "80%";
     public String height = "60%";
     public String backgroundStyle = "";
 

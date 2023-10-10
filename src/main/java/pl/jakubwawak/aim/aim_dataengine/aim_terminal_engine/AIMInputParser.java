@@ -5,24 +5,21 @@
  */
 package pl.jakubwawak.aim.aim_dataengine.aim_terminal_engine;
 
-import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.apache.commons.lang3.StringUtils;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Board;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Project;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
-import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_User;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMBoard;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMProject;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.PictureViewerWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.task_windows.InsertTaskWindow;
+import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.task_windows.TaskHistoryGlanceWindow;
+import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.task_windows.TaskListGlanceWindow;
 
 import java.util.ArrayList;
 import java.util.stream.IntStream;
@@ -83,13 +80,22 @@ public class AIMInputParser {
         Database_AIMProject dap = new Database_AIMProject(AimApplication.database);
         Database_AIMBoard dab = new Database_AIMBoard(AimApplication.database);
         String[] user_word_collection = user_input.split(" ");
+        // task -help
         if ( user_input.contains("-help")){
             PictureViewerWindow pvw = new PictureViewerWindow("images/task_schema.png","Task Terminal Command");
             secondaryLayout.add(pvw.main_dialog);
             pvw.main_dialog.open();
         }
-        if ( user_input.contains("-view") ){
-
+        // task -viewer
+        if ( user_input.contains("-viewer") ){
+            if ( user_word_collection.length == 2 ){
+                TaskListGlanceWindow tgw = new TaskListGlanceWindow();
+                secondaryLayout.add(tgw.main_dialog);
+                tgw.main_dialog.open();
+            }
+            else{
+                createNotificationResponse("Wrong input for the task, check help!",3);
+            }
         }
         // task -create
         if ( user_input.contains("-create")){
@@ -165,9 +171,9 @@ public class AIMInputParser {
         }
         //task -status -t task_name -st new/in progress/done
         else if (user_input.contains("-status")){
-            if ( user_word_collection.length == 5 ){
+            if ( user_word_collection.length >= 5 ){
                 String taskName = StringUtils.substringBetween(user_input,"-t","-st");
-                String []  subarray = IntStream.range(3, user_word_collection.length)
+                String []  subarray = IntStream.range(4, user_word_collection.length)
                         .mapToObj(i -> user_word_collection[i])
                         .toArray(String[]::new);
                 String taskStatus = String.join(" ",subarray);
@@ -196,14 +202,56 @@ public class AIMInputParser {
                 createNotificationResponse("Wrong command usage, check -help",3);
             }
         }
+        // task -remove -t task_name
         else if (user_input.contains("-remove")){
-
+            String []  subarray = IntStream.range(3, user_word_collection.length)
+                    .mapToObj(i -> user_word_collection[i])
+                    .toArray(String[]::new);
+            String taskName = String.join(" ",subarray);
+            if ( user_word_collection.length >= 4 ){
+                AIM_Task task = dat.getTask(taskName);
+                if ( task != null ){
+                    String ans = dat.remove(task);
+                    if (ans!=null){
+                        createNotificationResponse("Removed sources: "+ans,1);
+                    }
+                    else{
+                        createNotificationResponse("Error removing task, check help",2);
+                    }
+                }
+                else{
+                    createNotificationResponse("Cannot find task ("+taskName+")",3);
+                }
+            }
         }
+        //task -list
         else if (user_input.contains("-list")){
-
+            if ( user_word_collection.length == 2 ){
+                TaskListGlanceWindow tgw = new TaskListGlanceWindow();
+                secondaryLayout.add(tgw.main_dialog);
+                tgw.main_dialog.open();
+            }
+            else{
+                createNotificationResponse("Wrong input for the task, check help!",3);
+            }
         }
+        // task -history -t task_name
         else if (user_input.contains("-history")){
-
+            if ( user_word_collection.length >= 3 ){
+                String []  subarray = IntStream.range(3, user_word_collection.length)
+                        .mapToObj(i -> user_word_collection[i])
+                        .toArray(String[]::new);
+                String taskName = String.join(" ",subarray);
+                AIM_Task task = dat.getTask(taskName);
+                if ( task != null ){
+                    TaskHistoryGlanceWindow thgw = new TaskHistoryGlanceWindow(task);
+                    secondaryLayout.add(thgw.main_dialog);
+                    thgw.main_dialog.open();
+                }
+                else{
+                    createNotificationResponse("Cannot find task ("+taskName+")",3);
+                }
+            }
         }
     }
 
