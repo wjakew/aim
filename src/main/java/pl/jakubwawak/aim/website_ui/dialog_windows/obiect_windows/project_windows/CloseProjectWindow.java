@@ -92,7 +92,9 @@ public class CloseProjectWindow {
         Database_AIMProject dap = new Database_AIMProject(AimApplication.database);
         if ( dap.removeProject(projectToRemove) == 1){
             Notification.show("Project removed!");
-            AimApplication.session_cpc.updateLayout();
+            if ( AimApplication.session_cpc!= null ){
+                AimApplication.session_cpc.updateLayout();
+            }
             main_dialog.close();
         }
         else{

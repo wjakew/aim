@@ -180,7 +180,9 @@ public class InsertTaskWindow {
                     int ans = dait.updateAIMTask(loadTaskObject());
                     if (ans == 1){
                         Notification.show("Task updated!");
-                        AimApplication.session_ctc.updateLayout();
+                        if ( AimApplication.session_ctc!= null ){
+                            AimApplication.session_ctc.updateLayout();
+                        }
                         main_dialog.close();
 
                     }
@@ -195,7 +197,9 @@ public class InsertTaskWindow {
                     int ans = dait.insertAIMTask(loadTaskObject());
                     if ( ans == 1 ){
                         Notification.show("Task added!");
-                        AimApplication.session_ctc.updateLayout();
+                        if ( AimApplication.session_ctc!= null ){
+                            AimApplication.session_ctc.updateLayout();
+                        }
                         main_dialog.close();
                     }
                     else{
@@ -207,7 +211,9 @@ public class InsertTaskWindow {
                     int ans = daip.insertTaskToProject(projectToInsert,loadTaskObject());
                     if (ans == 1){
                         Notification.show("Task added to project ("+projectToInsert.aim_project_id+")!");
-                        AimApplication.session_cpc.updateLayout();
+                        if ( AimApplication.session_cpc!= null ){
+                            AimApplication.session_cpc.updateLayout();
+                        }
                         main_dialog.close();
                     }
                     else if ( ans == 0 ){

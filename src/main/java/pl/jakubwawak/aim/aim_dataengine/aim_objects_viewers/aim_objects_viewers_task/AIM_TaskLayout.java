@@ -137,7 +137,10 @@ public class AIM_TaskLayout {
             }
             if (ans!=0){
                 Notification.show("("+taskObject.aim_task_id.toString()+") set to: "+newStatus);
-                AimApplication.session_ctc.updateLayout();
+                if ( AimApplication.session_ctc!= null ){
+                    AimApplication.session_ctc.updateLayout();
+                }
+
             }
         }
         else{
@@ -160,7 +163,9 @@ public class AIM_TaskLayout {
             }
             if (ans!=0){
                 Notification.show("("+taskObject.aim_task_name+") set to: "+newStatus);
-                AimApplication.session_cpc.updateLayout();
+                if ( AimApplication.session_ctc!= null ){
+                    AimApplication.session_ctc.updateLayout();
+                }
             }
         }
 

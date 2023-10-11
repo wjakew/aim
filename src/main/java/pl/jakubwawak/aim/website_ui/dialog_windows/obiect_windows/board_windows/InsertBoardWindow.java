@@ -209,7 +209,9 @@ public class InsertBoardWindow {
                 int ans = dab.insertBoard(boardToAdd);
                 if ( ans == 1 ){
                     Notification.show("Board added!");
-                    AimApplication.session_cbc.updateLayout(0);
+                    if (AimApplication.session_cbc != null){
+                        AimApplication.session_cbc.updateLayout(0);
+                    }
                     main_dialog.close();
                 }
                 else{
@@ -219,7 +221,9 @@ public class InsertBoardWindow {
             else{
                 int ans = dab.updateBoard(boardToAdd);
                 if (ans == 1){
-                    AimApplication.session_cbc.updateLayout(0);
+                    if (AimApplication.session_cbc != null){
+                        AimApplication.session_cbc.updateLayout(0);
+                    }
                     main_dialog.close();
                 }
                 else{

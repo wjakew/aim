@@ -134,7 +134,9 @@ public class InsertProjectWindow {
                 if (ans == 1){
                     Notification.show("Project updated!");
                     main_dialog.close();
-                    AimApplication.session_cpc.updateLayout();
+                    if ( AimApplication.session_cpc!= null ){
+                        AimApplication.session_cpc.updateLayout();
+                    }
                 }
             }
             else{
@@ -143,7 +145,9 @@ public class InsertProjectWindow {
                 if (ans == 1){
                     Notification.show("Project added!");
                     main_dialog.close();
-                    AimApplication.session_cpc.updateLayout();
+                    if ( AimApplication.session_cpc!= null ){
+                        AimApplication.session_cpc.updateLayout();
+                    }
                 }
                 else{
                     Notification.show("Error adding project, check application log!");

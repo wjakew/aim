@@ -192,7 +192,9 @@ public class DetailsTaskWindow {
                 int ans = dat.updateAIMTaskStatus(taskObject,newStatus);
                 if (ans > 0){
                     Notification.show("Task status updated");
-                    AimApplication.session_ctc.updateLayout();
+                    if ( AimApplication.session_ctc!= null ){
+                        AimApplication.session_ctc.updateLayout();
+                    }
                 }
             }
             else if ( projectWithTask != null && boardWithTask == null){
@@ -202,7 +204,9 @@ public class DetailsTaskWindow {
                 int ans = dap.updateTaskStatus(projectWithTask,taskObject,newStatus);
                 if (ans > 0){
                     Notification.show("Project's task status updated");
-                    AimApplication.session_cpc.updateLayout();
+                    if ( AimApplication.session_cpc!= null ){
+                        AimApplication.session_cpc.updateLayout();
+                    }
                 }
             }
             else if (projectWithTask == null && boardWithTask != null){
@@ -353,7 +357,9 @@ public class DetailsTaskWindow {
             Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
             String data = dat.remove(taskObject);
             Notification.show("Removed ("+data+")");
-            AimApplication.session_ctc.updateLayout();
+            if ( AimApplication.session_ctc!= null ){
+                AimApplication.session_ctc.updateLayout();
+            }
             main_dialog.close();
         }
 
@@ -363,7 +369,9 @@ public class DetailsTaskWindow {
             if ( ans == 1 ){
                 Notification.show("Removed from project ("+projectWithTask.aim_project_id+")");
                 main_dialog.close();
-                AimApplication.session_cpc.updateLayout();
+                if ( AimApplication.session_cpc!= null ){
+                    AimApplication.session_cpc.updateLayout();
+                }
             }
         }
 

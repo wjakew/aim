@@ -107,7 +107,10 @@ public class ChangeBoardOwnerWindow {
                     Notification.show("Owner for board ("+dbw.board.board_id.toString()+") changed!");
                     dbw.main_dialog.close();
                     main_dialog.close();
-                    AimApplication.session_cbc.updateLayout(0);
+                    if (AimApplication.session_cbc != null){
+                        AimApplication.session_cbc.updateLayout(0);
+                    }
+
                 }
                 else{
                     Notification.show("Application error, check log");

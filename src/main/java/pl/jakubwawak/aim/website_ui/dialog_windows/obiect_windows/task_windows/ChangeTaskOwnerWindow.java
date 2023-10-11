@@ -104,7 +104,9 @@ public class ChangeTaskOwnerWindow {
                 int ans = dat.changeOwnerAIMTask(taskToUpdate,ownerlogin_field.getValue());
                 if ( ans == 1 ){
                     Notification.show("Owner changed!");
-                    AimApplication.session_ctc.updateLayout();
+                    if ( AimApplication.session_ctc!= null ){
+                        AimApplication.session_ctc.updateLayout();
+                    }
                     main_dialog.close();
                 }
             }
