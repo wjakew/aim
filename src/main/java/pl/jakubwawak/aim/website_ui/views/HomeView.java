@@ -39,7 +39,7 @@ public class HomeView extends VerticalLayout {
     HorizontalLayout headerLayout, navigationLayout;
     Button home_button, addelement_button,logout_button,user_button;
 
-    Button taskview_button, projectview_button, boardview_button;
+    Button taskview_button, projectview_button, boardview_button,terminal_button;
 
     TextField terminal_field;
 
@@ -81,7 +81,7 @@ public class HomeView extends VerticalLayout {
         right_layout.setSizeFull();
         right_layout.setJustifyContentMode(JustifyContentMode.START);
         right_layout.setAlignItems(FlexComponent.Alignment.END);
-        right_layout.add(logout_button);
+        right_layout.add(terminal_button,logout_button);
         right_layout.setWidth("80%");
 
         headerLayout = new HorizontalLayout(left_layout,center_layout,right_layout);
@@ -103,9 +103,9 @@ public class HomeView extends VerticalLayout {
         projectview_button = new Button("Projects",VaadinIcon.BOOK.create(),this::projectviewbutton_action);
         boardview_button = new Button("Boards", VaadinIcon.DASHBOARD.create(),this::boardviewbutton_action);
 
-        taskview_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_CONTRAST);
         projectview_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_CONTRAST);
         boardview_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_CONTRAST);
+        taskview_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_CONTRAST);
 
         navigationLayout = new HorizontalLayout(taskview_button,projectview_button,boardview_button);
         navigationLayout.setMargin(true);
@@ -154,17 +154,20 @@ public class HomeView extends VerticalLayout {
      * Function for preparing components
      */
     void prepare_components(){
-        home_button = new Button("Dash", VaadinIcon.DASHBOARD.create(),this::homebutton_action);
+        home_button = new Button("", VaadinIcon.DASHBOARD.create(),this::homebutton_action);
         new ButtonStyler().primaryButtonStyle(home_button,"20%","");
 
-        addelement_button= new Button("Add", VaadinIcon.PLUS.create(),this::addelementbutton_action);
+        addelement_button= new Button("", VaadinIcon.PLUS.create(),this::addelementbutton_action);
         new ButtonStyler().primaryButtonStyle(addelement_button,"20%","");
 
-        user_button= new Button("You", VaadinIcon.USER.create(),this::userbutton_action);
+        user_button= new Button("", VaadinIcon.USER.create(),this::userbutton_action);
         new ButtonStyler().primaryButtonStyle(user_button,"20%","");
 
         logout_button = new Button("Log out",VaadinIcon.EXIT.create(),this::logoutbutton_action);
-        new ButtonStyler().primaryButtonStyle(logout_button,"80%","");
+        new ButtonStyler().primaryButtonStyle(logout_button,"40%","");
+
+        terminal_button = new Button("",VaadinIcon.TERMINAL.create(),this::terminalbutton_aciton);
+        new ButtonStyler().primaryButtonStyle(terminal_button,"20%","");
 
         terminal_field = new TextField();
         terminal_field.setPrefixComponent(VaadinIcon.TERMINAL.create());
@@ -253,6 +256,15 @@ public class HomeView extends VerticalLayout {
         UserWindow uw = new UserWindow();
         add(uw.main_dialog);
         uw.main_dialog.open();
+    }
+
+    /**
+     * terminal_button action
+     * @param ex
+     */
+    private void terminalbutton_aciton(ClickEvent ex){
+        terminal_button.getUI().ifPresent(ui ->
+                ui.navigate("/terminal"));
     }
 
 }

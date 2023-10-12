@@ -3,7 +3,7 @@
  * kubawawak@gmail.com
  * all rights reserved
  */
-package pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows;
+package pl.jakubwawak.aim.website_ui.dialog_windows;
 
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H6;
@@ -47,7 +47,7 @@ public class PictureViewerWindow {
     void prepare_components(){
         // set components
         StreamResource res = new StreamResource("aim_logo.png", () -> {
-            return WelcomeView.class.getClassLoader().getResourceAsStream("images/task_schema.png");
+            return WelcomeView.class.getClassLoader().getResourceAsStream(imagePath);
         });
         imageToShow = new Image(res,"Picture Viewer");
         imageToShow.setSizeFull();

@@ -17,7 +17,9 @@ import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMBoard;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMProject;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
 import pl.jakubwawak.aim.website_ui.ProjectListGlanceWindow;
-import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.PictureViewerWindow;
+import pl.jakubwawak.aim.website_ui.dialog_windows.PictureViewerWindow;
+import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.board_windows.BoardListGlanceWindow;
+import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.board_windows.InsertBoardWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.project_windows.InsertProjectWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.project_windows.ProjectHistoryGlanceWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.project_windows.ProjectTaskListGlanceWindow;
@@ -77,6 +79,15 @@ public class AIMInputParser {
                 {
                     project_mind_creator(userInput);
                     break;
+                }
+                case "board":
+                {
+                    board_mind_creator(userInput);
+                    break;
+                }
+                default:
+                {
+                    createNotificationResponse("Nothing to show, wrong command. Press ? for help",3);
                 }
             }
         }
@@ -467,6 +478,132 @@ public class AIMInputParser {
                 successParsingFlag = 0;
             }
         }
+        // project -rmtask -n project_name -t task_name / project -addtask -n task_name
+        else if (user_input.contains("-rmtask") || user_input.contains("-addtask")){
+            if ( user_word_collection.length >= 6 ){
+                String projectName = StringUtils.substringBetween(user_input,"-n","-t").stripLeading().stripTrailing().strip();
+                String []  subarray = IntStream.range(5, user_word_collection.length)
+                        .mapToObj(i -> user_word_collection[i])
+                        .toArray(String[]::new);
+                String taskName = String.join(" ",subarray);
+                AIM_Project project = dap.getProjectByName(projectName);
+                if ( project != null ){
+                    AIM_Task task = dat.getTask(taskName);
+                    if ( task != null ){
+                        // found task and project on database
+                        int ans = -3;
+                        if ( user_input.contains("-rmtask")){
+                            ans = dap.removeTaskFromProject(project,task);
+                        }
+                        else if ( user_input.contains("-addtask")){
+                            ans = dap.insertTaskToProject(project,task);
+                        }
+
+                        if (ans == 1){
+                            createNotificationResponse("Added task to project ("+project.aim_project_id.toString()+")",1);
+                            successParsingFlag = 1;
+                        }
+                        else{
+                            createNotificationResponse("Cannot add task to project, code: ("+ans+")",2);
+                            successParsingFlag = 0;
+                        }
+                    }
+                    else{
+                        createNotificationResponse("Cannot find task named ("+taskName+")",3);
+                        successParsingFlag = 0;
+                    }
+                }
+                else{
+                    createNotificationResponse("Cannot find project named ("+projectName+")",3);
+                    successParsingFlag = 0;
+                }
+            }
+            else{
+                createNotificationResponse("Wrong command usage, check -help",2);
+                successParsingFlag = 0;
+            }
+        }
+    }
+
+    /**
+     * Function for board operation
+     * @param user_input
+     */
+    public void board_mind_creator(String user_input){
+        Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
+        Database_AIMProject dap = new Database_AIMProject(AimApplication.database);
+        Database_AIMBoard dab = new Database_AIMBoard(AimApplication.database);
+        String[] user_word_collection = user_input.split(" ");
+        //board -create / board -create -n name -d desc
+        if ( user_input.contains("-create")){
+            if ( user_word_collection.length == 2 ){
+                InsertBoardWindow ibw = new InsertBoardWindow(null);
+                secondaryLayout.add(ibw.main_dialog);
+                ibw.main_dialog.open();
+            }
+            else if ( user_word_collection.length >= 6 ){
+                String boardName = StringUtils.substringBetween(user_input,"-n","-d").strip().stripTrailing().stripLeading();
+                String []  subarray = IntStream.range(5, user_word_collection.length)
+                        .mapToObj(i -> user_word_collection[i])
+                        .toArray(String[]::new);
+                String boardDesc = String.join(" ",subarray);
+                AIM_Board board = new AIM_Board();
+                board.board_name = boardName;
+                board.board_desc = boardDesc;
+                int ans = dab.insertBoard(board);
+                if ( ans == 1 ){
+                    createNotificationResponse("Board ("+boardName+") created!",1);
+                    successParsingFlag = 1;
+                }
+                else{
+                    createNotificationResponse("Error adding board, check log!",2);
+                    successParsingFlag = 0;
+                }
+            }
+            else{
+                createNotificationResponse("Wrong command usage, check -help",3);
+                successParsingFlag = 0;
+            }
+        }
+        //board -remove -n name
+        else if (user_input.contains("-remove")){
+            if ( user_word_collection.length >= 4 ){
+                String []  subarray = IntStream.range(5, user_word_collection.length)
+                        .mapToObj(i -> user_word_collection[i])
+                        .toArray(String[]::new);
+                String boardName = String.join(" ",subarray);
+                AIM_Board board = dab.getBoard(boardName);
+                if (board !=null){
+                    int ans = dab.removeBoard(board);
+                    if ( ans == 1 ){
+                        createNotificationResponse("Board ("+board.board_id.toString()+") removed.",1);
+                        successParsingFlag = 1;
+                    }
+                    else{
+                        createNotificationResponse("Failed to remove, check log!",2);
+                        successParsingFlag = 0;
+                    }
+                }
+                else{
+                    createNotificationResponse("Cannot find board ("+boardName+")",3);
+                    successParsingFlag = 0;
+                }
+            }
+        }
+        //board -list
+        else if (user_input.contains("-list")){
+            if ( user_word_collection.length == 2 ){
+                BoardListGlanceWindow blgw = new BoardListGlanceWindow();
+                secondaryLayout.add(blgw.main_dialog);
+                blgw.main_dialog.open();
+                successParsingFlag = 1;
+            }
+            else{
+                createNotificationResponse("Wrong command usage, check -help",3);
+                successParsingFlag = 0;
+            }
+        }
+        
     }
 
     /**

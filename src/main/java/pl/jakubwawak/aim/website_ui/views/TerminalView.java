@@ -9,8 +9,10 @@ import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H6;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -21,6 +23,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
+import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.theme.lumo.Lumo;
 import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 import pl.jakubwawak.aim.AimApplication;
@@ -42,12 +45,13 @@ public class TerminalView extends VerticalLayout {
 
     Button normalmode_button;
 
+    VerticalLayout upperLayout, centerLayout,bottomLayout,footerLayout;
+
 
     /**
      * Constructor
      */
     public TerminalView(){
-        this.getElement().setAttribute("theme", Lumo.DARK);
         prepare_view();
 
         setSizeFull();
@@ -55,6 +59,7 @@ public class TerminalView extends VerticalLayout {
         setDefaultHorizontalComponentAlignment(Alignment.CENTER);
         getStyle().set("text-align", "center");
         getStyle().set("background-image","linear-gradient(black, white)");
+        getStyle().set("color","black");
         getStyle().set("--lumo-font-family","Monospace");
     }
 
@@ -77,18 +82,51 @@ public class TerminalView extends VerticalLayout {
                 terminal_field.setValue("");
         });
 
-        normalmode_button = new Button("Return to normal mode...",VaadinIcon.NOTEBOOK.create(),this::normalmodebutton_action);
+        normalmode_button = new Button("Go to standard mode",VaadinIcon.NOTEBOOK.create(),this::normalmodebutton_action);
         normalmode_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        normalmode_button.getStyle().set("background-color","white");
+        normalmode_button.getStyle().set("color","black");
+
+        upperLayout = new VerticalLayout();
+        upperLayout.setSizeFull();
+        upperLayout.setJustifyContentMode(JustifyContentMode.CENTER);
+        upperLayout.setDefaultHorizontalComponentAlignment(Alignment.CENTER);
+
+        bottomLayout = new VerticalLayout();
+        bottomLayout.setSizeFull();
+        bottomLayout.setJustifyContentMode(JustifyContentMode.CENTER);
+        bottomLayout.setDefaultHorizontalComponentAlignment(Alignment.CENTER);
+
+        centerLayout = new VerticalLayout();
+        centerLayout.setSizeFull();
+        centerLayout.setJustifyContentMode(JustifyContentMode.CENTER);
+        centerLayout.setDefaultHorizontalComponentAlignment(Alignment.CENTER);
+
+        footerLayout = new VerticalLayout();
+        footerLayout.setSizeFull();
+        footerLayout.setJustifyContentMode(JustifyContentMode.CENTER);
+        footerLayout.setDefaultHorizontalComponentAlignment(Alignment.CENTER);
+
     }
 
     /**
      * Function for preparing layout
      */
     void prepare_layout(){
-        add(new H1("Welcome to AIM"));
-        add(new H6(AimApplication.loggedUser.aim_user_email));
-        add(terminal_field);
-        add(normalmode_button);
+        StreamResource res = new StreamResource("aim_logo.png", () -> {
+            return WelcomeView.class.getClassLoader().getResourceAsStream("images/aim_logo.png");
+        });
+        Image logo = new Image(res,"aim logo");
+        logo.setHeight("15rem");
+        logo.setWidth("15rem");
+
+        upperLayout.add(logo);
+        centerLayout.add(new H6("WELCOME TO AIM"));
+        centerLayout.add(new H6(AimApplication.loggedUser.aim_user_email));
+        bottomLayout.add(terminal_field);
+        footerLayout.add(normalmode_button);
+
+        add(upperLayout,centerLayout,bottomLayout,footerLayout);
     }
 
     /**

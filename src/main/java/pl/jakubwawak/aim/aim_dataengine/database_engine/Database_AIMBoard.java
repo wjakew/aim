@@ -82,7 +82,7 @@ public class Database_AIMBoard {
     }
 
     /**
-     * Function for loading board object
+     * Function for loading board object by ID
      * @param board_id
      * @return AIM_Board
      */
@@ -95,6 +95,27 @@ public class Database_AIMBoard {
                 return new AIM_Board(board_document);
             }
             database.log("DB-GET-BOARD","Cannot find board for id ("+board_id.toString()+")");
+            return null;
+        }catch(Exception ex){
+            database.log("DB-GET-BOARD-FAILED","Failed to get board data ("+ex.toString()+")");
+            return null;
+        }
+    }
+
+    /**
+     * Function for loading board object by name
+     * @param board_name
+     * @return AIM_Board
+     */
+    public AIM_Board getBoard(String board_name){
+        try{
+            MongoCollection<Document> board_collection = database.get_data_collection("aim_board");
+            Document board_document = board_collection.find(new Document("board_name",board_name)).first();
+            if (board_document != null){
+                database.log("DB-GET-BOARD","Found board for given name ("+board_name+") task size: "+board_document.getList("task_list",Document.class).size());
+                return new AIM_Board(board_document);
+            }
+            database.log("DB-GET-BOARD","Cannot find board for id ("+board_name+")");
             return null;
         }catch(Exception ex){
             database.log("DB-GET-BOARD-FAILED","Failed to get board data ("+ex.toString()+")");
@@ -380,6 +401,29 @@ public class Database_AIMBoard {
             return 0;
         }catch(Exception ex){
             database.log("DB-BOARD-TASK-REMOVE-FAILED","Failed to remove task from board ("+ex.toString()+")");
+            return -1;
+        }
+    }
+
+    /**
+     * Function for removing board from database
+     * @param boardToRemove
+     * @return Integer
+     */
+    public int removeBoard(AIM_Board boardToRemove){
+        try{
+            MongoCollection<Document> board_collection = database.get_data_collection("aim_board");
+            DeleteResult result = board_collection.deleteOne(boardToRemove.prepareDocument());
+            if ( result.getDeletedCount() > 0 ){
+                database.log("DB-BOARD-REMOVE","Removed board ("+boardToRemove.board_id.toString()+")");
+                return 1;
+            }
+            else{
+                database.log("DB-BOARD-REMOVE","Cannot remove board, nothing to find!");
+                return 0;
+            }
+        }catch(Exception ex){
+            database.log("DB-BOARD-TASK-REMOVE-FAILED","Failed to remove board ("+ex.toString()+")");
             return -1;
         }
     }

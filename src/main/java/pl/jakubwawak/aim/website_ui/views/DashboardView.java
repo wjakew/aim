@@ -91,16 +91,16 @@ public class DashboardView extends VerticalLayout {
      * Function for preparing components
      */
     void prepare_components(){
-        home_button = new Button("Home", VaadinIcon.HOME.create(),this::homebutton_action);
+        home_button = new Button("", VaadinIcon.HOME.create(),this::homebutton_action);
         new ButtonStyler().primaryButtonStyle(home_button,"20%","");
 
-        addelement_button= new Button("Add", VaadinIcon.PLUS.create(),this::addelementbutton_action);
+        addelement_button= new Button("", VaadinIcon.PLUS.create(),this::addelementbutton_action);
         new ButtonStyler().primaryButtonStyle(addelement_button,"20%","");
 
-        user_button= new Button("You", VaadinIcon.USER.create(),this::userbutton_action);
+        user_button= new Button("", VaadinIcon.USER.create(),this::userbutton_action);
         new ButtonStyler().primaryButtonStyle(user_button,"20%","");
 
-        logout_button = new Button("Log out",VaadinIcon.EXIT.create(),this::logoutbutton_action);
+        logout_button = new Button("",VaadinIcon.EXIT.create(),this::logoutbutton_action);
         new ButtonStyler().primaryButtonStyle(logout_button,"80%","");
     }
 
