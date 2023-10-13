@@ -11,6 +11,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.apache.commons.lang3.StringUtils;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Board;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_BoardTask;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Project;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMBoard;
@@ -18,7 +19,9 @@ import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMProject;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
 import pl.jakubwawak.aim.website_ui.ProjectListGlanceWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.PictureViewerWindow;
+import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.board_windows.BoardHistoryGlanceWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.board_windows.BoardListGlanceWindow;
+import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.board_windows.BoardTaskListGlanceWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.board_windows.InsertBoardWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.project_windows.InsertProjectWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.project_windows.ProjectHistoryGlanceWindow;
@@ -600,6 +603,106 @@ public class AIMInputParser {
             }
             else{
                 createNotificationResponse("Wrong command usage, check -help",3);
+                successParsingFlag = 0;
+            }
+        }
+        else if (user_input.contains("-help")){
+            if ( user_word_collection.length == 2 ){
+                PictureViewerWindow pvw = new PictureViewerWindow("images/board_schema.png","Board Command Schema");
+                secondaryLayout.add(pvw.main_dialog);
+                pvw.main_dialog.open();
+            }
+        }
+        // board -tasks -n board_name
+        else if (user_input.contains("-tasks")){
+            if ( user_word_collection.length >= 4 ){
+                String []  subarray = IntStream.range(3, user_word_collection.length)
+                        .mapToObj(i -> user_word_collection[i])
+                        .toArray(String[]::new);
+                String boardName = String.join(" ",subarray);
+                AIM_Board board = dab.getBoard(boardName);
+                if ( board != null ){
+                    BoardTaskListGlanceWindow btlgw = new BoardTaskListGlanceWindow(board);
+                    secondaryLayout.add(btlgw.main_dialog);
+                    btlgw.main_dialog.open();
+                    successParsingFlag = 1;
+                }
+                else{
+                    createNotificationResponse("Cannot find board ("+boardName+")",3);
+                    successParsingFlag = 0;
+                }
+            }
+            else{
+                createNotificationResponse("Wrong command usage, check -help, code ("+user_word_collection.length+")",3);
+                successParsingFlag = 0;
+            }
+        }
+        // board -history -n board_name
+        else if (user_input.contains("-history")){
+            if ( user_word_collection.length >= 4 ){
+                String []  subarray = IntStream.range(3, user_word_collection.length)
+                        .mapToObj(i -> user_word_collection[i])
+                        .toArray(String[]::new);
+                String boardName = String.join(" ",subarray);
+                AIM_Board board = dab.getBoard(boardName);
+                if ( board != null ){
+                    //open board history window
+                    BoardHistoryGlanceWindow bhgw = new BoardHistoryGlanceWindow(board);
+                    secondaryLayout.add(bhgw.main_dialog);
+                    bhgw.main_dialog.open();
+                    successParsingFlag = 1;
+                }
+                else{
+                    createNotificationResponse("Cannot find board ("+boardName+")",3);
+                    successParsingFlag = 0;
+                }
+            }
+            else{
+                createNotificationResponse("Wrong command usage, check -help, code ("+user_word_collection.length+")",3);
+                successParsingFlag = 0;
+            }
+        }
+        // board -addtask -n board_name -t task_name / board -rmtask -n board_name -t task_name
+        else if ( user_input.contains("-addtask") || user_input.contains("-rmtask") ){
+            String boardName = StringUtils.substringBetween(user_input,"-n","-t").stripLeading().stripTrailing().strip();
+            String []  subarray = IntStream.range(4, user_word_collection.length)
+                    .mapToObj(i -> user_word_collection[i])
+                    .toArray(String[]::new);
+            String taskName = String.join(" ",subarray);
+            AIM_Board board = dab.getBoard(boardName);
+            if ( board != null ){
+                AIM_Task task = dat.getTask(taskName);
+                if ( task != null ){
+                    // task and board found
+                    AIM_BoardTask abt = new AIM_BoardTask(task);
+                    if ( user_input.contains("-addtask")) {
+                        int ans = dab.insertTaskToBoard(board, abt);
+                        if (ans == 1) {
+                            createNotificationResponse("Task added to board (" + board.board_id + ")", 1);
+                            successParsingFlag = 1;
+                        } else {
+                            createNotificationResponse("Failed to add task, check application log", 2);
+                            successParsingFlag = 0;
+                        }
+                    }
+                    else if ( user_input.contains("-rmtask")){
+                        int ans = dab.removeTaskFromBoard(board,abt);
+                        if (ans == 1) {
+                            createNotificationResponse("Task removed from board (" + board.board_id + ")", 1);
+                            successParsingFlag = 1;
+                        } else {
+                            createNotificationResponse("Failed to remove task, check application log", 2);
+                            successParsingFlag = 0;
+                        }
+                    }
+                }
+                else{
+                    createNotificationResponse("Cannot find task with name ("+taskName+")",3);
+                    successParsingFlag = 0;
+                }
+            }
+            else{
+                createNotificationResponse("Cannot find board with name ("+boardName+")",3);
                 successParsingFlag = 0;
             }
         }

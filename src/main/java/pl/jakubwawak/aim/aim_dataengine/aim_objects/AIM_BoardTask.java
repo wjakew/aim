@@ -46,4 +46,11 @@ public class AIM_BoardTask extends AIM_Task{
         taskDocument.append("aim_user_assigned",aim_user_assigned);
         return taskDocument;
     }
+
+    public String getAssignedUserGlance(){
+        if (aim_user_assigned != null){
+            return aim_user_assigned.getString("aim_user_email");
+        }
+        return "All";
+    }
 }

@@ -5,41 +5,40 @@
  */
 package pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.board_windows;
 
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H6;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Board;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_BoardTask;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
-import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMBoard;
-import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
-import pl.jakubwawak.maintanance.GridElement;
-import java.util.ArrayList;
+import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMProject;
 
 /**
- * Window for logging user to the app
+ * Window for showing tasks connected to project
  */
-public class BoardListGlanceWindow {
+public class BoardTaskListGlanceWindow {
 
     // variables for setting x and y of window
-    public String width = "40%";
-    public String height = "40%";
+    public String width = "60%";
+    public String height = "60%";
     public String backgroundStyle = "";
 
     // main login components
     public Dialog main_dialog;
     VerticalLayout main_layout;
 
-    Grid<AIM_Board> boardGrid;
+    Grid<AIM_BoardTask> boardTask_grid;
+
+    AIM_Board boardToShow;
 
     /**
      * Constructor
      */
-    public BoardListGlanceWindow(){
+    public BoardTaskListGlanceWindow(AIM_Board boardToShow){
+        this.boardToShow = boardToShow;
         main_dialog = new Dialog();
         main_layout = new VerticalLayout();
         prepare_dialog();
@@ -50,22 +49,15 @@ public class BoardListGlanceWindow {
      */
     void prepare_components(){
         // set components
-        boardGrid = new Grid<>(AIM_Board.class,false);
-        Database_AIMBoard dab = new Database_AIMBoard(AimApplication.database);
-        ArrayList<AIM_Board> boardCollection = dab.getUserBoardList();
+        Database_AIMProject dap = new Database_AIMProject(AimApplication.database);
+        boardTask_grid = new Grid<>(AIM_BoardTask.class,false);
+        boardTask_grid.addColumn(AIM_BoardTask::getAim_task_name).setHeader("Task Name");
+        boardTask_grid.addColumn(AIM_BoardTask::getAim_task_timestamp).setHeader("Timestamp");
+        boardTask_grid.addColumn(AIM_BoardTask::getAssignedUserGlance).setHeader("Assigned User");
 
-        boardGrid.addColumn(AIM_Board::getBoard_name).setHeader("Board Name");
-        boardGrid.addColumn(AIM_Board::ownerLabel).setHeader("Access Type");
-        boardGrid.setItems(boardCollection);
-        boardGrid.setSizeFull();
+        boardTask_grid.setItems(boardToShow.getTaskList());
+        boardTask_grid.setSizeFull();
 
-        boardGrid.addItemClickListener(e->{
-            for(AIM_Board selected : boardGrid.getSelectedItems()){
-                UI.getCurrent().getPage().executeJs("window.copyToClipboard($0)", selected.board_name);
-                Notification.show(selected.board_name+" copied to clipboard!");
-                break;
-            }
-        });
     }
 
     /**
@@ -74,9 +66,8 @@ public class BoardListGlanceWindow {
     void prepare_dialog(){
         prepare_components();
         // set layout
-        main_layout.add(new H6("Your Current Boards"));
-        main_layout.add(boardGrid);
-
+        main_layout.add(new H6("TASK LIST FOR BOARD "+boardToShow.board_name));
+        main_layout.add(boardTask_grid);
         main_layout.setSizeFull();
         main_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         main_layout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
