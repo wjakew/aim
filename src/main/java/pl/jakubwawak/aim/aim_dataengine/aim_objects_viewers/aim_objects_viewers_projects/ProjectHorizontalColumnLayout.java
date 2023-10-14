@@ -44,10 +44,7 @@ public class ProjectHorizontalColumnLayout {
         previous_button = new Button("", VaadinIcon.ARROW_LEFT.create(),this::previousbutton_action);
         next_button = new Button("",VaadinIcon.ARROW_RIGHT.create(),this::nextbutton_action);
         prepareLayout();
-
         projectHorizontalColumnLayout.setWidth("100%");
-        projectHorizontalColumnLayout.setMargin(true);
-        projectHorizontalColumnLayout.getStyle().set("background-color","gray");
         projectHorizontalColumnLayout.getStyle().set("color","black");
         projectHorizontalColumnLayout.getStyle().set("border-radius","15px");
 

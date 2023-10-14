@@ -30,7 +30,10 @@ import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_terminal_engine.AIMInputParser;
 import pl.jakubwawak.aim.website_ui.dialog_windows.AddElementWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.UserWindow;
+import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.CommandSuggestionWindow;
 import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
+
+import java.lang.management.GarbageCollectorMXBean;
 
 /**
  * Object for showing welcome view
@@ -45,6 +48,8 @@ public class TerminalView extends VerticalLayout {
 
     Button normalmode_button;
 
+    Button runcommand_button,help_button;
+
     VerticalLayout upperLayout, centerLayout,bottomLayout,footerLayout;
 
 
@@ -58,7 +63,7 @@ public class TerminalView extends VerticalLayout {
         setJustifyContentMode(JustifyContentMode.CENTER);
         setDefaultHorizontalComponentAlignment(Alignment.CENTER);
         getStyle().set("text-align", "center");
-        getStyle().set("background-image","linear-gradient(black, white)");
+        getStyle().set("background-image","radial-gradient(white,gray)");
         getStyle().set("color","black");
         getStyle().set("--lumo-font-family","Monospace");
     }
@@ -74,18 +79,27 @@ public class TerminalView extends VerticalLayout {
         terminal_field.setPlaceholder("let's create something...");
         terminal_field.setWidth("50%");
 
-        terminal_field.addKeyPressListener(Key.ENTER, e->
+        terminal_field.addKeyPressListener(e->
         {
-            aip.setUserInput(terminal_field.getValue());
-            aip.parse();
-            if ( aip.successParsingFlag == 1)
-                terminal_field.setValue("");
+            if (e.getKey().equals(Key.ENTER)){
+                aip.setUserInput(terminal_field.getValue());
+                aip.parse();
+                if ( aip.successParsingFlag == 1)
+                    terminal_field.setValue("");
+            }
         });
 
         normalmode_button = new Button("Go to standard mode",VaadinIcon.NOTEBOOK.create(),this::normalmodebutton_action);
         normalmode_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
         normalmode_button.getStyle().set("background-color","white");
         normalmode_button.getStyle().set("color","black");
+
+        runcommand_button = new Button("Run Command",VaadinIcon.COMPILE.create(),this::runcommandbutton_action);
+        runcommand_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        runcommand_button.setWidth("50%");
+
+        help_button = new Button("",VaadinIcon.QUESTION_CIRCLE.create(),this::helpbutton_action);
+        help_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
 
         upperLayout = new VerticalLayout();
         upperLayout.setSizeFull();
@@ -123,7 +137,9 @@ public class TerminalView extends VerticalLayout {
         upperLayout.add(logo);
         centerLayout.add(new H6("WELCOME TO AIM"));
         centerLayout.add(new H6(AimApplication.loggedUser.aim_user_email));
-        bottomLayout.add(terminal_field);
+        centerLayout.add(help_button);
+
+        bottomLayout.add(terminal_field,runcommand_button);
         footerLayout.add(normalmode_button);
 
         add(upperLayout,centerLayout,bottomLayout,footerLayout);
@@ -155,5 +171,26 @@ public class TerminalView extends VerticalLayout {
     private void normalmodebutton_action(ClickEvent ex){
         normalmode_button.getUI().ifPresent(ui ->
                 ui.navigate("/home"));
+    }
+
+    /**
+     * runcommand_button action
+     * @param ex
+     */
+    private void runcommandbutton_action(ClickEvent ex){
+        aip.setUserInput(terminal_field.getValue());
+        aip.parse();
+        if ( aip.successParsingFlag == 1)
+            terminal_field.setValue("");
+    }
+
+    /**
+     * helpbutton_action
+     * @param ex
+     */
+    private void helpbutton_action(ClickEvent ex){
+        CommandSuggestionWindow csw = new CommandSuggestionWindow(terminal_field.getValue(),this);
+        add(csw.main_dialog);
+        csw.main_dialog.open();
     }
 }

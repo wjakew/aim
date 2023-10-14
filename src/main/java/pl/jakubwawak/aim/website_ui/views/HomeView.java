@@ -55,7 +55,7 @@ public class HomeView extends VerticalLayout {
         setJustifyContentMode(JustifyContentMode.CENTER);
         setDefaultHorizontalComponentAlignment(Alignment.CENTER);
         getStyle().set("text-align", "center");
-        getStyle().set("background-image","linear-gradient(black, white)");
+        getStyle().set("background-image","radial-gradient(white,gray)");
         getStyle().set("--lumo-font-family","Monospace");
     }
 

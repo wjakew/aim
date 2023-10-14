@@ -105,7 +105,7 @@ public class AIM_ProjectLayout {
         projectLayout.getStyle().set("--lumo-font-family","Monospace");
 
         projectLayout.getStyle().set("border-radius","25px");
-        projectLayout.getStyle().set("background-color","black");
+        projectLayout.getStyle().set("background-image","radial-gradient(#eeaeca,#94bbe9)");
         projectLayout.getStyle().set("color","#FFFFFF");
     }
 

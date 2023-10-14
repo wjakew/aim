@@ -48,6 +48,8 @@ public class AIMInputParser {
 
     public int successParsingFlag;
 
+    ArrayList<String> allCommandsCollection;
+
     /**
      * Constructor
      */
@@ -55,6 +57,60 @@ public class AIMInputParser {
         successParsingFlag = 0;
         this.secondaryLayout = secondaryLayout;
         userInputHistory = new ArrayList<>();
+        allCommandsCollection = new ArrayList<>();
+        createAllCommandsCollection();
+    }
+
+    /**
+     * Function for creating all commands collection for search
+     */
+    void createAllCommandsCollection(){
+        allCommandsCollection.add("task -help");
+        allCommandsCollection.add("task -list");
+        allCommandsCollection.add("task -viewer");
+        allCommandsCollection.add("task -create");
+        allCommandsCollection.add("task -create -n name -d description");
+        allCommandsCollection.add("task -link -t task_name -s board_name/project_name");
+        allCommandsCollection.add("task -status -t task_name -st new/in progress/done");
+        allCommandsCollection.add("task -remove -t task_name");
+        allCommandsCollection.add("task -history -t task_name");
+        allCommandsCollection.add("task -details -t task_name");
+        allCommandsCollection.add("project -create");
+        allCommandsCollection.add("project -list");
+        allCommandsCollection.add("project -help");
+        allCommandsCollection.add("project -remove -n project_name");
+        allCommandsCollection.add("project -create -n project_name -d project_desc");
+        allCommandsCollection.add("project -history -n project_name");
+        allCommandsCollection.add("project -listtask -n project_name");
+        allCommandsCollection.add("project -rmtask -n project_name -t task_name");
+        allCommandsCollection.add("project -addtask -n task_name");
+        allCommandsCollection.add("board -create");
+        allCommandsCollection.add("board -create -n name -d desc");
+        allCommandsCollection.add("board -remove -n name");
+        allCommandsCollection.add("board -list");
+        allCommandsCollection.add("board -tasks -n board_name");
+        allCommandsCollection.add("board -history -n board_name");
+        allCommandsCollection.add("board -addtask -n board_name -t task_name");
+        allCommandsCollection.add("board -rmtask -n board_name -t task_name");
+    }
+
+    /**
+     * Function for loading input suggestion
+     * @param userInput
+     */
+    public ArrayList<String> getCommandSuggestion(String userInput){
+        if ( userInput.equals("") ){
+            return allCommandsCollection;
+        }
+        else{
+            ArrayList<String> data = new ArrayList<>();
+            for(String command : allCommandsCollection){
+                if ( command.contains(userInput) ){
+                    data.add(command);
+                }
+            }
+            return data;
+        }
     }
 
     /**
@@ -165,7 +221,6 @@ public class AIMInputParser {
         }
         // task -link -t task_name -s board/project
         else if (user_input.contains("-link")){
-            //todo bug with searching tasks - cannot find data
             if ( user_word_collection.length == 6 ){
                 String sourceObject = user_word_collection[5];
                 String taskName = StringUtils.substringBetween(user_input,"-t","-s").strip().stripLeading().stripTrailing();
@@ -312,6 +367,7 @@ public class AIMInputParser {
                 }
             }
         }
+        // task -details -t task_name
         else if ( user_input.contains("-details")){
             if ( user_word_collection.length >= 3 ){
                 String []  subarray = IntStream.range(3, user_word_collection.length)

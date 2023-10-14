@@ -40,8 +40,7 @@ public class CurrentTaskComposer {
     void prepareLayout(){
 
         mainLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
-        mainLayout.setWidth("90%");
-        mainLayout.setHeight("90%");
+        mainLayout.setSizeFull();
         mainLayout.getStyle().set("text-align", "center");
         mainLayout.getStyle().set("border-radius","25px");
         mainLayout.getStyle().set("margin","75px");

@@ -99,13 +99,13 @@ public class AIM_TaskLayout {
         main_layout.getStyle().set("border-radius","25px");
 
         if ( taskObject.status.equals("NEW")){
-            main_layout.getStyle().set("background-color","#48b869");
+            main_layout.getStyle().set("background-image","radial-gradient(#90e9cc, #56d580)");
         }
         else if ( taskObject.status.equals("IN PROGRESS")){
-            main_layout.getStyle().set("background-color","#4891b8");
+            main_layout.getStyle().set("background-image","radial-gradient(#d5bc56, #90e9cc)");
         }
         else if ( taskObject.status.equals("DONE")){
-            main_layout.getStyle().set("background-color","#a8964f");
+            main_layout.getStyle().set("background-image","radial-gradient(#9f68e7, #d5bc56)");
             changestatus_button.setVisible(false);
         }
         main_layout.getStyle().set("color","#FFFFFF");
