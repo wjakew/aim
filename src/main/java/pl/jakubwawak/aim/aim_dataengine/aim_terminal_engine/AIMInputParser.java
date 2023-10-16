@@ -69,7 +69,7 @@ public class AIMInputParser {
         allCommandsCollection.add("task -list");
         allCommandsCollection.add("task -viewer");
         allCommandsCollection.add("task -create");
-        allCommandsCollection.add("task -create -n name -d description");
+        allCommandsCollection.add("task -create -n task_name -d task_desc");
         allCommandsCollection.add("task -link -t task_name -s board_name/project_name");
         allCommandsCollection.add("task -status -t task_name -st new/in progress/done");
         allCommandsCollection.add("task -remove -t task_name");
@@ -85,8 +85,8 @@ public class AIMInputParser {
         allCommandsCollection.add("project -rmtask -n project_name -t task_name");
         allCommandsCollection.add("project -addtask -n task_name");
         allCommandsCollection.add("board -create");
-        allCommandsCollection.add("board -create -n name -d desc");
-        allCommandsCollection.add("board -remove -n name");
+        allCommandsCollection.add("board -create -n board_name -d board_desc");
+        allCommandsCollection.add("board -remove -n board_name");
         allCommandsCollection.add("board -list");
         allCommandsCollection.add("board -tasks -n board_name");
         allCommandsCollection.add("board -history -n board_name");

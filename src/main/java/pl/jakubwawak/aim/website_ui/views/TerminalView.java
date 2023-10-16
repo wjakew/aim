@@ -9,31 +9,18 @@ import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.StreamResource;
-import com.vaadin.flow.theme.lumo.Lumo;
-import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_terminal_engine.AIMInputParser;
-import pl.jakubwawak.aim.website_ui.dialog_windows.AddElementWindow;
-import pl.jakubwawak.aim.website_ui.dialog_windows.UserWindow;
-import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.CommandSuggestionWindow;
-import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
-
-import java.lang.management.GarbageCollectorMXBean;
+import pl.jakubwawak.aim.website_ui.dialog_windows.CommandSuggestionWindow;
 
 /**
  * Object for showing welcome view
@@ -42,7 +29,7 @@ import java.lang.management.GarbageCollectorMXBean;
 @Route(value = "terminal")
 public class TerminalView extends VerticalLayout {
 
-    TextField terminal_field;
+    public TextField terminal_field;
 
     AIMInputParser aip;
 

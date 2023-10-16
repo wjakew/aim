@@ -3,8 +3,9 @@
  * kubawawak@gmail.com
  * all rights reserved
  */
-package pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows;
+package pl.jakubwawak.aim.website_ui.dialog_windows;
 
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -101,7 +102,7 @@ public class CommandSuggestionWindow {
             }
         });
 
-        acceptsuggestion_button = new Button("Use this command!",VaadinIcon.ARROW_RIGHT.create());
+        acceptsuggestion_button = new Button("Use this command!",VaadinIcon.ARROW_RIGHT.create(),this::acceptsuggestionbutton_action);
         acceptsuggestion_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
         acceptsuggestion_button.setWidth("100%");
 
@@ -131,5 +132,45 @@ public class CommandSuggestionWindow {
         main_layout.getStyle().set("--lumo-font-family","Monospace");
         main_dialog.add(main_layout);
         main_dialog.setWidth(width);main_dialog.setHeight(height);
+    }
+
+    /**
+     * acceptsuggestion_button action
+     * @param ex
+     */
+    private void acceptsuggestionbutton_action(ClickEvent ex){
+        if (terminal_field.getValue().contains("-n") || terminal_field.getValue().contains("-t") || terminal_field.getValue().contains("_")){
+            String property1 = null;
+            String property2 = null;
+            ArrayList<String> propertiesCollection = new ArrayList<>();
+            for(String word : terminal_field.getValue().split(" ")){
+                if (word.contains("_")){
+                    propertiesCollection.add(word);
+                }
+            }
+            if (propertiesCollection.size() == 1 ){
+                property1 = propertiesCollection.get(0);
+            }
+            else if (propertiesCollection.size() == 2 ){
+                property1 = propertiesCollection.get(0);
+                property2 = propertiesCollection.get(1);
+            }
+
+            if (property1 != null){
+                CommandSuggestionInsertWindow csiw = new CommandSuggestionInsertWindow(terminal_field.getValue(),property1,property2,secondaryView);
+                main_layout.add(csiw.main_dialog);
+                csiw.main_dialog.open();
+                main_dialog.close();
+            }
+            else{
+                secondaryView.terminal_field.setValue(terminal_field.getValue());
+                main_dialog.close();
+            }
+
+        }
+        else{
+            secondaryView.terminal_field.setValue(terminal_field.getValue());
+            main_dialog.close();
+        }
     }
 }
