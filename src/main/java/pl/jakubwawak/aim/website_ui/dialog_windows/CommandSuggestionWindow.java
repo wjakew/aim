@@ -155,6 +155,12 @@ public class CommandSuggestionWindow {
                 property1 = propertiesCollection.get(0);
                 property2 = propertiesCollection.get(1);
             }
+            try{
+                System.out.println(property1+"/"+property2);
+            }
+            catch(Exception e){
+                System.out.println(e.toString());
+            }
 
             if (property1 != null){
                 CommandSuggestionInsertWindow csiw = new CommandSuggestionInsertWindow(terminal_field.getValue(),property1,property2,secondaryView);

@@ -87,7 +87,7 @@ public class CommandSuggestionInsertWindow {
         if ( !property1.isEmpty() ){
             main_layout.add(property1_field);
         }
-        if ( !property2_field.isEmpty() ){
+        if ( !property2.isEmpty() ){
             main_layout.add(property2_field);
         }
 
