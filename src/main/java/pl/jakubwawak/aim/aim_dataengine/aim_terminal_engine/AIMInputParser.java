@@ -5,9 +5,13 @@
  */
 package pl.jakubwawak.aim.aim_dataengine.aim_terminal_engine;
 
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.tabs.TabSheet;
 import org.apache.commons.lang3.StringUtils;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Board;
@@ -19,10 +23,8 @@ import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMProject;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
 import pl.jakubwawak.aim.website_ui.ProjectListGlanceWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.PictureViewerWindow;
-import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.board_windows.BoardHistoryGlanceWindow;
-import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.board_windows.BoardListGlanceWindow;
-import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.board_windows.BoardTaskListGlanceWindow;
-import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.board_windows.InsertBoardWindow;
+import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.board_windows.*;
+import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.project_windows.DetailsProjectWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.project_windows.InsertProjectWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.project_windows.ProjectHistoryGlanceWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.project_windows.ProjectTaskListGlanceWindow;
@@ -30,6 +32,7 @@ import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.task_windows.D
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.task_windows.InsertTaskWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.task_windows.TaskHistoryGlanceWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.task_windows.TaskListGlanceWindow;
+import pl.jakubwawak.aim.website_ui.views.TerminalView;
 
 import java.util.ArrayList;
 import java.util.stream.IntStream;
@@ -47,18 +50,109 @@ public class AIMInputParser {
     VerticalLayout secondaryLayout;
 
     public int successParsingFlag;
+    public int simpleViewFlagNeed;
 
     ArrayList<String> allCommandsCollection;
+
+    // objects for current glance layout component
+    public VerticalLayout currentGlanceLayout;
+    Grid<AIM_Task> task_grid;
+    Grid<AIM_Project> project_grid;
+    Grid<AIM_Board> board_grid;
 
     /**
      * Constructor
      */
-    public AIMInputParser(VerticalLayout secondaryLayout){
+    public AIMInputParser(VerticalLayout terminalView){
         successParsingFlag = 0;
-        this.secondaryLayout = secondaryLayout;
+        simpleViewFlagNeed = 0;
+        this.secondaryLayout = terminalView;
         userInputHistory = new ArrayList<>();
         allCommandsCollection = new ArrayList<>();
         createAllCommandsCollection();
+        currentGlanceLayout = new VerticalLayout();
+        currentGlanceLayout.setVisible(false);
+        prepareLayout();
+    }
+
+    /**
+     * Function for preparing current glance layout
+     */
+    void prepareLayout(){
+
+        // task_tab
+        Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
+        ArrayList<AIM_Task> taskCollection = dat.getTaskCollection();
+        task_grid = new Grid<>(AIM_Task.class,false);
+        task_grid.addColumn(AIM_Task::getAim_task_name).setHeader("Task Name");
+        task_grid.addColumn(AIM_Task::getAim_task_owner_glance).setHeader("Task Owner");
+        task_grid.addColumn(AIM_Task::getAim_task_timestamp).setHeader("Time Created");
+        task_grid.addColumn(AIM_Task::getStatus).setHeader("Task Status");
+        task_grid.setItems(taskCollection);
+        task_grid.setWidth("100%");task_grid.setHeight("100%");
+
+        // projects_tab
+        Database_AIMProject dap = new Database_AIMProject(AimApplication.database);
+        ArrayList<AIM_Project> projectCollection = dap.getUserProjects();
+        project_grid = new Grid<>(AIM_Project.class,false);
+        project_grid.addColumn(AIM_Project::getAim_project_name).setHeader("Project Name");
+        project_grid.addColumn(AIM_Project::getAim_owner_glance).setHeader("Project Owner");
+        project_grid.setItems(projectCollection);
+        project_grid.setWidth("100%");project_grid.setHeight("100%");
+
+        // board_tab
+        Database_AIMBoard dab = new Database_AIMBoard(AimApplication.database);
+        ArrayList<AIM_Board> boardCollection = dab.getUserBoardList();
+        board_grid = new Grid<>(AIM_Board.class,false);
+        board_grid.addColumn(AIM_Board::getBoard_name).setHeader("Board Name");
+        board_grid.addColumn(AIM_Board::getBoard_owner_glance).setHeader("Board Owner");
+        board_grid.addColumn(AIM_Board::getBoard_members_size).setHeader("Members Amount");
+        board_grid.setItems(boardCollection);
+        board_grid.setWidth("100%");board_grid.setHeight("100%");
+
+        task_grid.addItemClickListener(e->{
+            for(AIM_Task selected_task : task_grid.getSelectedItems()){
+                DetailsTaskWindow dtw = new DetailsTaskWindow(selected_task);
+                secondaryLayout.add(dtw.main_dialog);
+                dtw.main_dialog.open();
+                break;
+            }
+        });
+
+        project_grid.addItemClickListener(e->{
+            for(AIM_Project selected_project : project_grid.getSelectedItems()){
+                DetailsProjectWindow dpw = new DetailsProjectWindow(selected_project);
+                secondaryLayout.add(dpw.main_dialog);
+                dpw.main_dialog.open();
+                break;
+            }
+        });
+
+        board_grid.addItemClickListener(e->{
+            for(AIM_Board selected_board : board_grid.getSelectedItems()){
+                DetailsBoardWindow dbw = new DetailsBoardWindow(selected_board);
+                secondaryLayout.add(dbw.main_dialog);
+                dbw.main_dialog.open();;
+                break;
+            }
+        });
+
+        TabSheet tabSheet_center = new TabSheet();
+        tabSheet_center.add("Task",task_grid);
+        tabSheet_center.add("Project",project_grid);
+        tabSheet_center.add("Board",board_grid);
+        tabSheet_center.setSizeFull();
+
+        currentGlanceLayout.add(tabSheet_center);
+
+        currentGlanceLayout.setSizeFull();
+        currentGlanceLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+        currentGlanceLayout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
+        currentGlanceLayout.getStyle().set("text-align", "center");
+
+        currentGlanceLayout.getStyle().set("border-radius","25px");
+        currentGlanceLayout.getStyle().set("background-color","grey");
+        currentGlanceLayout.getStyle().set("--lumo-font-family","Monospace");
     }
 
     /**
@@ -144,14 +238,54 @@ public class AIMInputParser {
                     board_mind_creator(userInput);
                     break;
                 }
+                case "aim":
+                {
+                    aimp_commands_creator(userInput);
+                    break;
+                }
+                case "help":
+                {
+                    PictureViewerWindow pvw = new PictureViewerWindow("images/usage_schema.png","AIM Terminal Usage Schema");
+                    secondaryLayout.add(pvw.main_dialog);
+                    pvw.main_dialog.open();
+                    break;
+                }
                 default:
                 {
                     createNotificationResponse("Nothing to show, wrong command. Press ? for help",3);
+                    break;
                 }
             }
         }
         else{
             response_nonKeyWord();
+        }
+    }
+
+    /**
+     * Function for aim operation
+     * @param user_input
+     */
+    public void aimp_commands_creator(String user_input){
+        String[] user_word_collection = user_input.split(" ");
+        if( user_word_collection.length == 2 ){
+            if (user_input.contains("-focus")) {
+                if (currentGlanceLayout.isVisible()) {
+                    currentGlanceLayout.setVisible(false);
+                    Notification.show("AIM Glance hidden");
+                    simpleViewFlagNeed = 0;
+
+                } else {
+                    currentGlanceLayout.setVisible(true);
+                    Notification.show("AIM Glance set to visible!");
+                    simpleViewFlagNeed = 1;
+                }
+                successParsingFlag = 1;
+            }
+        }
+        else{
+            createNotificationResponse("Nothing to show, wrong command. Press ? for help",3);
+            successParsingFlag = 0;
         }
     }
 

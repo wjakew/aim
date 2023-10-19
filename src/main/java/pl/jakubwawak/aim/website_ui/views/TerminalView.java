@@ -13,6 +13,7 @@ import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
@@ -36,9 +37,10 @@ public class TerminalView extends VerticalLayout {
     Button normalmode_button;
 
     Button runcommand_button,help_button;
+    H6 simpleViewHeader;
 
-    VerticalLayout upperLayout, centerLayout,bottomLayout,footerLayout;
-
+    VerticalLayout upperLayout,bottomLayout,footerLayout;
+    public VerticalLayout centerLayout;
 
     /**
      * Constructor
@@ -60,6 +62,8 @@ public class TerminalView extends VerticalLayout {
      * Function for preparing components
      */
     void prepare_components(){
+        simpleViewHeader = new H6("AIM BY JAKUB WAWAK");
+        simpleViewHeader.setVisible(false);
         aip = new AIMInputParser(this);
         terminal_field = new TextField();
         terminal_field.setPrefixComponent(VaadinIcon.TERMINAL.create());
@@ -73,6 +77,18 @@ public class TerminalView extends VerticalLayout {
                 aip.parse();
                 if ( aip.successParsingFlag == 1)
                     terminal_field.setValue("");
+                if ( aip.simpleViewFlagNeed == 1){
+                    centerLayout.setVisible(false);
+                    footerLayout.setVisible(false);
+                    upperLayout.setVisible(false);
+                    simpleViewHeader.setVisible(true);
+                }
+                else{
+                    centerLayout.setVisible(true);
+                    footerLayout.setVisible(true);
+                    upperLayout.setVisible(true);
+                    simpleViewHeader.setVisible(false);
+                }
             }
         });
 
@@ -126,7 +142,8 @@ public class TerminalView extends VerticalLayout {
         centerLayout.add(new H6(AimApplication.loggedUser.aim_user_email));
         centerLayout.add(help_button);
 
-        bottomLayout.add(terminal_field,runcommand_button);
+        bottomLayout.add(simpleViewHeader,terminal_field,runcommand_button,aip.currentGlanceLayout);
+
         footerLayout.add(normalmode_button);
 
         add(upperLayout,centerLayout,bottomLayout,footerLayout);
@@ -139,7 +156,6 @@ public class TerminalView extends VerticalLayout {
         if (AimApplication.loggedUser != null){
             prepare_components();
             prepare_layout();
-
         }
         else{
             // user not logged

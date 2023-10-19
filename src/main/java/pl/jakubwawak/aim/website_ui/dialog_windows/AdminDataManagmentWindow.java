@@ -83,7 +83,7 @@ public class AdminDataManagmentWindow {
 
         // board_tab
         Database_AIMBoard dab = new Database_AIMBoard(AimApplication.database);
-        ArrayList<AIM_Board> boardCollection = dab.getUserBoardList();
+        ArrayList<AIM_Board> boardCollection = dab.getAllBoardList();
         board_grid = new Grid<>(AIM_Board.class,false);
         board_grid.addColumn(AIM_Board::getBoard_name).setHeader("Board Name");
         board_grid.addColumn(AIM_Board::getBoard_owner_glance).setHeader("Board Owner");
