@@ -112,7 +112,7 @@ public class DashboardView extends VerticalLayout {
             prepare_components();
             prepare_header();
             add(headerLayout);
-            UserDashboardLayout udl = new UserDashboardLayout();
+            UserDashboardLayout udl = new UserDashboardLayout(1);
             add(udl.main_dashboard_layout);
         }
         else{

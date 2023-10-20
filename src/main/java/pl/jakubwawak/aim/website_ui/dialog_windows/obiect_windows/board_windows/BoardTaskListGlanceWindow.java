@@ -22,8 +22,8 @@ import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMProject;
 public class BoardTaskListGlanceWindow {
 
     // variables for setting x and y of window
-    public String width = "60%";
-    public String height = "60%";
+    public String width = "80%";
+    public String height = "80%";
     public String backgroundStyle = "";
 
     // main login components

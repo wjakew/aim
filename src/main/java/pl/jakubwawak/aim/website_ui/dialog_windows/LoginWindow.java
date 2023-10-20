@@ -187,7 +187,7 @@ public class LoginWindow {
                     // logged successfully
                     Notification.show("Welcome back "+AimApplication.loggedUser.aim_user_email+"!");
                     login_button.getUI().ifPresent(ui ->
-                            ui.navigate("/terminal"));
+                            ui.navigate("/aim"));
                 }
                 else if ( ans == 0 ){
                     login_field.setValue("");password_field.setValue("");

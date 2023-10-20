@@ -137,7 +137,7 @@ public class DetailsBoardWindow {
         boardDetailsLayout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
         boardDetailsLayout.getStyle().set("text-align", "center");
         boardDetailsLayout.getStyle().set("--lumo-font-family","Monospace");
-        main_dialog.setWidth("80%");main_dialog.setHeight("80%");
+        main_dialog.setWidth("90%");main_dialog.setHeight("90%");
 
         main_dialog.add(boardDetailsLayout);
     }

@@ -43,10 +43,13 @@ public class UserDashboardLayout {
     Button getrandomtask_button;
     ArrayList<AIM_TaskLayout> taskContentData;
 
+    int mode;
+
     /**
      * Constructor
      */
-    public UserDashboardLayout(){
+    public UserDashboardLayout(int mode){
+        this.mode = mode;
         main_dashboard_layout = new VerticalLayout();
         database_telemetry = new Database_UserTelemetry(AimApplication.database);
         prepareLayout();
@@ -85,7 +88,9 @@ public class UserDashboardLayout {
 
         headerLayout.setAlignItems(FlexComponent.Alignment.CENTER);
         headerLayout.setVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+
         headerLayout.getStyle().set("background-image","radial-gradient(#eeaeca, #94bbe9)");
+
         headerLayout.getStyle().set("text-align", "center");
         headerLayout.getStyle().set("border-radius","25px");
         headerLayout.getStyle().set("--lumo-font-family","Monospace");
@@ -95,7 +100,7 @@ public class UserDashboardLayout {
         percentLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         percentLayout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
         percentLayout.getStyle().set("text-align", "center");
-        percentLayout.getStyle().set("background-image","linear-gradient(black, white)");
+        percentLayout.getStyle().set("background-image","linear-gradient(#e79268, #b156d5)");
         percentLayout.getStyle().set("border-radius","25px");
         percentLayout.getStyle().set("--lumo-font-family","Monospace");
 
@@ -106,7 +111,7 @@ public class UserDashboardLayout {
         dataLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         dataLayout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
         dataLayout.getStyle().set("text-align", "center");
-        dataLayout.getStyle().set("background-image","linear-gradient(black, white)");
+        dataLayout.getStyle().set("background-image","linear-gradient(#e79268, #b156d5)");
         dataLayout.getStyle().set("border-radius","25px");
         dataLayout.getStyle().set("--lumo-font-family","Monospace");
 
@@ -156,7 +161,9 @@ public class UserDashboardLayout {
         main_dashboard_layout.getStyle().set("text-align", "center");
         main_dashboard_layout.getStyle().set("border-radius","25px");
         main_dashboard_layout.getStyle().set("margin","75px");
-        main_dashboard_layout.getStyle().set("background-color","black");
+        if ( mode == 1 ){
+            main_dashboard_layout.getStyle().set("background-color","black");
+        }
         main_dashboard_layout.getStyle().set("--lumo-font-family","Monospace");
     }
 

@@ -91,6 +91,7 @@ public class CurrentBoardComposer {
         reloadBoardCollection();
         mainLayout.removeAll();
         if ( layoutPages.size() > 0 ){
+            mainLayout.add(new H6("Current boards"));
             BoardFullColumnPage current_bfcp = layoutPages.get(index);
             addToLayout(current_bfcp.boardLayout1);
             addToLayout(current_bfcp.boardLayout2);

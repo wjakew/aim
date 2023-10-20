@@ -22,7 +22,9 @@ import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMBoard;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMProject;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
 import pl.jakubwawak.aim.website_ui.ProjectListGlanceWindow;
+import pl.jakubwawak.aim.website_ui.dialog_windows.DashboardWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.PictureViewerWindow;
+import pl.jakubwawak.aim.website_ui.dialog_windows.UserWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.board_windows.*;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.project_windows.DetailsProjectWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.project_windows.InsertProjectWindow;
@@ -186,6 +188,10 @@ public class AIMInputParser {
         allCommandsCollection.add("board -history -n board_name");
         allCommandsCollection.add("board -addtask -n board_name -t task_name");
         allCommandsCollection.add("board -rmtask -n board_name -t task_name");
+        allCommandsCollection.add("aim");
+        allCommandsCollection.add("aim -dashboard");
+        allCommandsCollection.add("aim -focus");
+        allCommandsCollection.add("aim -options");
     }
 
     /**
@@ -280,6 +286,18 @@ public class AIMInputParser {
                     Notification.show("AIM Glance set to visible!");
                     simpleViewFlagNeed = 1;
                 }
+                successParsingFlag = 1;
+            }
+            else if (user_input.contains("-options")){
+                UserWindow uw = new UserWindow();
+                secondaryLayout.add(uw.main_dialog);
+                uw.main_dialog.open();
+                successParsingFlag = 1;
+            }
+            else if (user_input.contains("-dashboard")){
+                DashboardWindow dw = new DashboardWindow();
+                secondaryLayout.add(dw.main_dialog);
+                dw.main_dialog.open();;
                 successParsingFlag = 1;
             }
         }

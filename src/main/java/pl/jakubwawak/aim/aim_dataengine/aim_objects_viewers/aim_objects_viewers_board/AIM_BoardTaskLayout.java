@@ -10,6 +10,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.H6;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
@@ -65,6 +66,43 @@ public class AIM_BoardTaskLayout{
             showDetails_button.getStyle().set("background-color","grey");
             showDetails_button.getStyle().set("color","white");
 
+            Icon statusIcon = VaadinIcon.ERASER.create();
+            Icon ownerIcon = VaadinIcon.ERASER.create();
+
+            if ( taskObject.aim_user_assigned == null){
+                // task assigned to no one
+                ownerIcon = VaadinIcon.CALENDAR_USER.create();
+            }
+            else if ( taskObject.aim_user_assigned.equals(AimApplication.loggedUser.prepareDocument())){
+                // task assigned to logged user
+                ownerIcon = VaadinIcon.USER_CHECK.create();
+            }
+            else {
+                // task assigned to other user
+                ownerIcon = VaadinIcon.USERS.create();
+            }
+
+            switch(taskObject.status){
+                case "NEW":
+                {
+                    statusIcon = VaadinIcon.CHECK_SQUARE_O.create();
+                    break;
+                }
+                case "IN PROGRESS":
+                {
+                    statusIcon = VaadinIcon.CHECK_SQUARE.create();
+                    break;
+                }
+                case "DONE":
+                {
+                    statusIcon = VaadinIcon.BAN.create();
+                    break;
+                }
+            }
+
+            statusIcon.getStyle().set("color","black");
+            ownerIcon.getStyle().set("color","black");
+
             FlexLayout left_layout = new FlexLayout();
             left_layout.setSizeFull();
             left_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.START);
@@ -82,26 +120,8 @@ public class AIM_BoardTaskLayout{
             hl_center.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
             hl_center.setWidth("100%");hl_center.setHeight("10%");
 
-            main_layout.add(hl_center);
+            main_layout.add(new HorizontalLayout(statusIcon,ownerIcon),hl_center);
 
-            HorizontalLayout hl_center_low = new HorizontalLayout(left_layout,right_layout);
-
-            hl_center_low.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
-            hl_center_low.setWidth("100%");hl_center_low.setHeight("10%");
-
-            String ownLabel = "";
-            if ( taskObject.aim_user_assigned != null ){
-                ownLabel = taskObject.aim_user_assigned.getString("aim_user_email");
-            }
-
-            if ( ownLabel.isEmpty()){
-                hl_center_low.add(new H6(taskObject.status));
-            }
-            else{
-                hl_center_low.add(new H6(taskObject.status+"/"+ownLabel));
-            }
-
-            main_layout.add(hl_center_low);
 
             // show by colors assigned to and current status
             String assignedColorHex = "";
@@ -140,7 +160,7 @@ public class AIM_BoardTaskLayout{
             main_layout.getStyle().set("background-image",backgroundValue);
         }
         else{
-            addtask_button = new Button("", VaadinIcon.PLUS.create());
+            addtask_button = new Button("", VaadinIcon.PLUS.create(),this::addtaskbutton_action);
             addtask_button.getStyle().set("background-color","red");
             addtask_button.getStyle().set("color","white");
             main_layout.getStyle().set("background-color","white");
