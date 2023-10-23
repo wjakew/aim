@@ -26,7 +26,7 @@ import java.util.Scanner;
 public class AimApplication {
 
 	public static String version = "v1.0.0";
-	public static String build = "aim191023REV01";
+	public static String build = "aim201023REV01";
 	public static String applicationStartup;
 	public static int test_flag = 0; // flag for enabling testing
 	public static int log_database_dump_flag = 0; // flag for enabling database log dump
@@ -34,7 +34,7 @@ public class AimApplication {
 	public static Database_Connector database;
 	public static AIM_GlobalConfiguration globalConfiguration;
 
-	public static String connectionStringDebug = "mongodb+srv://kubawawak:Vigor2710Vn@jwmdbinstance.uswe95e.mongodb.net/?retryWrites=true&w=majority";
+	public static String connectionStringDebug = "";
 
 	public static AIM_User loggedUser;
 

@@ -193,7 +193,7 @@ public class AIM_BoardTaskLayout{
     private void addtaskbutton_action(ClickEvent ex){
         AddTaskBoardWindow atbw = new AddTaskBoardWindow(boardObject,null);
         main_layout.add(atbw.main_dialog);
-
+        atbw.main_dialog.open();
     }
 
 
