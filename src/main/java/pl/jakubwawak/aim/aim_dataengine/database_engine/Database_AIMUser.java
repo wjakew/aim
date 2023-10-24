@@ -113,6 +113,27 @@ public class Database_AIMUser {
     }
 
     /**
+     * Function for getting AIM_User by ID
+     * @param aim_user_id
+     * @return AIM_User
+     */
+    public AIM_User getAIMUser(ObjectId aim_user_id){
+        try{
+            MongoCollection<Document> user_collection = database.get_data_collection("aim_user");
+            Document user_document = user_collection.find(new Document("aim_user_id",aim_user_id)).first();
+            if ( user_document != null ){
+                database.log("DB-AIMUSER-GET","Found user with ID: "+aim_user_id.toString());
+                return new AIM_User(user_document);
+            }
+            database.log("DB-AIMUSER-GET","Cannot find user with ID: "+aim_user_id.toString());
+            return null;
+        }catch(Exception ex){
+            database.log("DB-AIMUSER-GET-FAILED","Failed to get user with that id ("+ex.toString()+")");
+            return null;
+        }
+    }
+
+    /**
      * Function for creating new application user
      * @param newUser
      * @return Integer

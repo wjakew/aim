@@ -1,9 +1,9 @@
+package pl.jakubwawak.aim.aim_dataengine.database_engine;
 /**
  * by Jakub Wawak
  * kubawawak@gmail.com
  * all rights reserved
  */
-package pl.jakubwawak.aim.aim_dataengine.database_engine;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -13,18 +13,19 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_APIUserKey;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_User;
 
 /**
  * Object for maintaining API keys on database
  */
-public class Database_AIMAPI {
+public class Database_APIKey {
 
     public Database_Connector database;
 
     /**
      * Constructor
      */
-    public Database_AIMAPI(Database_Connector database){
+    public Database_APIKey(Database_Connector database){
         this.database = database;
     }
 
@@ -36,6 +37,28 @@ public class Database_AIMAPI {
         try{
             MongoCollection<Document> apikey_collection = database.get_data_collection("aim_apikey");
             FindIterable<Document> apikey_documents = apikey_collection.find();
+            for(Document apikey_document : apikey_documents){
+                if (apikey_document.getObjectId("aim_user_id").equals(AimApplication.loggedUser.aim_user_id)){
+                    database.log("DB-APIKEY-FOUND","Found key for logged user! ("+AimApplication.loggedUser.aim_user_id.toString()+")");
+                    return new AIM_APIUserKey(apikey_document);
+                }
+            }
+            database.log("DB-APIKEY-EMPTY","Cannot find key for logged user! ("+AimApplication.loggedUser.aim_user_id.toString()+")");
+            return null;
+        }catch (Exception ex){
+            database.log("DB-APIKEY-ERROR","Failed to check api key ("+ex.toString()+")");
+            return null;
+        }
+    }
+
+    /**
+     * Function for checking API key for  user
+     * @return AIM_APIUserKey
+     */
+    public AIM_APIUserKey getUserAPIKey(ObjectId aim_user_id){
+        try{
+            MongoCollection<Document> apikey_collection = database.get_data_collection("aim_apikey");
+            FindIterable<Document> apikey_documents = apikey_collection.find(new Document("aim_user_id",aim_user_id));
             for(Document apikey_document : apikey_documents){
                 if (apikey_document.getObjectId("aim_user_id").equals(AimApplication.loggedUser.aim_user_id)){
                     database.log("DB-APIKEY-FOUND","Found key for logged user! ("+AimApplication.loggedUser.aim_user_id.toString()+")");
@@ -71,6 +94,16 @@ public class Database_AIMAPI {
     }
 
     /**
+     * Function for changing API key status
+     * @param userKey
+     * @param newStatus
+     * @return Integer
+     */
+    public int changeAPIKeyStatus(AIM_APIUserKey userKey, int newStatus){
+
+    }
+
+    /**
      * Function for removing api key data
      * @param aim_user_id
      * @return int
@@ -88,6 +121,30 @@ public class Database_AIMAPI {
         }catch(Exception ex){
             database.log("DB-APIKEYREMOVE-FAILED","Failed to remove apikey ("+ex.toString()+")");
             return -1;
+        }
+    }
+
+    /**
+     * Function for validating api user key
+     * @param apiuserkey_value
+     * @return AIM_User
+     */
+    public AIM_User validateUserAPIKey(String apiuserkey_value){
+        try{
+            MongoCollection<Document> apikey_collection = database.get_data_collection("aim_apikey");
+            Document apikey_document = apikey_collection.find(new Document("apiuserkey_value",apiuserkey_value)).first();
+            if( apikey_document != null ){
+                Database_AIMUser dau = new Database_AIMUser(database);
+                database.log("DB-VALIDATE-APIKEY","Validated api key |"+apiuserkey_value+"| user ("+apikey_document.getObjectId("aim_user_id").toString()+")");
+                return dau.getAIMUser(apikey_document.getObjectId("aim_user_id"));
+            }
+            else{
+                database.log("DB-VALIDATE-APIKEY-NOUSER","Cannot find user for api key |"+apiuserkey_value+"|");
+                return null;
+            }
+        }catch(Exception ex){
+            database.log("DB-VALIDATE-APIKEY-FAILED","Failed to validate user by api key ("+ex.toString()+")");
+            return null;
         }
     }
 }

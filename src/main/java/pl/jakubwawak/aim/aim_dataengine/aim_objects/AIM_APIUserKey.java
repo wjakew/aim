@@ -19,11 +19,11 @@ import java.util.UUID;
 public class AIM_APIUserKey {
 
     ObjectId aim_user_id;
-    String apiuserkey_value;
+    public String apiuserkey_value;
 
-    String apiuserkey_timegenerated;
+    public String apiuserkey_timegenerated;
 
-    int apiuserkey_activeflag;
+    public int apiuserkey_activeflag;
 
     /**
      * Constructor

@@ -24,14 +24,14 @@ public class UserWindow {
 
     // variables for setting x and y of window
     public String width = "40%";
-    public String height = "40%";
+    public String height = "60%";
     public String backgroundStyle = "";
 
     // main login components
     public Dialog main_dialog;
     VerticalLayout main_layout;
 
-    Button removeaccount_button, changepassword_button, adminconsole_button, datamanagment_button;
+    Button removeaccount_button, changepassword_button, adminconsole_button, datamanagment_button, apimanagment_button;
 
     /**
      * Constructor
@@ -57,6 +57,9 @@ public class UserWindow {
 
         datamanagment_button = new Button("Data Managment", VaadinIcon.DATABASE.create(),this::datamanagmentbutton_action);
         new ButtonStyler().primaryButtonStyle(datamanagment_button,"100%","");
+
+        apimanagment_button = new Button("API Managment", VaadinIcon.PLUG.create(),this::apimanagmentbutton_action);
+        new ButtonStyler().primaryButtonStyle(apimanagment_button,"100%","");
     }
 
     /**
@@ -70,6 +73,7 @@ public class UserWindow {
         main_layout.add(new H6(AimApplication.loggedUser.aim_user_email));
         main_layout.add(removeaccount_button);
         main_layout.add(changepassword_button);
+        main_layout.add(apimanagment_button);
 
         if(AimApplication.loggedUser.aim_user_type.equals("SERVERADM")){
             main_layout.add(adminconsole_button);
@@ -116,5 +120,15 @@ public class UserWindow {
         AdminDataManagmentWindow admw = new AdminDataManagmentWindow();
         main_layout.add(admw.main_dialog);
         admw.main_dialog.open();
+    }
+
+    /**
+     * apimanagment_button action
+     * @param ex
+     */
+    private void apimanagmentbutton_action(ClickEvent ex){
+        APIManagerWindow amw = new APIManagerWindow();
+        main_layout.add(amw.main_dialog);
+        amw.main_dialog.open();
     }
 }
