@@ -18,7 +18,7 @@ import java.util.UUID;
  */
 public class AIM_APIUserKey {
 
-    ObjectId aim_user_id;
+    public ObjectId aim_user_id;
     public String apiuserkey_value;
 
     public String apiuserkey_timegenerated;

@@ -7,9 +7,13 @@ package pl.jakubwawak.aim.aim_dataengine.database_engine;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertOneResult;
+import com.mongodb.client.result.UpdateResult;
+import com.vaadin.flow.data.provider.ArrayUpdater;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_APIUserKey;
@@ -100,7 +104,20 @@ public class Database_APIKey {
      * @return Integer
      */
     public int changeAPIKeyStatus(AIM_APIUserKey userKey, int newStatus){
-
+        MongoCollection<Document> apikey_collection = database.get_data_collection("aim_apikey");
+        try{
+            Bson updates = Updates.combine(Updates.set("apiuserkey_activeflag",newStatus));
+            UpdateResult updateResult = apikey_collection.updateOne(userKey.prepareDocument(),updates);
+            if ( updateResult.getModifiedCount() > 0 ){
+                database.log("DB-APIKEYUPDATE","Updated api status for ("+userKey.aim_user_id.toString()+")");
+                return 1;
+            }
+            database.log("DB-APIKEYUPDATE","Nothing to update on, result: "+updateResult.getModifiedCount());
+            return 0;
+        }catch(Exception ex){
+            database.log("DB-APIKEYUPDATE-FAILED","Failed to update apikey ("+ex.toString()+")");
+            return -1;
+        }
     }
 
     /**
