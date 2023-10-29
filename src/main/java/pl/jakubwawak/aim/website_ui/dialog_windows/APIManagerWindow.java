@@ -40,6 +40,8 @@ public class APIManagerWindow {
     Button createapi_button;
     Button blockapi_button;
 
+    String status;
+    AIM_APIUserKey userKey;
 
 
 
@@ -47,9 +49,10 @@ public class APIManagerWindow {
      * Constructor
      */
     public APIManagerWindow(){
+        databaseApiKey = new Database_APIKey(AimApplication.database);
+        userKey = databaseApiKey.checkloggedUserAPIKey();
         main_dialog = new Dialog();
         main_layout = new VerticalLayout();
-        databaseApiKey = new Database_APIKey(AimApplication.database);
         prepare_dialog();
     }
 
@@ -58,9 +61,8 @@ public class APIManagerWindow {
      */
     void prepare_components(){
         // set components
-        AIM_APIUserKey userKey = databaseApiKey.checkloggedUserAPIKey();
         createapi_button = new Button("error", VaadinIcon.PLUG.create(),this::createapibutton_action);
-        blockapi_button = new Button("error",VaadinIcon.STOP.create());
+        blockapi_button = new Button("error",VaadinIcon.STOP.create(),this::blockapibutton_action);
 
         createapi_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
         blockapi_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
@@ -68,6 +70,13 @@ public class APIManagerWindow {
         if ( userKey != null ){
             createapi_button.setText("Remove key");
             blockapi_button.setText("Block your API");
+
+            if ( userKey.apiuserkey_activeflag == 1 ){
+                status = "API ACTIVE";
+            }
+            else{
+                status = "API INACTIVE";
+            }
         }
         else{
             createapi_button.setText("Create API Key");
@@ -80,11 +89,11 @@ public class APIManagerWindow {
     void prepare_dialog(){
         prepare_components();
         // set layout
-        AIM_APIUserKey userKey = databaseApiKey.checkloggedUserAPIKey();
         if (userKey != null){
             main_layout.add(new H6("API KEY CREATED"));
             main_layout.add(new H6(userKey.apiuserkey_value));
             main_layout.add(new H6(userKey.apiuserkey_timegenerated));
+            main_layout.add(new H6(status));
             main_layout.add(new HorizontalLayout(blockapi_button,createapi_button));
         }
         else{
@@ -134,6 +143,39 @@ public class APIManagerWindow {
                 else{
                     Notification.show("Failed to remove API key, check application log!");
                     main_dialog.close();
+                }
+                break;
+            }
+        }
+    }
+
+    /**
+     * blockapi_button action
+     * @param ex
+     */
+    private void blockapibutton_action(ClickEvent ex){
+        switch(status){
+            case "API ACTIVE":
+            {
+                int ans = databaseApiKey.changeAPIKeyStatus(userKey,0);
+                if (ans == 1){
+                    Notification.show("Status changed");
+                    main_dialog.close();
+                }
+                else{
+                    Notification.show("Failed to change status, check log");
+                }
+                break;
+            }
+            case "API INACTIVE":
+            {
+                int ans = databaseApiKey.changeAPIKeyStatus(userKey,1);
+                if (ans == 1){
+                    Notification.show("Status changed");
+                    main_dialog.close();
+                }
+                else{
+                    Notification.show("Failed to change status, check log");
                 }
                 break;
             }

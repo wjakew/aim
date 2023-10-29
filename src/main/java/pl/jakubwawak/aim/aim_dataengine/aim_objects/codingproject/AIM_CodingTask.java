@@ -19,13 +19,15 @@ public class AIM_CodingTask {
 
     public String aim_codingtask_tag; // tag field for eg version number or category
 
+    public String aim_codingtask_timestamp;
+
     public String aim_codingtask_name;
 
     public String aim_codingtask_desc;
 
     public Document aim_codingtask_owner;
 
-    public List<Document> aim_codingtask_coments;
+    public List<Document> aim_codingtask_comments;
 
     public List<Document> aim_codingtask_history;
 }

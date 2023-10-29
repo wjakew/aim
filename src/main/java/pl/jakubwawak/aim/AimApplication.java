@@ -34,7 +34,7 @@ public class AimApplication {
 	public static Database_Connector database;
 	public static AIM_GlobalConfiguration globalConfiguration;
 
-	public static String connectionStringDebug = "";
+	public static String connectionStringDebug = "mongodb+srv://kubawawak:Vigor2710Vn@jwmdbinstance.uswe95e.mongodb.net/?retryWrites=true&w=majority";
 
 	public static AIM_User loggedUser;
 

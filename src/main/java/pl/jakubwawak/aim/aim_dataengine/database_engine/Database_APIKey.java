@@ -150,6 +150,7 @@ public class Database_APIKey {
         try{
             MongoCollection<Document> apikey_collection = database.get_data_collection("aim_apikey");
             Document apikey_document = apikey_collection.find(new Document("apiuserkey_value",apiuserkey_value)).first();
+            //todo bug with finding apikey documents
             if( apikey_document != null ){
                 Database_AIMUser dau = new Database_AIMUser(database);
                 database.log("DB-VALIDATE-APIKEY","Validated api key |"+apiuserkey_value+"| user ("+apikey_document.getObjectId("aim_user_id").toString()+")");
