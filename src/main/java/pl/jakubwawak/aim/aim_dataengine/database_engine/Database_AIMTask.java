@@ -11,6 +11,7 @@ import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_User;
@@ -73,6 +74,33 @@ public class Database_AIMTask {
             database.log("DB-TASK-LOADCOLLECTION","Loaded "+data.size()+" objects from database");
         }catch(Exception ex){
             database.log("DB-TASK-LOADCOLLECTION-FAILED","Failed to get user task collection ("+ex.toString()+")");
+        }
+        return data;
+    }
+
+    /**
+     * Function for loading task collection for given user
+     * @param aim_user_id - user ID from database
+     * @param source - NEW IN PROGRESS DONE
+     * @return
+     */
+    public ArrayList<AIM_Task> getUserTaskCollection(ObjectId aim_user_id, String source){
+        //todo bug with getting user task collection
+        ArrayList<AIM_Task> data = new ArrayList<>();
+        try{
+            MongoCollection<Document> task_collection = database.get_data_collection("aim_task");
+            FindIterable<Document> userTaskCollection = task_collection.find();
+            for(Document task_document: userTaskCollection){
+                Document userDocument = task_document.get("aim_task_owner",Document.class);
+                if( userDocument.getObjectId("_id").equals(aim_user_id)){
+                    if ( task_document.getString("status").equals(source)){
+                        data.add(new AIM_Task(task_document));
+                    }
+                }
+            }
+            database.log("DB-TASK-USRTASKCLC","Loaded "+data.size()+" tasks with source "+source+" for user ID ("+aim_user_id.toString()+")");
+        }catch(Exception ex){
+            database.log("DB-TASK-USRTASKCLC-FAILED","Failed to get user task collection ("+ex.toString()+")");
         }
         return data;
     }

@@ -4,12 +4,12 @@
 
 ### Web application for task scheduling and project maintaining. More advanced “todo application”.
 
-> Current version in in Proof Of Concept state - do not use that in mission critical tasks.
+> Current version in Proof Of Concept state - do not use that in mission-critical tasks.
 > 
 
 ### Roadmap
 
-- POC - core functionality, API support core, stablility - CURRENT STATE
+- POC - core functionality, API support core, stability - CURRENT STATE
 - UI Fixes, UI customization - IN FUTURE
 - Coding projects and task support - IN FUTURE
 - Full API support and task automation - IN FUTURE
@@ -31,12 +31,12 @@ Comming soon!
 1. Creating tasks, projects and boards.
 2. Maintaining tasks by changing owners, adding comments. Check task history right in the task window.
 3. Create projects with full history and API support, add tasks, add comments and check the completion level.
-4. Create collaborative boards  - add task, delegate users. Create members and add privilages.
+4. Create collaborative boards  - add task, delegate users. Create members and add privileges.
 5. Two UI modes, simple, normal one and terminal - interact with the app using only the keyboard.
 6. Dashboard view with engaging task list.
 7. Simple and easy deployment - you only need MongoDB instance and machine with Java 21.
-8. Ready for full API support for task automation - COMMING SOON.
-9. Coding projects and task support - new category of object - COMMING SOON.
+8. Ready for full API support for task automation - COMING SOON.
+9. Coding projects and task support - new category of object - COMING SOON.
 
 ### UI Screenshots
 

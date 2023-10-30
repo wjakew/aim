@@ -6,8 +6,10 @@
 package pl.jakubwawak.aim.website_ui.dialog_windows;
 
 import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -24,6 +26,7 @@ import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_APIKey;
 /**
  * Window for managing API keys
  */
+@JsModule("./recipe/copytoclipboard.js")
 public class APIManagerWindow {
 
     // variables for setting x and y of window
@@ -39,6 +42,8 @@ public class APIManagerWindow {
     Database_APIKey databaseApiKey;
     Button createapi_button;
     Button blockapi_button;
+
+    Button apikey_button;
 
     String status;
     AIM_APIUserKey userKey;
@@ -63,6 +68,12 @@ public class APIManagerWindow {
         // set components
         createapi_button = new Button("error", VaadinIcon.PLUG.create(),this::createapibutton_action);
         blockapi_button = new Button("error",VaadinIcon.STOP.create(),this::blockapibutton_action);
+
+        if ( userKey != null ){
+            apikey_button = new Button(userKey.apiuserkey_value,VaadinIcon.KEY.create(),this::apikeybutton_action);
+            apikey_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        }
+
 
         createapi_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
         blockapi_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
@@ -91,7 +102,7 @@ public class APIManagerWindow {
         // set layout
         if (userKey != null){
             main_layout.add(new H6("API KEY CREATED"));
-            main_layout.add(new H6(userKey.apiuserkey_value));
+            main_layout.add(apikey_button);
             main_layout.add(new H6(userKey.apiuserkey_timegenerated));
             main_layout.add(new H6(status));
             main_layout.add(new HorizontalLayout(blockapi_button,createapi_button));
@@ -147,6 +158,15 @@ public class APIManagerWindow {
                 break;
             }
         }
+    }
+
+    /**
+     * apikey_button action
+     * @param ex
+     */
+    private void apikeybutton_action(ClickEvent ex){
+        UI.getCurrent().getPage().executeJs("window.copyToClipboard($0)", apikey_button.getText());
+        Notification.show("API Key copied to clipboard!");
     }
 
     /**

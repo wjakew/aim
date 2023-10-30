@@ -7,6 +7,9 @@ package pl.jakubwawak.aim.aim_dataengine.database_engine;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertOneResult;
@@ -42,7 +45,7 @@ public class Database_APIKey {
             MongoCollection<Document> apikey_collection = database.get_data_collection("aim_apikey");
             FindIterable<Document> apikey_documents = apikey_collection.find();
             for(Document apikey_document : apikey_documents){
-                if (apikey_document.getObjectId("aim_user_id").equals(AimApplication.loggedUser.aim_user_id)){
+                if (apikey_document.get("aim_user",Document.class).equals(AimApplication.loggedUser.prepareDocument())){
                     database.log("DB-APIKEY-FOUND","Found key for logged user! ("+AimApplication.loggedUser.aim_user_id.toString()+")");
                     return new AIM_APIUserKey(apikey_document);
                 }
@@ -59,12 +62,12 @@ public class Database_APIKey {
      * Function for checking API key for  user
      * @return AIM_APIUserKey
      */
-    public AIM_APIUserKey getUserAPIKey(ObjectId aim_user_id){
+    public AIM_APIUserKey getUserAPIKey(AIM_User aim_user){
         try{
             MongoCollection<Document> apikey_collection = database.get_data_collection("aim_apikey");
-            FindIterable<Document> apikey_documents = apikey_collection.find(new Document("aim_user_id",aim_user_id));
+            FindIterable<Document> apikey_documents = apikey_collection.find(new Document("aim_user",aim_user.prepareDocument()));
             for(Document apikey_document : apikey_documents){
-                if (apikey_document.getObjectId("aim_user_id").equals(AimApplication.loggedUser.aim_user_id)){
+                if (apikey_document.get("aim_user", Document.class).equals(AimApplication.loggedUser.prepareDocument())){
                     database.log("DB-APIKEY-FOUND","Found key for logged user! ("+AimApplication.loggedUser.aim_user_id.toString()+")");
                     return new AIM_APIUserKey(apikey_document);
                 }
@@ -109,7 +112,7 @@ public class Database_APIKey {
             Bson updates = Updates.combine(Updates.set("apiuserkey_activeflag",newStatus));
             UpdateResult updateResult = apikey_collection.updateOne(userKey.prepareDocument(),updates);
             if ( updateResult.getModifiedCount() > 0 ){
-                database.log("DB-APIKEYUPDATE","Updated api status for ("+userKey.aim_user_id.toString()+")");
+                database.log("DB-APIKEYUPDATE","Updated api status for ("+userKey.aim_user.aim_user_email+")");
                 return 1;
             }
             database.log("DB-APIKEYUPDATE","Nothing to update on, result: "+updateResult.getModifiedCount());
@@ -149,17 +152,13 @@ public class Database_APIKey {
     public AIM_User validateUserAPIKey(String apiuserkey_value){
         try{
             MongoCollection<Document> apikey_collection = database.get_data_collection("aim_apikey");
-            Document apikey_document = apikey_collection.find(new Document("apiuserkey_value",apiuserkey_value)).first();
-            //todo bug with finding apikey documents
-            if( apikey_document != null ){
-                Database_AIMUser dau = new Database_AIMUser(database);
-                database.log("DB-VALIDATE-APIKEY","Validated api key |"+apiuserkey_value+"| user ("+apikey_document.getObjectId("aim_user_id").toString()+")");
-                return dau.getAIMUser(apikey_document.getObjectId("aim_user_id"));
+            FindIterable<Document> apikey_documents = apikey_collection.find();
+            for(Document apikey_document : apikey_documents){
+                if (apikey_document.getString("apiuserkey_value").equals(apiuserkey_value)){
+                    return new AIM_User(apikey_document.get("aim_user", Document.class));
+                }
             }
-            else{
-                database.log("DB-VALIDATE-APIKEY-NOUSER","Cannot find user for api key |"+apiuserkey_value+"|");
-                return null;
-            }
+            return null;
         }catch(Exception ex){
             database.log("DB-VALIDATE-APIKEY-FAILED","Failed to validate user by api key ("+ex.toString()+")");
             return null;

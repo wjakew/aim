@@ -82,6 +82,7 @@ import '@vaadin/grid/src/vaadin-grid-tree-toggle.js';
 import '@vaadin/upload/src/vaadin-upload.js';
 import '@vaadin/virtual-list/src/vaadin-virtual-list.js';
 import 'Frontend/generated/jar-resources/virtualListConnector.js';
+import 'Frontend/recipe/copytoclipboard.js';
 const loadOnDemand = (key) => { return Promise.resolve(0); }
 window.Vaadin = window.Vaadin || {};
 window.Vaadin.Flow = window.Vaadin.Flow || {};

@@ -32,9 +32,9 @@ public class HealthResponse {
         applicationBuild = AimApplication.build;
         startupTime = AimApplication.applicationStartup;
         connectionStatus = Boolean.toString(AimApplication.database.connected);
-        appStatus = AimApplication.database.database_url.substring(0,AimApplication.database.database_url.length()/2);
+        appStatus = "database_connected_enabled";
         if ( aimUser != null ){
-            aim_user_id = aimUser.aim_user_id.toString();
+            aim_user_id = aimUser.aim_user_email;
         }
         else{
             aim_user_id = "wrong_apikey";

@@ -8,13 +8,11 @@ package pl.jakubwawak.aim;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_BoardTask;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Project;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_User;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_board.AIM_BoardTaskListLayout;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_board.CurrentBoardComposer;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task.TaskColumnLayout;
-import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMBoard;
-import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMProject;
-import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
-import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMUser;
+import pl.jakubwawak.aim.aim_dataengine.database_engine.*;
 import pl.jakubwawak.maintanance.Password_Validator;
 
 /**
@@ -46,9 +44,7 @@ public class AimTest {
 
                 AimApplication.globalConfiguration = AimApplication.database.getGlobalConfiguration();
 
-                Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
-                System.out.println(dat.getTask("test"));
-
+                Database_APIKey dak = new Database_APIKey(AimApplication.database);
             }
         }catch(Exception ex){ex.printStackTrace();}
         // closing application

@@ -8,6 +8,7 @@ package pl.jakubwawak.aim.aim_dataengine.aim_objects;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import pl.jakubwawak.aim.AimApplication;
+import pl.jakubwawak.maintanance.RandomWordGeneratorEngine;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,7 +19,7 @@ import java.util.UUID;
  */
 public class AIM_APIUserKey {
 
-    public ObjectId aim_user_id;
+    public AIM_User aim_user;
     public String apiuserkey_value;
 
     public String apiuserkey_timegenerated;
@@ -29,8 +30,9 @@ public class AIM_APIUserKey {
      * Constructor
      */
     public AIM_APIUserKey(){
-        aim_user_id = AimApplication.loggedUser.aim_user_id;
-        apiuserkey_value = UUID.randomUUID().toString();
+        aim_user = AimApplication.loggedUser;
+        RandomWordGeneratorEngine rwge = new RandomWordGeneratorEngine();
+        apiuserkey_value = rwge.generateRandomString(20,true,false);
         apiuserkey_timegenerated = LocalDateTime.now().toString();
         apiuserkey_activeflag = 1;
     }
@@ -40,7 +42,7 @@ public class AIM_APIUserKey {
      * @param document
      */
     public AIM_APIUserKey(Document document){
-        aim_user_id = document.getObjectId("aim_user_id");
+        aim_user = new AIM_User(document.get("aim_user",Document.class));
         apiuserkey_value = document.getString("apiuserkey_value");
         apiuserkey_timegenerated = document.getString("apiuserkey_timegenerated");
         apiuserkey_activeflag = document.getInteger("apiuserkey_activeflag");
@@ -52,7 +54,7 @@ public class AIM_APIUserKey {
      */
     public Document prepareDocument(){
         Document document = new Document();
-        document.append("aim_user_id",aim_user_id);
+        document.append("aim_user",aim_user.prepareDocument());
         document.append("apiuserkey_value",apiuserkey_value);
         document.append("apiuserkey_timegenerated",apiuserkey_timegenerated);
         document.append("apiuserkey_activeflag",apiuserkey_activeflag);
