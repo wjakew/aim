@@ -80,25 +80,24 @@ public class Database_AIMTask {
 
     /**
      * Function for loading task collection for given user
-     * @param aim_user_id - user ID from database
+     * @param aim_user - user object from database
      * @param source - NEW IN PROGRESS DONE
-     * @return
+     * @return ArrayList
      */
-    public ArrayList<AIM_Task> getUserTaskCollection(ObjectId aim_user_id, String source){
+    public ArrayList<AIM_Task> getUserTaskCollection(AIM_User aim_user, String source){
         //todo bug with getting user task collection
         ArrayList<AIM_Task> data = new ArrayList<>();
+        Database_AIMUser dau = new Database_AIMUser(AimApplication.database);
         try{
             MongoCollection<Document> task_collection = database.get_data_collection("aim_task");
             FindIterable<Document> userTaskCollection = task_collection.find();
             for(Document task_document: userTaskCollection){
                 Document userDocument = task_document.get("aim_task_owner",Document.class);
-                if( userDocument.getObjectId("_id").equals(aim_user_id)){
-                    if ( task_document.getString("status").equals(source)){
-                        data.add(new AIM_Task(task_document));
-                    }
+                if ( userDocument.getString("aim_user_email").equals(aim_user.aim_user_email)){
+                    data.add(new AIM_Task(task_document));
                 }
             }
-            database.log("DB-TASK-USRTASKCLC","Loaded "+data.size()+" tasks with source "+source+" for user ID ("+aim_user_id.toString()+")");
+            database.log("DB-TASK-USRTASKCLC","Loaded "+data.size()+" tasks with source "+source+" for user ("+aim_user.aim_user_email+")");
         }catch(Exception ex){
             database.log("DB-TASK-USRTASKCLC-FAILED","Failed to get user task collection ("+ex.toString()+")");
         }

@@ -15,6 +15,8 @@ import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_
 import pl.jakubwawak.aim.aim_dataengine.database_engine.*;
 import pl.jakubwawak.maintanance.Password_Validator;
 
+import java.util.ArrayList;
+
 /**
  * Object for testing application objects
  */
@@ -44,7 +46,9 @@ public class AimTest {
 
                 AimApplication.globalConfiguration = AimApplication.database.getGlobalConfiguration();
 
-                Database_APIKey dak = new Database_APIKey(AimApplication.database);
+                Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
+                ArrayList<AIM_Task> data = dat.getUserTaskCollection(AimApplication.loggedUser,"NEW");
+                System.out.println("end");
             }
         }catch(Exception ex){ex.printStackTrace();}
         // closing application

@@ -72,7 +72,7 @@ public class TaskEndpoint {
             if (user!=null){
                 // api key found - realize the get
                 Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
-                ArrayList<AIM_Task> data = dat.getUserTaskCollection(user.aim_user_id,list_type);
+                ArrayList<AIM_Task> data = dat.getUserTaskCollection(user,list_type);
                 for(AIM_Task task : data){
                     task.aim_task_owner = null;
                     response.response_content.add(task.prepareDocument());
