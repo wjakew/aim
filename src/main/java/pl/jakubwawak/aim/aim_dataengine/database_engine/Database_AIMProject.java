@@ -19,6 +19,7 @@ import org.springframework.cglib.core.Local;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Project;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_User;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -49,6 +50,26 @@ public class Database_AIMProject {
         try{
             MongoCollection<Document> project_collection = database.get_data_collection("aim_project");
             FindIterable<Document> project_documents = project_collection.find(new Document("aim_owner",AimApplication.loggedUser.prepareDocument()));
+            for(Document project_document : project_documents){
+                data.add(new AIM_Project(project_document));
+            }
+            database.log("DB-PROJECT-LIST","Loaded "+data.size()+" projects for "+AimApplication.loggedUser.aim_user_email);
+        }catch(Exception ex){
+            database.log("DB-PROJECT-GET-LIST-FAILED","Failed to get projects list ("+ex.toString()+")");
+        }
+        return data;
+    }
+
+    /**
+     * Function for
+     * @param user
+     * @return
+     */
+    public ArrayList<AIM_Project> getUserProjects(AIM_User user){
+        ArrayList<AIM_Project> data = new ArrayList<>();
+        try{
+            MongoCollection<Document> project_collection = database.get_data_collection("aim_project");
+            FindIterable<Document> project_documents = project_collection.find(new Document("aim_owner",user.prepareDocument()));
             for(Document project_document : project_documents){
                 data.add(new AIM_Project(project_document));
             }

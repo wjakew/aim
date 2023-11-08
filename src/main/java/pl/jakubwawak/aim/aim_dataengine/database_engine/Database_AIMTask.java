@@ -269,6 +269,22 @@ public class Database_AIMTask {
     }
 
     /**
+     * Function for adding new task to application for specific owner
+     * @param newaimTask
+     * @param owner
+     * @return Integer
+     */
+    public int insertAIMTask(AIM_Task newaimTask, AIM_User owner){
+        try{
+            newaimTask.aim_task_owner = owner.prepareDocument();
+            return insertAIMTask(newaimTask);
+        }catch(Exception ex){
+            database.log("DB-AIM-TASK-INSERT","Failed to insert task on database ("+ex.toString()+")");
+            return -1;
+        }
+    }
+
+    /**
      * Function for updating aim task data
      * @param aimTaskUpdate
      * @return Integer

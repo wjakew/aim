@@ -54,6 +54,29 @@ Terminal View
 2. Java 21
 3. Spring-Boot + Vaadin
 
+### API 
+
+Application contains restfull API. You can reach that on /api
+Current endpoints:
+
+```html
+/api/health/{aim_apikey}
+```
+```html
+/api/task/task-list/{list_type}/{aim_apikey}
+```
+```html
+/api/task/add/{aim_apikey}/{task_name}
+```
+```html
+/api/project/project-list/{aim_apikey}
+```
+```html
+/api/board/board-list/{aim_apikey}
+```
+
+You can turn on or off API and create your API key in application settings
+
 ### Deployment
 
 1. Download the latest zip archive from the Release section.

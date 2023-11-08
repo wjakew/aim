@@ -46,9 +46,7 @@ public class AimTest {
 
                 AimApplication.globalConfiguration = AimApplication.database.getGlobalConfiguration();
 
-                Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
-                ArrayList<AIM_Task> data = dat.getUserTaskCollection(AimApplication.loggedUser,"NEW");
-                System.out.println("end");
+                // test data here
             }
         }catch(Exception ex){ex.printStackTrace();}
         // closing application
