@@ -186,8 +186,14 @@ public class LoginWindow {
                 if ( ans == 1 && AimApplication.loggedUser != null){
                     // logged successfully
                     Notification.show("Welcome back "+AimApplication.loggedUser.aim_user_email+"!");
-                    login_button.getUI().ifPresent(ui ->
-                            ui.navigate("/aim"));
+                    if ( AimApplication.loggedUser.aim_user_configuration1.isEmpty()){
+                        login_button.getUI().ifPresent(ui ->
+                                ui.navigate("/aim"));
+                    }
+                    else{
+                        login_button.getUI().ifPresent(ui ->
+                                ui.navigate(AimApplication.loggedUser.aim_user_configuration1));
+                    }
                 }
                 else if ( ans == 0 ){
                     login_field.setValue("");password_field.setValue("");

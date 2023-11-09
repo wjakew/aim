@@ -50,8 +50,15 @@ public class Database_AIMBoard {
             FindIterable<Document> board_documents = board_collection.find();
             for(Document board_document : board_documents){
                 AIM_Board board = new AIM_Board(board_document);
-                if ( board.board_owner.equals(AimApplication.loggedUser.prepareDocument()) || board.board_members.contains(AimApplication.loggedUser.prepareDocument())){
+                if ( board.board_owner.getString("aim_user_email").equals(AimApplication.loggedUser.aim_user_email) ){
                     data.add(board);
+                }
+                else{
+                    for(Document member_document : board.board_members){
+                        if ( member_document.getString("aim_user_email").equals(AimApplication.loggedUser.aim_user_email)){
+                            data.add(board);
+                        }
+                    }
                 }
             }
             database.log("DB-LIST-BOARD","Loaded "+data.size()+" objects from database for "+AimApplication.loggedUser.aim_user_id.toString());
@@ -73,8 +80,15 @@ public class Database_AIMBoard {
             FindIterable<Document> board_documents = board_collection.find();
             for(Document board_document : board_documents){
                 AIM_Board board = new AIM_Board(board_document);
-                if ( board.board_owner.equals(user.prepareDocument()) || board.board_members.contains(user.prepareDocument())){
+                if ( board.board_owner.getString("aim_user_email").equals(user.aim_user_email) ){
                     data.add(board);
+                }
+                else{
+                    for(Document member_document : board.board_members){
+                        if ( member_document.getString("aim_user_email").equals(user.aim_user_email)){
+                            data.add(board);
+                        }
+                    }
                 }
             }
             database.log("DB-LIST-BOARD","Loaded "+data.size()+" objects from database for "+user.aim_user_id.toString());

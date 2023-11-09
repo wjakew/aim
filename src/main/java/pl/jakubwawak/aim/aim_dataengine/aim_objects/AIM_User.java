@@ -23,8 +23,8 @@ public class AIM_User {
 
     public String aim_user_telephone;
 
-    public String aim_user_configuration1;
-    public String aim_user_configuration2;
+    public String aim_user_configuration1; // selected starting page url
+    public String aim_user_configuration2; // selected primary and secondary color (#xxxxxx.#xxxxxx)
     public String aim_user_configuration3;
     public String aim_user_configuration4;
 

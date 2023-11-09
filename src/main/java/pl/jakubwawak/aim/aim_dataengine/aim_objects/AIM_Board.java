@@ -81,7 +81,7 @@ public class AIM_Board {
      * @return String
      */
     public String ownerLabel(){
-        if (board_owner.equals(AimApplication.loggedUser.prepareDocument())){
+        if (board_owner.getString("aim_user_email").equals(AimApplication.loggedUser.aim_user_email)){
             return "Owner";
         }
         return "Member";

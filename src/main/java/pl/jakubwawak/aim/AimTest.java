@@ -5,10 +5,7 @@
  */
 package pl.jakubwawak.aim;
 
-import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_BoardTask;
-import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Project;
-import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
-import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_User;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.*;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_board.AIM_BoardTaskListLayout;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_board.CurrentBoardComposer;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task.TaskColumnLayout;
@@ -47,6 +44,8 @@ public class AimTest {
                 AimApplication.globalConfiguration = AimApplication.database.getGlobalConfiguration();
 
                 // test data here
+                dau.clearBackgroundColors();
+                System.out.println("END");
             }
         }catch(Exception ex){ex.printStackTrace();}
         // closing application

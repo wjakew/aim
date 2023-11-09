@@ -49,9 +49,10 @@ public class Database_AIMProject {
         ArrayList<AIM_Project> data = new ArrayList<>();
         try{
             MongoCollection<Document> project_collection = database.get_data_collection("aim_project");
-            FindIterable<Document> project_documents = project_collection.find(new Document("aim_owner",AimApplication.loggedUser.prepareDocument()));
-            for(Document project_document : project_documents){
-                data.add(new AIM_Project(project_document));
+            FindIterable<Document> project_documents = project_collection.find();
+            for(Document project_document : project_documents) {
+                if (project_document.get("aim_owner", Document.class).get("aim_user_email").equals(AimApplication.loggedUser.aim_user_email))
+                    data.add(new AIM_Project(project_document));
             }
             database.log("DB-PROJECT-LIST","Loaded "+data.size()+" projects for "+AimApplication.loggedUser.aim_user_email);
         }catch(Exception ex){
@@ -70,8 +71,9 @@ public class Database_AIMProject {
         try{
             MongoCollection<Document> project_collection = database.get_data_collection("aim_project");
             FindIterable<Document> project_documents = project_collection.find(new Document("aim_owner",user.prepareDocument()));
-            for(Document project_document : project_documents){
-                data.add(new AIM_Project(project_document));
+            for(Document project_document : project_documents) {
+                if (project_document.get("aim_owner", Document.class).get("aim_user_email").equals(user.aim_user_email))
+                    data.add(new AIM_Project(project_document));
             }
             database.log("DB-PROJECT-LIST","Loaded "+data.size()+" projects for "+AimApplication.loggedUser.aim_user_email);
         }catch(Exception ex){

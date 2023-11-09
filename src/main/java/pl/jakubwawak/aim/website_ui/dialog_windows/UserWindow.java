@@ -31,7 +31,7 @@ public class UserWindow {
     public Dialog main_dialog;
     VerticalLayout main_layout;
 
-    Button removeaccount_button, changepassword_button, adminconsole_button, datamanagment_button, apimanagment_button;
+    Button applicationsettings_button,removeaccount_button, changepassword_button, adminconsole_button, datamanagment_button, apimanagment_button;
 
     /**
      * Constructor
@@ -50,8 +50,12 @@ public class UserWindow {
         removeaccount_button = new Button("Remove Account", VaadinIcon.USER.create());
         new ButtonStyler().primaryButtonStyle(removeaccount_button,"100%","");
 
+        applicationsettings_button = new Button("Application Settings", VaadinIcon.CHART_TIMELINE.create(),this::applicationsettingsbutton_actionc);
+        new ButtonStyler().primaryButtonStyle(applicationsettings_button,"100%","");
+
         changepassword_button = new Button("Change Password", VaadinIcon.PENCIL.create(),this::changepasswordbutton);
         new ButtonStyler().primaryButtonStyle(changepassword_button,"100%","");
+
         adminconsole_button = new Button("Admin Console", VaadinIcon.UMBRELLA.create(),this::adminconsolebutton_action);
         new ButtonStyler().primaryButtonStyle(adminconsole_button,"100%","");
 
@@ -71,6 +75,7 @@ public class UserWindow {
         main_layout.add(VaadinIcon.USER.create());
         main_layout.add(new H6(AimApplication.loggedUser.aim_user_id.toString()));
         main_layout.add(new H6(AimApplication.loggedUser.aim_user_email));
+        main_layout.add(applicationsettings_button);
         main_layout.add(removeaccount_button);
         main_layout.add(changepassword_button);
         main_layout.add(apimanagment_button);
@@ -130,5 +135,15 @@ public class UserWindow {
         APIManagerWindow amw = new APIManagerWindow();
         main_layout.add(amw.main_dialog);
         amw.main_dialog.open();
+    }
+
+    /**
+     * applicationsettings_button action
+     * @param ex
+     */
+    private void applicationsettingsbutton_actionc(ClickEvent ex){
+        UserOptionsWindow uow = new UserOptionsWindow();
+        main_layout.add(uow.main_dialog);
+        uow.main_dialog.open();
     }
 }

@@ -205,6 +205,91 @@ public class Database_AIMUser {
     }
 
     /**
+     * Function for setting user home page
+     * @param homepage
+     * @return Integer
+     */
+    public int setUserHomePage(String homepage){
+        try{
+            MongoCollection<Document> user_collection = database.get_data_collection("aim_user");
+            Document user_document = user_collection.find(new Document("_id",AimApplication.loggedUser.aim_user_id)).first();
+            if (user_document != null){
+                Bson updates = Updates.combine(
+                        Updates.set("aim_user_configuration1",homepage)
+                );
+                UpdateResult result = user_collection.updateOne(user_document,updates);
+                if ( result.getModifiedCount() > 0 ){
+                    database.log("DB-AIMUSER-ADMUPDATE","Updated user ("+AimApplication.loggedUser.aim_user_id.toString()+") homepage to "+homepage);
+                    return 1;
+                }
+                database.log("DB-AIMUSER-ADMUPDATE","Cannot update user ("+AimApplication.loggedUser.aim_user_id.toString()+"), no changes!");
+                return 0;
+            }database.log("DB-AIMUSER-ADMUPDATE","Cannot find user ("+AimApplication.loggedUser.aim_user_id.toString()+")");
+            return 0;
+        }catch(Exception ex){
+            database.log("DB-AIMUSER-ADMUPDATE-FAILED","Failed to set data for user ("+ex.toString()+")");
+            return -1;
+        }
+    }
+
+    /**
+     * Function for settting custom background colors
+     * @param color1Hex
+     * @param color2Hex
+     * @return Integer
+     */
+    public int setBackgroundColors(String color1Hex, String color2Hex){
+        try{
+            MongoCollection<Document> user_collection = database.get_data_collection("aim_user");
+            Document user_document = user_collection.find(new Document("_id",AimApplication.loggedUser.aim_user_id)).first();
+            if (user_document != null){
+                Bson updates = Updates.combine(
+                        Updates.set("aim_user_configuration2",color1Hex+","+color2Hex)
+                );
+                UpdateResult result = user_collection.updateOne(user_document,updates);
+                if ( result.getModifiedCount() > 0 ){
+                    database.log("DB-AIMUSER-ADMUPDATE","Updated user ("+AimApplication.loggedUser.aim_user_id.toString()+") colors to "+color1Hex+","+color2Hex);
+                    return 1;
+                }
+                database.log("DB-AIMUSER-ADMUPDATE","Cannot update user ("+AimApplication.loggedUser.aim_user_id.toString()+"), no changes!");
+                return 0;
+            }database.log("DB-AIMUSER-ADMUPDATE","Cannot find user ("+AimApplication.loggedUser.aim_user_id.toString()+")");
+            return 0;
+        }catch(Exception ex){
+            database.log("DB-AIMUSER-ADMUPDATE-FAILED","Failed to set data for user ("+ex.toString()+")");
+            return -1;
+        }
+    }
+
+    /**
+     * Function for clearing background colors for user
+     * @return Integer
+     */
+    public int clearBackgroundColors(){
+        //todo bug - cannot change to default
+        try{
+            MongoCollection<Document> user_collection = database.get_data_collection("aim_user");
+            Document user_document = user_collection.find(new Document("_id",AimApplication.loggedUser.aim_user_id)).first();
+            if (user_document != null){
+                Bson updates = Updates.combine(
+                        Updates.set("aim_user_configuration2","blank")
+                );
+                UpdateResult result = user_collection.updateOne(user_document,updates);
+                if ( result.getModifiedCount() > 0 ){
+                    database.log("DB-AIMUSER-ADMUPDATE","Updated user ("+AimApplication.loggedUser.aim_user_id.toString()+") colors to default");
+                    return 1;
+                }
+                database.log("DB-AIMUSER-ADMUPDATE","Cannot update user ("+AimApplication.loggedUser.aim_user_id.toString()+"), no changes!");
+                return 0;
+            }database.log("DB-AIMUSER-ADMUPDATE","Cannot find user ("+AimApplication.loggedUser.aim_user_id.toString()+")");
+            return 0;
+        }catch(Exception ex){
+            database.log("DB-AIMUSER-ADMUPDATE-FAILED","Failed to set data for user ("+ex.toString()+")");
+            return -1;
+        }
+    }
+
+    /**
      * Function for setting user normal data
      * @param userToChange
      * @return Integer

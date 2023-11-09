@@ -126,7 +126,7 @@ public class DetailsBoardWindow {
         boardDetailsLayout.add(AimApplication.currentBoardTaskList.main_layout);
 
         //setup permission
-        if ( !board.board_owner.equals(AimApplication.loggedUser.prepareDocument()) ){
+        if ( board.ownerLabel().equals("Member") ){
             members_button.setEnabled(false);
             update_button.setEnabled(false);
             changeowner_button.setEnabled(false);

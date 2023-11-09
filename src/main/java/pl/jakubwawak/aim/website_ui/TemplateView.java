@@ -46,7 +46,12 @@ public class TemplateView extends VerticalLayout {
         setJustifyContentMode(JustifyContentMode.CENTER);
         setDefaultHorizontalComponentAlignment(Alignment.CENTER);
         getStyle().set("text-align", "center");
-        getStyle().set("background-image","radial-gradient(white,gray)");
+        if ( AimApplication.loggedUser.aim_user_configuration2.equals("blank") ){
+            getStyle().set("background-image","radial-gradient(white,gray)");
+        }
+        else{
+            getStyle().set("background-image","radial-gradient("+AimApplication.loggedUser.aim_user_configuration2+")");
+        }
         getStyle().set("--lumo-font-family","Monospace");
     }
 
