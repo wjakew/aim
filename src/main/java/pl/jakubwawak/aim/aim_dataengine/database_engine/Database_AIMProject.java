@@ -11,6 +11,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -20,7 +21,9 @@ import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Project;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_User;
+import pl.jakubwawak.maintanance.RandomWordGeneratorEngine;
 
+import java.sql.PreparedStatement;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -118,6 +121,34 @@ public class Database_AIMProject {
             return null;
         }catch(Exception ex){
             database.log("DB-PROJECT-GETSINGLE-FAILED","Failed to get project by name ("+ex.toString()+")");
+            return null;
+        }
+    }
+
+    /**
+     * Function for loading project data by shared code
+     * @param sharing_code
+     * @return AIM_Project
+     */
+    public AIM_Project getProjectBySharedCode(String sharing_code){
+        try{
+            MongoCollection<Document> sharing_collection = database.get_data_collection("aim_share");
+            Document sharing_document = sharing_collection.find(new Document("sharing_code", sharing_code)).first();
+            if ( sharing_document == null ){
+                for(AIM_Project project : getAllProjects()){
+                    if (project.aim_project_id.equals(sharing_document.getObjectId("project_id"))){
+                        database.log("DB-SHARING-PROJECT","Found project ("+project.aim_project_id.toString()+") for sharing code!");
+                        return project;
+                    }
+                }
+                database.log("DB-SHARING-PROJECT-NOPROJECT","Found code but cannot find project with ID: "+sharing_document.getObjectId("project_id"));
+                return null;
+            }
+            database.log("DB-SHARING-GETPROJECT-NOCODE","Cannot find sharing_code: "+sharing_code);
+            return null;
+        }
+        catch(Exception ex){
+            database.log("DB-PROJECT-SHARE-FAILED","Failed to share project ("+ex.toString()+")");
             return null;
         }
     }
@@ -249,6 +280,83 @@ public class Database_AIMProject {
         }catch(Exception ex){
             database.log("DB-PROJECT-UPDATE-FAILED","Failed to update project ("+ex.toString()+")");
             return -1;
+        }
+    }
+
+    /**
+     * Function for creating sharing code for project
+     * @return Integer
+     */
+    public String shareProject(AIM_Project projectToShare){
+        try{
+            MongoCollection<Document> sharing_collection = database.get_data_collection("aim_share");
+            Document sharing_document = sharing_collection.find(new Document("project_id", projectToShare.aim_project_id)).first();
+            RandomWordGeneratorEngine rwge = new RandomWordGeneratorEngine();
+            if ( sharing_document == null ){
+                String sharingCode = rwge.generateRandomString(10,true,false);
+                Document document = new Document();
+                document.append("project_id",projectToShare.aim_project_id);
+                document.append("type","project");
+                document.append("sharing_code",sharingCode);
+                InsertOneResult result = sharing_collection.insertOne(document);
+                if ( result.wasAcknowledged() ){
+                    database.log("DB-SHARING-PROJECT","Shared project ("+projectToShare.aim_project_id.toString()+") sharing code: "+sharingCode);
+                    return sharingCode;
+                }
+                database.log("DB-SHARING-FAILED","Nothing to update on table, probably ");
+                return null;
+            }
+            database.log("DB-SHARING-ALREADY","Project already shared ("+sharing_document.getString("sharing_code")+")");
+            return null;
+        }
+        catch(Exception ex){
+            database.log("DB-PROJECT-SHARE-FAILED","Failed to share project ("+ex.toString()+")");
+            return null;
+        }
+    }
+
+    /**
+     * Function for removing project share
+     * @param projectToshare
+     * @return Integer
+     */
+    public int removeShareProject(AIM_Project projectToshare){
+        try {
+            MongoCollection<Document> sharing_collection = database.get_data_collection("aim_share");
+            Document sharing_document = sharing_collection.find(new Document("project_id", projectToshare.aim_project_id)).first();
+            if ( sharing_document != null ){
+                DeleteResult result = sharing_collection.deleteOne(sharing_document);
+                if (result.getDeletedCount() > 0){
+                    database.log("DB-PROJECT-SHARE-REMOVE","Share of the project("+projectToshare.aim_project_id.toString()+") removed!");
+                    return 1;
+                }
+            }
+            return 0;
+        }catch(Exception ex){
+            database.log("DB-PROJECT-SHARE-REMOVE-FAILED","Failed to remove sharing on project ("+ex.toString()+")");
+            return -1;
+        }
+
+    }
+
+    /**
+     * Function for checking if project is shared
+     * @param projectToShare
+     * @return String
+     */
+    public String checkShare(AIM_Project projectToShare){
+        try{
+            MongoCollection<Document> sharing_collection = database.get_data_collection("aim_share");
+            Document sharing_document = sharing_collection.find(new Document("project_id", projectToShare.aim_project_id)).first();
+            if ( sharing_document == null ){
+                return null;
+            }
+            database.log("DB-SHARING-ALREADY","Project already shared ("+sharing_document.getString("sharing_code")+")");
+            return sharing_document.getString("sharing_code");
+        }
+        catch(Exception ex){
+            database.log("DB-PROJECT-SHARE-FAILED","Failed to share project ("+ex.toString()+")");
+            return null;
         }
     }
 

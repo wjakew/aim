@@ -44,7 +44,12 @@ public class AimTest {
                 AimApplication.globalConfiguration = AimApplication.database.getGlobalConfiguration();
 
                 // test data here
-                dau.clearBackgroundColors();
+                Database_AIMProject dap = new Database_AIMProject(AimApplication.database);
+                ArrayList<AIM_Project> project_collection = dap.getUserProjects();
+
+                String share = dap.shareProject(project_collection.get(0));
+                String checkShare = dap.checkShare(project_collection.get(0));
+                dap.removeShareProject(project_collection.get(0));
                 System.out.println("END");
             }
         }catch(Exception ex){ex.printStackTrace();}

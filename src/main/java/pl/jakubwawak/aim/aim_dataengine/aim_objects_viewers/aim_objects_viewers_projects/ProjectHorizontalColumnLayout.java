@@ -7,6 +7,7 @@ package pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -42,15 +43,18 @@ public class ProjectHorizontalColumnLayout {
         currentPageNumber = 0;
 
         previous_button = new Button("", VaadinIcon.ARROW_LEFT.create(),this::previousbutton_action);
+        previous_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
         next_button = new Button("",VaadinIcon.ARROW_RIGHT.create(),this::nextbutton_action);
+        next_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+
         prepareLayout();
         projectHorizontalColumnLayout.setWidth("100%");
         projectHorizontalColumnLayout.getStyle().set("color","black");
         projectHorizontalColumnLayout.getStyle().set("border-radius","15px");
 
         projectHorizontalColumnLayout.setMargin(true);
-        projectHorizontalColumnLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-        projectHorizontalColumnLayout.setVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+        //projectHorizontalColumnLayout.setAlignItems(FlexComponent.Alignment.CENTER);
+        //projectHorizontalColumnLayout.setVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
 
         // engine for selecting projects in horizontal layout
         projectHorizontalColumnLayout.addClickListener(e->{

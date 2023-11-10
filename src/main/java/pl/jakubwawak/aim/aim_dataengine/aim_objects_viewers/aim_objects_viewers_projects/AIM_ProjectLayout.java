@@ -6,18 +6,24 @@
 package pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_projects;
 
 import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.H6;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
+import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Project;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task.TaskColumnLayout;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task.TaskColumnPage;
+import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMProject;
 import pl.jakubwawak.aim.website_ui.dialog_windows.MessageComponent;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.project_windows.CloseProjectWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.project_windows.InsertProjectWindow;
@@ -29,17 +35,19 @@ import java.util.ArrayList;
 /**
  * Object for creating layout for AIM_Project object
  */
+@JsModule("./recipe/copytoclipboard.js")
 public class AIM_ProjectLayout {
     AIM_Project projectObject;
     public VerticalLayout projectLayout;
 
     Grid<GridElement> grid_history;
 
-    Button update_button, closeproject_button;
+    Button update_button, closeproject_button,share_button;
 
     Button addtask_button;
 
     TaskColumnLayout tcl;
+    int shareClickCount;
 
     /**
      * Constructor
@@ -47,12 +55,13 @@ public class AIM_ProjectLayout {
     public AIM_ProjectLayout(AIM_Project projectObject){
         this.projectObject = projectObject;
         this.projectLayout = new VerticalLayout();
+        shareClickCount = 0;
 
         grid_history = new Grid<>(GridElement.class,false);
         grid_history.addColumn(GridElement::getGridelement_text).setHeader("Project History");
-        grid_history.setSizeFull();
+        grid_history.setHeight("100%");grid_history.setWidth("100%");
 
-        tcl = new TaskColumnLayout(projectObject.getTaskCollection(),"green","Linked Tasks",projectObject,"60%","90%");
+        tcl = new TaskColumnLayout(projectObject.getTaskCollection(),"gray","Linked Tasks",projectObject,"60%","90%");
 
         ArrayList<GridElement> historycontent = new ArrayList<>();
 
@@ -60,13 +69,26 @@ public class AIM_ProjectLayout {
             historycontent.add(new GridElement(element));
         }
         grid_history.setItems(historycontent);
-        addtask_button = new Button("Add Task",this::addtaskbutton_action);
+        addtask_button = new Button("Task",VaadinIcon.PLUS.create(),this::addtaskbutton_action);
         addtask_button.addThemeVariants(ButtonVariant.LUMO_SUCCESS,ButtonVariant.LUMO_PRIMARY);
-        update_button = new Button("Update Project",this::updateprojectbutton_action);
+        update_button = new Button("Update",VaadinIcon.FILE_REFRESH.create(),this::updateprojectbutton_action);
         update_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
-        closeproject_button = new Button("Close Project",this::closeprojectbutton_action);
+        closeproject_button = new Button("Close",VaadinIcon.TRASH.create(),this::closeprojectbutton_action);
         closeproject_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
-        update_button.setWidth("100%");closeproject_button.setWidth("100%"); addtask_button.setWidth("100%");
+
+        share_button = new Button("Share", VaadinIcon.SHARE.create(),this::sharebutton_action);
+        share_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        Database_AIMProject dap = new Database_AIMProject(AimApplication.database);
+        String share = dap.checkShare(projectObject);
+
+        if ( share == null ){
+            share_button.setText("Share Project");
+        }
+        else{
+            share_button.setText(share);
+        }
+
+        update_button.setWidth("100%");closeproject_button.setWidth("100%"); addtask_button.setWidth("100%");share_button.setWidth("100%");
 
         grid_history.addItemClickListener(e ->{
             GridElement selected = e.getItem();
@@ -74,6 +96,7 @@ public class AIM_ProjectLayout {
             projectLayout.add(mc.main_dialog);
             mc.main_dialog.open();
         });
+
         prepareLayout();
     }
 
@@ -85,8 +108,6 @@ public class AIM_ProjectLayout {
 
         VerticalLayout vl_left = new VerticalLayout();
         vl_left.add(grid_history);
-        vl_left.add(addtask_button);
-        vl_left.add(update_button,closeproject_button);
         vl_left.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         vl_left.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
         vl_left.getStyle().set("text-align", "center");
@@ -97,7 +118,7 @@ public class AIM_ProjectLayout {
         mainhorizontal_layout.setSizeFull();
         mainhorizontal_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 
-        projectLayout.add(new H4(projectObject.aim_project_name),mainhorizontal_layout);
+        projectLayout.add(new H4(projectObject.aim_project_name),new HorizontalLayout(addtask_button,update_button,closeproject_button),mainhorizontal_layout,share_button);
         projectLayout.setSizeFull();
         projectLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         projectLayout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
@@ -130,12 +151,55 @@ public class AIM_ProjectLayout {
     }
 
     /**
-     * closeproject_button
+     * closeproject_button action
      * @param ex
      */
     private void closeprojectbutton_action(ClickEvent ex){
         CloseProjectWindow cpw = new CloseProjectWindow(projectObject);
         projectLayout.add(cpw.main_dialog);
         cpw.main_dialog.open();
+    }
+
+    /**
+     * share_button action
+     * @param ex
+     */
+    private void sharebutton_action(ClickEvent ex){
+        Database_AIMProject dap = new Database_AIMProject(AimApplication.database);
+        if ( share_button.getText().equals("Share Project") ){
+            String share = dap.shareProject(projectObject);
+            if (share != null){
+                shareClickCount = 0;
+                share_button.setText(share);
+                Notification.show("Project was shared!");
+                UI.getCurrent().getPage().executeJs("window.copyToClipboard($0)", share);
+                Notification.show("Share code copied to clipboard!");
+            }
+            else{
+                Notification.show("Failed to share project, check log!");
+            }
+        }
+        else{
+            if (shareClickCount == 2){
+                int ans = dap.removeShareProject(projectObject);
+                if ( ans == 1 ){
+                    Notification.show("Share removed!");
+                    share_button.setText("Share Project");
+                    shareClickCount = 0;
+                }
+            }
+            else if (shareClickCount == 1){
+                Notification.show("Next click remove sharing in the project!");
+                UI.getCurrent().getPage().executeJs("window.copyToClipboard($0)", share_button.getText());
+                Notification.show("Share code copied to clipboard!");
+                shareClickCount++;
+            }
+            else{
+                UI.getCurrent().getPage().executeJs("window.copyToClipboard($0)", share_button.getText());
+                Notification.show("Share code copied to clipboard!");
+                shareClickCount++;
+            }
+        }
+        shareClickCount++;
     }
 }
