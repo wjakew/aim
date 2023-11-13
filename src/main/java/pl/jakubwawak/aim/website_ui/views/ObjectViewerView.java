@@ -26,6 +26,8 @@ import org.bson.Document;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Project;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_projects.AIM_ProjectLayoutShare;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task.AIM_TaskLayoutShare;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMProject;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_ShareCode;
@@ -101,6 +103,16 @@ public class ObjectViewerView extends VerticalLayout implements HasUrlParameter<
                 add(new H6("NOTHING FOUND - WRONG SHARING CODE"));
             }
             else{
+                StreamResource res = new StreamResource("aim_logo.png", () -> {
+                    return WelcomeView.class.getClassLoader().getResourceAsStream("images/aim_logo.png");
+                });
+
+                Image logo = new Image(res,"aim logo");
+                logo.setHeight("5rem");
+                logo.setWidth("5rem");
+                add(logo);
+                HorizontalLayout hl_spacer = new HorizontalLayout();
+                hl_spacer.setHeight("10%");
                 // sharing code correct - add object viewer based on type
                 switch(sharingDocument.getString("type")){
                     case "project":
@@ -111,8 +123,9 @@ public class ObjectViewerView extends VerticalLayout implements HasUrlParameter<
                         if ( project != null ){
                             add(new H6("PROJECT ID: "+project.aim_project_id.toString()));
                             add(new H6("OWNER: "+project.aim_owner.getString("aim_user_email")));
-                            // todo view project layout -  add to view
-
+                            add(hl_spacer);
+                            AIM_ProjectLayoutShare apls = new AIM_ProjectLayoutShare(project);
+                            add(apls.layout);
                         }
                         else{
                             add(new H6("SHARED PROJECT IS NULL, CONTACT ADMINISTRATOR"));
@@ -127,7 +140,9 @@ public class ObjectViewerView extends VerticalLayout implements HasUrlParameter<
                         if (task != null){
                             add(new H6("TASK ID "+task.aim_task_id.toString()));
                             add(new H6("OWNER: "+task.aim_task_owner.getString("aim_user_email")));
-                            // todo view task layout - add to view
+                            add(hl_spacer);
+                            AIM_TaskLayoutShare atls = new AIM_TaskLayoutShare(task);
+                            add(atls.layout);
                         }
                         else{
                             add(new H6("SHARED TASK IS NULL, CONTACT ADMINISTRATOR"));
@@ -136,15 +151,6 @@ public class ObjectViewerView extends VerticalLayout implements HasUrlParameter<
                     }
                     default:
                     {
-                        // nothing to show - sharing code is wrong
-                        StreamResource res = new StreamResource("aim_logo.png", () -> {
-                            return WelcomeView.class.getClassLoader().getResourceAsStream("images/aim_logo.png");
-                        });
-
-                        Image logo = new Image(res,"aim logo");
-                        logo.setHeight("5rem");
-                        logo.setWidth("5rem");
-                        add(logo);
                         add(new H6(parameter));
                         add(new H6("WRONG SHARING TYPE, CHECK APPLICATION LOG"));
                         break;

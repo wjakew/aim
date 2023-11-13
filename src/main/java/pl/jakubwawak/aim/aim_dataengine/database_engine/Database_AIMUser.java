@@ -266,7 +266,6 @@ public class Database_AIMUser {
      * @return Integer
      */
     public int clearBackgroundColors(){
-        //todo bug - cannot change to default
         try{
             MongoCollection<Document> user_collection = database.get_data_collection("aim_user");
             Document user_document = user_collection.find(new Document("_id",AimApplication.loggedUser.aim_user_id)).first();

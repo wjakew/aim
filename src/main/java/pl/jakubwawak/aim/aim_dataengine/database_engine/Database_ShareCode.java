@@ -35,7 +35,6 @@ public class Database_ShareCode {
             FindIterable<Document> sharingDocuments = sharing_collection.find();
             for(Document sharing_document : sharingDocuments){
                 if ( sharing_document.getString("sharing_code").equals(sharing_code)){
-                    //todo bug - cannot find string
                     database.log("DB-GET-SHARE","Loaded share code with code: "+sharing_code);
                     return sharing_document;
                 }

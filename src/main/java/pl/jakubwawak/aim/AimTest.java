@@ -44,13 +44,10 @@ public class AimTest {
                 AimApplication.globalConfiguration = AimApplication.database.getGlobalConfiguration();
 
                 // test data here
-                Database_AIMProject dap = new Database_AIMProject(AimApplication.database);
-                ArrayList<AIM_Project> project_collection = dap.getUserProjects();
-
-                String share = dap.shareProject(project_collection.get(0));
-                String checkShare = dap.checkShare(project_collection.get(0));
-                dap.removeShareProject(project_collection.get(0));
-                System.out.println("END");
+                Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
+                ArrayList<AIM_Task> taskCollection = dat.getTaskCollection();
+                String share  = dat.shareTask(taskCollection.get(0));
+                System.out.println(share);
             }
         }catch(Exception ex){ex.printStackTrace();}
         // closing application

@@ -88,7 +88,6 @@ public class Database_AIMTask {
      * @return ArrayList
      */
     public ArrayList<AIM_Task> getUserTaskCollection(AIM_User aim_user, String source){
-        //todo bug with getting user task collection
         ArrayList<AIM_Task> data = new ArrayList<>();
         Database_AIMUser dau = new Database_AIMUser(AimApplication.database);
         try{
@@ -117,7 +116,7 @@ public class Database_AIMTask {
             MongoCollection<Document> sharing_collection = database.get_data_collection("aim_share");
             Document sharing_document = sharing_collection.find(new Document("task_id", taskToShare.aim_task_id)).first();
             RandomWordGeneratorEngine rwge = new RandomWordGeneratorEngine();
-            if ( sharing_document != null ){
+            if ( sharing_document == null ){
                 String sharingCode = rwge.generateRandomString(10,true,false);
                 Document document = new Document();
                 document.append("task_id",taskToShare.aim_task_id);
@@ -131,7 +130,7 @@ public class Database_AIMTask {
                 database.log("DB-SHARING-TASK","Nothing to update on table, probably ");
                 return null;
             }
-            database.log("DB-SHARING-ALREADY","Project already shared ("+sharing_document.getString("sharing_code")+")");
+            database.log("DB-SHARING-ALREADY","Task already shared ("+sharing_document.getString("sharing_code")+")");
             return null;
         }catch(Exception ex){
             database.log("DB-TASK-SHARE-FAILED","Failed to share task ("+ex.toString()+")");

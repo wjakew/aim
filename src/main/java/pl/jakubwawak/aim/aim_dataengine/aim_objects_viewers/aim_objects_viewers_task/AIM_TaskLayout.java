@@ -110,6 +110,10 @@ public class AIM_TaskLayout {
         }
         main_layout.getStyle().set("color","#FFFFFF");
         main_layout.getStyle().set("--lumo-font-family","Monospace");
+
+        if (AimApplication.loggedUser == null){
+            changestatus_button.setVisible(false);
+        }
     }
 
     /**

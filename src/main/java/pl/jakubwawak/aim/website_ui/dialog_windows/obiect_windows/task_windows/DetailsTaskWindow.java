@@ -6,6 +6,7 @@
 package pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.task_windows;
 
 import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -37,7 +38,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 /**
- * Window for logging user to the app
+ * Window for task details
  */
 public class DetailsTaskWindow {
 
@@ -61,10 +62,14 @@ public class DetailsTaskWindow {
 
     Button update_button, changeowner_button, delete_button;
 
+    Button sharetask_button;
+
     AIM_Project projectWithTask;
     AIM_Board boardWithTask;
     Document assignedUser;
     AIM_BoardTask boardTask;
+
+    int shareClickCount;
 
     ComboBox<GridElement> assignedmember_combobox;
 
@@ -78,6 +83,7 @@ public class DetailsTaskWindow {
         assignedUser = null;
         projectWithTask = null;
         boardWithTask = null;
+        shareClickCount = 0;
         prepare_dialog();
     }
 
@@ -93,6 +99,7 @@ public class DetailsTaskWindow {
         assignedUser = null;
         main_dialog = new Dialog();
         main_layout = new VerticalLayout();
+        shareClickCount = 0;
         prepare_dialog();
     }
 
@@ -109,6 +116,7 @@ public class DetailsTaskWindow {
         this.boardWithTask = boardWithTask;
         main_dialog = new Dialog();
         main_layout = new VerticalLayout();
+        shareClickCount = 0;
         prepare_dialog();
     }
 
@@ -155,6 +163,10 @@ public class DetailsTaskWindow {
         changeowner_button = new Button("Change Owner", VaadinIcon.USER.create(),this::changeowner_button);
         changeowner_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_CONTRAST);
         changeowner_button.setWidth("100%");
+
+        sharetask_button= new Button("Share Task", VaadinIcon.SHARE.create(),this::sharetaskbutton_action);
+        sharetask_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_CONTRAST);
+        sharetask_button.setWidth("100%");
 
         delete_button = new Button("Remove Task", VaadinIcon.TRASH.create(),this::deletebutton_action);
         delete_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_ERROR);
@@ -242,6 +254,16 @@ public class DetailsTaskWindow {
                 break;
             }
         });
+
+        // setting share button text
+        Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
+        String share = dat.checkShare(taskObject);
+        if ( share!= null ){
+            sharetask_button.setText(share);
+        }
+        else{
+            sharetask_button.setText("Share Task");
+        }
     }
 
     /**
@@ -288,7 +310,7 @@ public class DetailsTaskWindow {
 
         vl_left.add(history_grid);
 
-        vl_right.add(new H6("Created: "+taskObject.aim_task_timestamp),new H6("Deadline: "+taskObject.aim_task_deadline),status_combobox,update_button,changeowner_button);
+        vl_right.add(new H6("Created: "+taskObject.aim_task_timestamp),new H6("Deadline: "+taskObject.aim_task_deadline),status_combobox,update_button,changeowner_button,sharetask_button);
 
         if ( boardWithTask != null ){
             vl_right.add(assignedmember_combobox);
@@ -317,11 +339,26 @@ public class DetailsTaskWindow {
         if ( taskObject.aim_task_id == null ){
             changeowner_button.setEnabled(false);
             update_button.setEnabled(false);
+            sharetask_button.setEnabled(false);
         }
 
         if ( boardWithTask == null ){
             assignedmember_combobox.setEnabled(false);
         }
+
+        if ( AimApplication.loggedUser != null){
+            if ( AimApplication.loggedUser.aim_user_id.equals(taskObject.aim_task_owner.getObjectId("aim_user_id"))){
+                delete_button.setEnabled(true);
+            }
+            else{
+                delete_button.setEnabled(false);
+            }
+        }
+        else{
+            delete_button.setEnabled(false);
+            status_combobox.setEnabled(false);
+        }
+
     }
 
     /**
@@ -384,5 +421,48 @@ public class DetailsTaskWindow {
                 AimApplication.currentBoardTaskList.reloadView();
             }
         }
+    }
+
+    /**
+     * sharetask_button action
+     * @param ex
+     */
+    private void sharetaskbutton_action(ClickEvent ex){
+        Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
+        if ( sharetask_button.getText().equals("Share Task") ){
+            String share = dat.shareTask(taskObject);
+            if (share != null){
+                shareClickCount = 0;
+                sharetask_button.setText(share);
+                Notification.show("Task was shared!");
+                UI.getCurrent().getPage().executeJs("window.copyToClipboard($0)", share);
+                Notification.show("Share code copied to clipboard!");
+            }
+            else{
+                Notification.show("Failed to share task, check log!");
+            }
+        }
+        else{
+            if (shareClickCount == 2){
+                int ans = dat.removeShareTask(taskObject);
+                if ( ans == 1 ){
+                    Notification.show("Share removed!");
+                    sharetask_button.setText("Share Task");
+                    shareClickCount = 0;
+                }
+            }
+            else if (shareClickCount == 1){
+                Notification.show("Next click remove sharing in the task object!");
+                UI.getCurrent().getPage().executeJs("window.copyToClipboard($0)", sharetask_button.getText());
+                Notification.show("Share code copied to clipboard!");
+                shareClickCount++;
+            }
+            else{
+                UI.getCurrent().getPage().executeJs("window.copyToClipboard($0)", sharetask_button.getText());
+                Notification.show("Share code copied to clipboard!");
+                shareClickCount++;
+            }
+        }
+        shareClickCount++;
     }
 }

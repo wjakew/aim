@@ -126,6 +126,27 @@ public class Database_AIMProject {
     }
 
     /**
+     * Function for loading project object by ID
+     * @param project_id
+     * @return
+     */
+    public AIM_Project getProjectByID(ObjectId project_id){
+        try{
+            MongoCollection<Document> project_collection = database.get_data_collection("aim_project");
+            Document project_document = project_collection.find(new Document("_id",project_id)).first();
+            if ( project_document != null ){
+                database.log("DB-PROJECT-GETSINGLE","Found project with given ID ("+project_id.toString()+")");
+                return new AIM_Project(project_document);
+            }
+            database.log("DB-PROJECT-GETSINGLE","Cannot find project with given ID ("+project_id.toString()+")");
+            return null;
+        }catch(Exception ex){
+            database.log("DB-PROJECT-GETSINGLE-FAILED","Failed to get project by ID ("+ex.toString()+")");
+            return null;
+        }
+    }
+
+    /**
      * Function for loading project data by shared code
      * @param sharing_code
      * @return AIM_Project
@@ -133,16 +154,11 @@ public class Database_AIMProject {
     public AIM_Project getProjectBySharedCode(String sharing_code){
         try{
             MongoCollection<Document> sharing_collection = database.get_data_collection("aim_share");
-            Document sharing_document = sharing_collection.find(new Document("sharing_code", sharing_code)).first();
-            if ( sharing_document == null ){
-                for(AIM_Project project : getAllProjects()){
-                    if (project.aim_project_id.equals(sharing_document.getObjectId("project_id"))){
-                        database.log("DB-SHARING-PROJECT","Found project ("+project.aim_project_id.toString()+") for sharing code!");
-                        return project;
-                    }
+            FindIterable<Document> sharingDocuments = sharing_collection.find();
+            for(Document sharing_document : sharingDocuments){
+                if ( sharing_document.getString("sharing_code").equals(sharing_code) ){
+                    return getProjectByID(sharing_document.getObjectId("project_id"));
                 }
-                database.log("DB-SHARING-PROJECT-NOPROJECT","Found code but cannot find project with ID: "+sharing_document.getObjectId("project_id"));
-                return null;
             }
             database.log("DB-SHARING-GETPROJECT-NOCODE","Cannot find sharing_code: "+sharing_code);
             return null;
