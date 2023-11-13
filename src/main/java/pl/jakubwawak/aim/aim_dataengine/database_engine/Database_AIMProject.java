@@ -336,7 +336,6 @@ public class Database_AIMProject {
             database.log("DB-PROJECT-SHARE-REMOVE-FAILED","Failed to remove sharing on project ("+ex.toString()+")");
             return -1;
         }
-
     }
 
     /**

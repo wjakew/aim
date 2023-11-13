@@ -9,13 +9,16 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import pl.jakubwawak.aim.AimApplication;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Project;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_User;
 import org.bson.Document;
+import pl.jakubwawak.maintanance.RandomWordGeneratorEngine;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -105,6 +108,82 @@ public class Database_AIMTask {
     }
 
     /**
+     * Function for sharing task
+     * @param taskToShare
+     * @return String
+     */
+    public String shareTask(AIM_Task taskToShare){
+        try{
+            MongoCollection<Document> sharing_collection = database.get_data_collection("aim_share");
+            Document sharing_document = sharing_collection.find(new Document("task_id", taskToShare.aim_task_id)).first();
+            RandomWordGeneratorEngine rwge = new RandomWordGeneratorEngine();
+            if ( sharing_document != null ){
+                String sharingCode = rwge.generateRandomString(10,true,false);
+                Document document = new Document();
+                document.append("task_id",taskToShare.aim_task_id);
+                document.append("type","task");
+                document.append("sharing_code",sharingCode);
+                InsertOneResult result = sharing_collection.insertOne(document);
+                if ( result.wasAcknowledged() ){
+                    database.log("DB-SHARING-TASK","Shared task ("+taskToShare.aim_task_id.toString()+") sharing code: "+sharingCode);
+                    return sharingCode;
+                }
+                database.log("DB-SHARING-TASK","Nothing to update on table, probably ");
+                return null;
+            }
+            database.log("DB-SHARING-ALREADY","Project already shared ("+sharing_document.getString("sharing_code")+")");
+            return null;
+        }catch(Exception ex){
+            database.log("DB-TASK-SHARE-FAILED","Failed to share task ("+ex.toString()+")");
+            return null;
+        }
+    }
+
+    /**
+     * Function for removing task share
+     * @param taskToShare
+     * @return Integer
+     */
+    public int removeShareTask(AIM_Task taskToShare){
+        try {
+            MongoCollection<Document> sharing_collection = database.get_data_collection("aim_share");
+            Document sharing_document = sharing_collection.find(new Document("task_id", taskToShare.aim_task_id)).first();
+            if ( sharing_document != null ){
+                DeleteResult result = sharing_collection.deleteOne(sharing_document);
+                if (result.getDeletedCount() > 0){
+                    database.log("DB-TASK-SHARE-REMOVE","Share of the task("+taskToShare.aim_task_id.toString()+") removed!");
+                    return 1;
+                }
+            }
+            return 0;
+        }catch(Exception ex){
+            database.log("DB-TASK-SHARE-REMOVE-FAILED","Failed to remove sharing on task ("+ex.toString()+")");
+            return -1;
+        }
+    }
+
+    /**
+     * Function for checking if project is shared
+     * @param taskToShare
+     * @return String
+     */
+    public String checkShare(AIM_Task taskToShare){
+        try{
+            MongoCollection<Document> sharing_collection = database.get_data_collection("aim_share");
+            Document sharing_document = sharing_collection.find(new Document("task_id", taskToShare.aim_task_id)).first();
+            if ( sharing_document == null ){
+                return null;
+            }
+            database.log("DB-SHARING-ALREADY","Task already shared ("+sharing_document.getString("sharing_code")+")");
+            return sharing_document.getString("sharing_code");
+        }
+        catch(Exception ex){
+            database.log("DB-TASK-SHARE-FAILED","Failed to share task ("+ex.toString()+")");
+            return null;
+        }
+    }
+
+    /**
      * Function for getting taskCollection
      * @return ArrayList
      */
@@ -184,6 +263,31 @@ public class Database_AIMTask {
             database.log("DB-GETTASK", "No task found for name ("+aimTaskName+")");
         }
         return data;
+    }
+
+    /**
+     * Function for getting task object from database based on sharing code
+     * @param sharing_code
+     * @return AIM_Task
+     */
+    public AIM_Task getTaskBySharedCode(String sharing_code){
+        Database_ShareCode dsc = new Database_ShareCode(AimApplication.database);
+        Document sharingDocument = dsc.getShareCode(sharing_code);
+        if ( sharingDocument != null ){
+            try{
+                MongoCollection<Document> task_collection = database.get_data_collection("aim_task");
+                Document task_document = task_collection.find(new Document("_id",sharingDocument.getObjectId("task_id"))).first();
+                if (task_document != null) {
+                    database.log("DB-GETTASK-SHARED", "Found task for sharing code, ID(" + task_document.getObjectId("_id").toString());
+                    return new AIM_Task(task_document);
+                }
+            }catch(Exception ex){
+                database.log("DB-GETTASK-FAILED","Failed to get task object ("+ex.toString()+")");
+                return null;
+            }
+        }
+        database.log("DB-GETTASK-SHARED","No task under given sharing code ("+sharing_code+")");
+        return null;
     }
 
     /**

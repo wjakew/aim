@@ -10,6 +10,7 @@
 ### Roadmap
 
 - Coding projects and task support - IN FUTURE
+- Widgets and fully customizable page - IN FUTURE
 
 ![screenshot1](https://github.com/wjakew/aim/blob/master/readme_resources/aim_screenshot1.png)
 
@@ -34,8 +35,9 @@ Comming soon!
 7. Simple and easy deployment - you only need MongoDB instance and machine with Java 21.
 8. Ready for full API support for task automation.
 9. UI Customization.
-10. Sharing objects and public viewer - COMING SOON.
-11. Coding projects and task support - new category of object - COMING SOON.
+10. Sharing objects and public viewer.
+11. New page/view with full customization - new widgets! - COMING SOON. 
+12. Coding projects and task support - new category of object - COMING SOON.
 
 ### UI Screenshots
 

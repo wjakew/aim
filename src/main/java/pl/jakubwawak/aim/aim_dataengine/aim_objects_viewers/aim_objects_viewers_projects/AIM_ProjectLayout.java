@@ -88,8 +88,6 @@ public class AIM_ProjectLayout {
             share_button.setText(share);
         }
 
-        update_button.setWidth("100%");closeproject_button.setWidth("100%"); addtask_button.setWidth("100%");share_button.setWidth("100%");
-
         grid_history.addItemClickListener(e ->{
             GridElement selected = e.getItem();
             MessageComponent mc = new MessageComponent(selected.getGridelement_text());
@@ -118,7 +116,7 @@ public class AIM_ProjectLayout {
         mainhorizontal_layout.setSizeFull();
         mainhorizontal_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 
-        projectLayout.add(new H4(projectObject.aim_project_name),new HorizontalLayout(addtask_button,update_button,closeproject_button),mainhorizontal_layout,share_button);
+        projectLayout.add(new H4(projectObject.aim_project_name),new HorizontalLayout(addtask_button,update_button,closeproject_button,share_button),mainhorizontal_layout);
         projectLayout.setSizeFull();
         projectLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         projectLayout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);

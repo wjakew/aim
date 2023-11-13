@@ -49,6 +49,7 @@ public class LoginWindow {
     Button createaccount_button;
 
     Button resetpassword_button;
+    Button aimviewer_button;
 
     /**
      * Constructor
@@ -80,18 +81,23 @@ public class LoginWindow {
         createaccount_button = new Button("Create Account",VaadinIcon.PLUS.create(),this::createaccoutnbutton_action);
         resetpassword_button = new Button("Reset Password",VaadinIcon.LOCK.create(),this::resetpasswordbutton_action);
 
+        aimviewer_button = new Button("AIM Viewer",VaadinIcon.SEARCH.create(),this::aimviewerbutton_action);
+
         if ( AimApplication.globalConfiguration.userCreationFlag == 0 ){
             createaccount_button.setEnabled(false);
         }
 
         // styling buttons
         new ButtonStyler().primaryButtonStyle(login_button,"100%","");
+        new ButtonStyler().primaryButtonStyle(aimviewer_button,"100%","");
         new ButtonStyler().primaryButtonStyle(createaccount_button,"50%","");
         new ButtonStyler().primaryButtonStyle(resetpassword_button,"50%","");
         createaccount_button.getStyle().set("background-color","white");
         createaccount_button.getStyle().set("color","#000000");
         resetpassword_button.getStyle().set("background-color","white");
         resetpassword_button.getStyle().set("color","#000000");
+        aimviewer_button.getStyle().set("background-color","white");
+        aimviewer_button.getStyle().set("color","#000000");
     }
 
     /**
@@ -125,7 +131,7 @@ public class LoginWindow {
         mainHL.add(vl);
 
         H6 header = new H6("welcome to AIM");
-        main_layout.add(header,logo,mainHL);
+        main_layout.add(header,logo,mainHL,aimviewer_button);
 
         main_layout.setSizeFull();
         main_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
@@ -166,14 +172,23 @@ public class LoginWindow {
      * resetpassword_button action
      * @param ex
      */
-    private void resetpasswordbutton_action(ClickEvent ex){
+    private void resetpasswordbutton_action(ClickEvent ex) {
         Database_AIMUser dau = new Database_AIMUser(AimApplication.database);
         ArrayList<AIM_User> adm_users = dau.getAdminList();
-        if ( adm_users.size() > 0 ){
-            MessageComponent mc = new MessageComponent("Contact instance administrator: "+adm_users.get(0).aim_user_email);
+        if (adm_users.size() > 0) {
+            MessageComponent mc = new MessageComponent("Contact instance administrator: " + adm_users.get(0).aim_user_email);
             main_layout.add(mc.main_dialog);
             mc.main_dialog.open();
         }
+    }
+
+    /**
+     * aimviewer_button action
+     * @param ex
+     */
+    private void aimviewerbutton_action(ClickEvent ex){
+        aimviewer_button.getUI().ifPresent(ui ->
+                ui.navigate("/viewer"));
     }
 
     void login(){

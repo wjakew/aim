@@ -24,8 +24,10 @@ import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.theme.lumo.Lumo;
 import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
+import org.bson.Document;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMProject;
+import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_ShareCode;
 import pl.jakubwawak.aim.website_ui.dialog_windows.AddElementWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.UserWindow;
 import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
@@ -120,10 +122,8 @@ public class ViewerRedirectPage extends VerticalLayout {
         sharecode_field.setPlaceholder("aim share code");
         sharecode_field.setWidth("50%");
 
-        go_button = new Button("View",VaadinIcon.ARROW_RIGHT.create());
+        go_button = new Button("View",VaadinIcon.ARROW_RIGHT.create(),this::setGo_button);
         go_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
-
-
     }
 
     /**
@@ -213,8 +213,17 @@ public class ViewerRedirectPage extends VerticalLayout {
      * @param ex
      */
     private void setGo_button(ClickEvent ex){
+        Database_ShareCode dsc = new Database_ShareCode(AimApplication.database);
         if (!sharecode_field.getValue().isEmpty()){
-
+            Document sharingDocument = dsc.getShareCode(sharecode_field.getValue());
+            if ( sharingDocument != null ){
+                // sharing document found, check type and send to viewer page
+                go_button.getUI().ifPresent(ui ->
+                        ui.navigate("/object-viewer/"+sharecode_field.getValue()));
+            }
+            else{
+                Notification.show("No object linked to code ("+sharecode_field.getValue()+")");
+            }
         }
     }
 
