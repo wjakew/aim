@@ -67,6 +67,7 @@ public class UserOptionsWindow {
         content.add(new GridElement("/terminal"));
         content.add(new GridElement("/dashboard"));
         content.add(new GridElement("/aim"));
+        content.add(new GridElement("/widgets"));
 
         homepage_combobox.setItems(content);
         homepage_combobox.setItemLabelGenerator(GridElement::getGridelement_text);

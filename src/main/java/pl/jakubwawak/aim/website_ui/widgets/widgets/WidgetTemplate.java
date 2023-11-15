@@ -13,23 +13,8 @@ import java.io.Serializable;
 /**
  * Widget for
  */
-public class WidgetTemplate implements Serializable {
+public class WidgetTemplate extends Widget implements Serializable {
 
-    // widget layout
-    public VerticalLayout widget;
-
-    // max widget size
-    final int widthMAX = 60;
-    final int heightMAX = 60;
-
-    // styling widget
-    final String backgroundType = "background-color";
-    final String backgroundStyle = "black";
-
-    // set size
-    int width,height;
-
-    // value for changing template data
     String contentString;
 
     /**
@@ -39,15 +24,7 @@ public class WidgetTemplate implements Serializable {
      * @param contentString
      */
     public WidgetTemplate(int width,int height, String contentString){
-        if ( widthMAX > width )
-            this.width = width;
-        else
-            this.width = widthMAX;
-        if ( heightMAX > height )
-            this.height = height;
-        else
-            this.height = height;
-        widget = new VerticalLayout();
+        super(width,height);
         this.contentString = contentString;
         prepareWidget();
     }
@@ -55,23 +32,15 @@ public class WidgetTemplate implements Serializable {
     /**
      * Function for preparing widget content
      */
-    void prepareContent(){
+    public void prepareContent(){
         // prepare content layout
     }
 
     /**
      * Function for preparing widget layout
      */
-    void prepareWidget(){
+    public void prepareWidget(){
         prepareContent();
-        // prepare widget layout
-
-        widget.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
-        widget.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
-        widget.getStyle().set("text-align", "center");
-
-        widget.getStyle().set("border-radius","25px");
-        widget.getStyle().set(backgroundType,backgroundStyle);
-        widget.getStyle().set("--lumo-font-family","Monospace");
+        super.createEmptyWidget();
     }
 }
