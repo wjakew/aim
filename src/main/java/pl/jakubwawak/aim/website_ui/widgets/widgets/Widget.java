@@ -61,6 +61,9 @@ public class Widget {
         widget.getStyle().set(backgroundType,backgroundStyle);
         widget.getStyle().set("--lumo-font-family","Monospace");
         widget.setHeight(height+"%");widget.setWidth(width+"%");
+
+        // creating empty widget as default
+        createEmptyWidget();
     }
 
     /**
@@ -81,7 +84,7 @@ public class Widget {
     /**
      * Function for creating empty widget
      */
-    public void createEmptyWidget(){
+    void createEmptyWidget(){
         addToWidget_button = new Button("", VaadinIcon.PLAY_CIRCLE.create(),this::addToWidgetbutton_action);
         addToWidget_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
         widget.add(addToWidget_button);
