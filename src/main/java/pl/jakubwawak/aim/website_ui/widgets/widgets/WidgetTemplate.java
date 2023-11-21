@@ -5,6 +5,7 @@
  */
 package pl.jakubwawak.aim.website_ui.widgets.widgets;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
@@ -30,17 +31,33 @@ public class WidgetTemplate extends Widget implements Serializable {
     }
 
     /**
+     * Function for adding component
+     * @param component
+     */
+    void addComponent(Component component){
+        super.addToWidget(component);
+    }
+
+
+    /**
      * Function for preparing widget content
      */
-    public void prepareContent(){
+    void prepareContent(){
         // prepare content layout
     }
 
     /**
      * Function for preparing widget layout
      */
-    public void prepareWidget(){
+    void prepareWidget(){
         prepareContent();
-        super.createEmptyWidget();
+        super.reloadBackground();
+    }
+
+    /**
+     * Function for preparing demo content of the widget
+     */
+    public void prepareDemo(){
+        // prepare demo content
     }
 }

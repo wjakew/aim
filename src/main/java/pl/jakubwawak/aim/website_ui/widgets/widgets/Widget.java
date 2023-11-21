@@ -28,8 +28,8 @@ public class Widget {
     public final int heightMAX = 60;
 
     // styling widget
-    public final String backgroundType = "background-color";
-    public final String backgroundStyle = "black";
+    public String backgroundType = "background-color";
+    public String backgroundStyle = "black";
 
     // set size
     public int width,height;
@@ -63,7 +63,7 @@ public class Widget {
         widget.setHeight(height+"%");widget.setWidth(width+"%");
 
         // creating empty widget as default
-        createEmptyWidget();
+        // createEmptyWidget();
     }
 
     /**
@@ -79,6 +79,13 @@ public class Widget {
      */
     public void addToWidget(Component component){
         widget.add(component);
+    }
+
+    /**
+     * Function for reloading background
+     */
+    public void reloadBackground(){
+        widget.getStyle().set(backgroundType,backgroundStyle);
     }
 
     /**

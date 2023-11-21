@@ -20,7 +20,7 @@
 
 ### Application Schema
 
-Comming soon!
+Coming soon!
 
 ![screenshot1](https://github.com/wjakew/aim/blob/master/readme_resources/aim_screenshot10.png)
 

@@ -265,6 +265,32 @@ public class Database_AIMTask {
     }
 
     /**
+     * Function for getting task object from database based on ID
+     * @param task_id
+     * @return AIM_Task
+     */
+    public AIM_Task getTask(ObjectId task_id){
+        AIM_Task data = null;
+        try{
+            MongoCollection<Document> task_collection = database.get_data_collection("aim_task");
+            FindIterable<Document> userTaskCollection = task_collection.find();
+            for(Document task_document : userTaskCollection){
+                if ( task_document.getObjectId("_id").equals(task_id) ){
+                    database.log("BD-GETTASK","Found task ID("+task_id.toString()+") as ("+task_document.getObjectId("_id").toString()+")");
+                    data = new AIM_Task(task_document);
+                    break;
+                }
+            }
+        }catch(Exception ex){
+            database.log("DB-GETTASK-FAILED","Failed to get task object ("+ex.toString()+")");
+        }
+        if ( data == null ){
+            database.log("DB-GETTASK", "No task found for name ID("+task_id.toString()+")");
+        }
+        return data;
+    }
+
+    /**
      * Function for getting task object from database based on sharing code
      * @param sharing_code
      * @return AIM_Task

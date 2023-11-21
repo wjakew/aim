@@ -96,12 +96,12 @@ public class WidgetView extends VerticalLayout {
      * Function for preparing components
      */
     void prepare_components(){
-        home_button = new Button("Home", VaadinIcon.HOME.create(),this::homebutton_action);
+        home_button = new Button("", VaadinIcon.HOME.create(),this::homebutton_action);
         new ButtonStyler().primaryButtonStyle(home_button,"20%","");
-        terminal_button = new Button("Term",VaadinIcon.TERMINAL.create(),this::terminalbutton_action);
+        terminal_button = new Button("",VaadinIcon.TERMINAL.create(),this::terminalbutton_action);
         new ButtonStyler().primaryButtonStyle(terminal_button,"20%","");
 
-        addelement_button= new Button("Add", VaadinIcon.PLUS.create(),this::addelementbutton_action);
+        addelement_button= new Button("", VaadinIcon.PLUS.create(),this::addelementbutton_action);
         new ButtonStyler().primaryButtonStyle(addelement_button,"20%","");
 
         user_button= new Button("You", VaadinIcon.USER.create(),this::userbutton_action);
