@@ -51,7 +51,7 @@ public class DetailsTaskWindow {
     public Dialog main_dialog;
     VerticalLayout main_layout;
 
-    AIM_Task taskObject;
+    public AIM_Task taskObject;
 
     H1 taskname_header;
     TextArea taskdesc_area;
@@ -60,7 +60,7 @@ public class DetailsTaskWindow {
 
     ComboBox<GridElement> status_combobox;
 
-    Button update_button, changeowner_button, delete_button;
+    Button update_button, changeowner_button, delete_button,addcomment_button;
 
     Button sharetask_button;
 
@@ -72,6 +72,7 @@ public class DetailsTaskWindow {
     int shareClickCount;
 
     ComboBox<GridElement> assignedmember_combobox;
+    ArrayList<GridElement> data;
 
     /**
      * Constructor
@@ -133,7 +134,7 @@ public class DetailsTaskWindow {
         taskdesc_area.setWidth("100%");
 
         history_grid = new Grid<>(GridElement.class,false);
-        ArrayList<GridElement> data = new ArrayList<>();
+        data = new ArrayList<>();
 
         for(String element : taskObject.aim_task_history){
             data.add(new GridElement(element));
@@ -167,6 +168,10 @@ public class DetailsTaskWindow {
         sharetask_button= new Button("Share Task", VaadinIcon.SHARE.create(),this::sharetaskbutton_action);
         sharetask_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_CONTRAST);
         sharetask_button.setWidth("100%");
+
+        addcomment_button = new Button("Add comment",VaadinIcon.COMMENT.create(),this::setAddcomment_button);
+        addcomment_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_CONTRAST);
+        addcomment_button.setWidth("100%");
 
         delete_button = new Button("Remove Task", VaadinIcon.TRASH.create(),this::deletebutton_action);
         delete_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_ERROR);
@@ -258,12 +263,25 @@ public class DetailsTaskWindow {
         // setting share button text
         Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
         String share = dat.checkShare(taskObject);
+
         if ( share!= null ){
             sharetask_button.setText(share);
         }
         else{
             sharetask_button.setText("Share Task");
         }
+
+    }
+
+    /**
+     * Function for reloading history grid
+     */
+    public void historyReload(){
+        data.clear();
+        for(String element : taskObject.aim_task_history){
+            data.add(new GridElement(element));
+        }
+        history_grid.getDataProvider().refreshAll();
     }
 
     /**
@@ -308,7 +326,7 @@ public class DetailsTaskWindow {
         vl_right.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
         vl_right.getStyle().set("text-align", "center");
 
-        vl_left.add(history_grid);
+        vl_left.add(history_grid,addcomment_button);
 
         vl_right.add(new H6("Created: "+taskObject.aim_task_timestamp),new H6("Deadline: "+taskObject.aim_task_deadline),status_combobox,update_button,changeowner_button,sharetask_button);
 
@@ -340,6 +358,7 @@ public class DetailsTaskWindow {
             changeowner_button.setEnabled(false);
             update_button.setEnabled(false);
             sharetask_button.setEnabled(false);
+            addcomment_button.setEnabled(false);
         }
 
         if ( boardWithTask == null ){
@@ -382,6 +401,16 @@ public class DetailsTaskWindow {
             main_layout.add(itw.main_dialog);
             itw.main_dialog.open();
         }
+    }
+
+    /**
+     * addcomment_button action
+     * @param ex
+     */
+    private void setAddcomment_button(ClickEvent ex){
+        CommentTaskWindow ctw = new CommentTaskWindow(this);
+        main_layout.add(ctw.main_dialog);
+        ctw.main_dialog.open();
     }
 
     /**

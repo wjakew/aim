@@ -11,6 +11,7 @@ import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
 import pl.jakubwawak.aim.website_ui.widgets.widgets.Widget;
+import pl.jakubwawak.aim.website_ui.widgets.widgets.widgets.CreateTaskWidget;
 import pl.jakubwawak.aim.website_ui.widgets.widgets.widgets.TaskDetailsWidget;
 
 import java.util.ArrayList;
@@ -35,9 +36,7 @@ public class WidgetPanel {
      * Function for preparing widgets
      */
     void prepareWidgets(){
-        Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
-        ArrayList<AIM_Task> taskCollection = dat.getNewTaskCollection();
-        widget1 = new TaskDetailsWidget(60,60,taskCollection.get(0).aim_task_id.toString());
+        widget1 = new CreateTaskWidget(60,60,"");
     }
 
     /**
