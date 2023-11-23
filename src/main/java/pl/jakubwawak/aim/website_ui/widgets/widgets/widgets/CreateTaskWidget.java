@@ -13,6 +13,7 @@ import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.textfield.TextField;
+import org.bson.types.ObjectId;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
@@ -30,6 +31,7 @@ public class CreateTaskWidget extends Widget implements Serializable {
     TextField taskName_field, taskDesc_field;
     Button create_button;
 
+
     /**
      * Constructor
      * @param width
@@ -38,8 +40,27 @@ public class CreateTaskWidget extends Widget implements Serializable {
      */
     public CreateTaskWidget(int width,int height, String contentString){
         super(width,height);
+        super.widgetDesc = "Widget for creating task in a simple way. Type create to add this widget";
         this.contentString = contentString;
-        prepareWidget();
+        contentStringCorrect = checkContentStringCorrect();
+        if ( contentString.equals("demo") ){
+            prepareDemo();
+        }
+        else{
+            if ( contentStringCorrect )
+                prepareWidget();
+            else
+                AimApplication.database.log("WIDGET","Widget empty! Wrong contentString");
+        }
+    }
+
+    /**
+     * Function for checking contentstring value
+     * @return boolean
+     */
+    public boolean checkContentStringCorrect(){
+        // logic for checking content string logic
+        return true;
     }
 
     /**
@@ -108,6 +129,7 @@ public class CreateTaskWidget extends Widget implements Serializable {
      */
     public void prepareDemo(){
         // prepare demo content
+        super.widget.removeAll();
         prepareWidget();
         taskName_field.setEnabled(false);
         taskDesc_field.setEnabled(false);

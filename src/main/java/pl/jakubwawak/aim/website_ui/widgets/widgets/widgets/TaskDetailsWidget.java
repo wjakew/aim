@@ -40,6 +40,7 @@ public class TaskDetailsWidget extends Widget implements Serializable {
 
     Button changestatus_button, details_button;
 
+
     /**
      * Constructor
      * @param width
@@ -48,8 +49,34 @@ public class TaskDetailsWidget extends Widget implements Serializable {
      */
     public TaskDetailsWidget(int width,int height, String contentString){
         super(width,height);
+        super.widgetDesc = "Widget for showing task details";
         this.contentString = contentString;
-        prepareWidget();
+        contentStringCorrect = checkContentStringCorrect();
+        if ( contentString.isEmpty() ){
+            prepareDemo();
+        }
+        else{
+            if ( contentStringCorrect )
+                prepareWidget();
+            else
+                AimApplication.database.log("WIDGET","Widget empty! Wrong contentString");
+        }
+    }
+
+    /**
+     * Function for checking contentstring value
+     * @return boolean
+     */
+    public boolean checkContentStringCorrect(){
+        // logic for checking content string logic
+        try{
+            ObjectId task_id = new ObjectId(contentString);
+            Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
+            return dat.getTask(task_id) != null;
+        }catch(Exception ex){
+            return false;
+        }
+
     }
 
     /**
@@ -157,8 +184,14 @@ public class TaskDetailsWidget extends Widget implements Serializable {
      * Function for preparing demo content of the widget
      */
     public void prepareDemo(){
-        // prepare demo content
+        changestatus_button = new Button("", VaadinIcon.ARROW_CIRCLE_RIGHT.create(),this::setChangestatus_button);
+        details_button = new Button("",VaadinIcon.INFO.create(),this::detailsbutton_action);
 
+        changestatus_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        details_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+
+        // prepare demo content
+        super.widget.removeAll();
         taskDetails_area = new TextArea("");
         taskDetails_area.setValue("test");
 

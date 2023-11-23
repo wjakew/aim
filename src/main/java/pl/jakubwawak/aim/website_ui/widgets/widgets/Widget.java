@@ -23,10 +23,6 @@ public class Widget {
     // widget layout
     public VerticalLayout widget;
 
-    // max widget size
-    public final int widthMAX = 60;
-    public final int heightMAX = 60;
-
     // styling widget
     public String backgroundType = "background-color";
     public String backgroundStyle = "black";
@@ -37,20 +33,17 @@ public class Widget {
     // clear widget button
     Button addToWidget_button;
 
+    public String widgetDesc = ""; // widget desc for widget picker window
+    public boolean contentStringCorrect; // flag for checking if string is correct
+
     /**
      * Constructor
      * @param width
      * @param height
      */
     public Widget(int width,int height){
-        if ( widthMAX > width )
-            this.width = width;
-        else
-            this.width = widthMAX;
-        if ( heightMAX > height )
-            this.height = height;
-        else
-            this.height = height;
+        this.width = width;
+        this.height = height;
         widget = new VerticalLayout();
 
         widget.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
@@ -59,11 +52,12 @@ public class Widget {
 
         widget.getStyle().set("border-radius","25px");
         widget.getStyle().set(backgroundType,backgroundStyle);
+        widget.getStyle().set("color","white");
         widget.getStyle().set("--lumo-font-family","Monospace");
         widget.setHeight(height+"%");widget.setWidth(width+"%");
 
         // creating empty widget as default
-        // createEmptyWidget();
+        createEmptyWidget();
     }
 
     /**
@@ -92,14 +86,16 @@ public class Widget {
      * Function for creating empty widget
      */
     void createEmptyWidget(){
-        addToWidget_button = new Button("", VaadinIcon.PLAY_CIRCLE.create(),this::addToWidgetbutton_action);
+        addToWidget_button = new Button("", VaadinIcon.PLUS.create(),this::addToWidgetbutton_action);
         addToWidget_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
         widget.add(addToWidget_button);
     }
 
     // button actions
     private void addToWidgetbutton_action(ClickEvent ex){
-        Notification.show("Open widget drawer!");
+        WidgetPickerWindow wpw = new WidgetPickerWindow();
+        widget.add(wpw.main_dialog);
+        wpw.main_dialog.open();
     }
 
 }

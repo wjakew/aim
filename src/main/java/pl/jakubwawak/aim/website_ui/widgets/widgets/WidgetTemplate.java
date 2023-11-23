@@ -6,8 +6,10 @@
 package pl.jakubwawak.aim.website_ui.widgets.widgets;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import pl.jakubwawak.aim.AimApplication;
 
 import java.io.Serializable;
 
@@ -18,6 +20,9 @@ public class WidgetTemplate extends Widget implements Serializable {
 
     String contentString;
 
+    String widgetDesc = ""; // widget desc for widget picker window
+    boolean contentStringCorrect; // flag for checking if string is correct
+
     /**
      * Constructor
      * @param width
@@ -27,7 +32,20 @@ public class WidgetTemplate extends Widget implements Serializable {
     public WidgetTemplate(int width,int height, String contentString){
         super(width,height);
         this.contentString = contentString;
-        prepareWidget();
+        contentStringCorrect = checkContentStringCorrect();
+        if ( contentStringCorrect )
+            prepareWidget();
+        else
+            AimApplication.database.log("WIDGET","Widget empty! Wrong contentString");
+    }
+
+    /**
+     * Function for checking contentstring value
+     * @return boolean
+     */
+    public boolean checkContentStringCorrect(){
+        // logic for checking content string logic
+        return true;
     }
 
     /**
@@ -59,5 +77,7 @@ public class WidgetTemplate extends Widget implements Serializable {
      */
     public void prepareDemo(){
         // prepare demo content
+        super.widget.removeAll();
+        addComponent(new H6("DEMO"));
     }
 }

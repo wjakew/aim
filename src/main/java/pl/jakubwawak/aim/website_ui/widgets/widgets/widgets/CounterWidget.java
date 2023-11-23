@@ -38,8 +38,27 @@ public class CounterWidget extends Widget implements Serializable {
      */
     public CounterWidget(int width,int height, String contentString){
         super(width,height);
+        super.widgetDesc = "Widget for showing number of tasks, options: task-done, task-new, task-inprogress"; // widget desc for widget picker window
         this.contentString = contentString;
-        prepareWidget();
+        contentStringCorrect = checkContentStringCorrect();
+        if (contentString.isEmpty()){
+            prepareDemo();
+        }
+        else{
+            if (contentStringCorrect)
+                prepareWidget();
+            else
+                AimApplication.database.log("WIDGET","Widget empty! Wrong contentString");
+        }
+    }
+
+    /**
+     * Function for checking contentstring value
+     * @return boolean
+     */
+    public boolean checkContentStringCorrect(){
+        // logic for checking content string logic
+        return contentString.equals("task-done") || contentString.equals("task-new") || contentString.equals("task-inprogress");
     }
 
     /**
