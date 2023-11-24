@@ -93,7 +93,7 @@ public class Widget {
 
     // button actions
     private void addToWidgetbutton_action(ClickEvent ex){
-        WidgetPickerWindow wpw = new WidgetPickerWindow();
+        WidgetPickerWindow wpw = new WidgetPickerWindow(this);
         widget.add(wpw.main_dialog);
         wpw.main_dialog.open();
     }

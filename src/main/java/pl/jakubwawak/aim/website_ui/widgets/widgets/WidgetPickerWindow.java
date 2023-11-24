@@ -48,10 +48,13 @@ public class WidgetPickerWindow {
 
     ArrayList<Widget> selectableWidgetCollection;
 
+    Widget widgetToChange;
+
     /**
      * Constructor
      */
-    public WidgetPickerWindow(){
+    public WidgetPickerWindow(Widget widgetToChange){
+        this.widgetToChange = widgetToChange;
         index = 0;
         main_dialog = new Dialog();
         main_layout = new VerticalLayout();
@@ -168,6 +171,10 @@ public class WidgetPickerWindow {
         }
     }
 
+    /**
+     * next_button action
+     * @param ex
+     */
     private void setNext_button(ClickEvent ex){
         if ( index < selectableWidgetCollection.size()-1 ){
             index++;
