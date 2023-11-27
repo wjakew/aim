@@ -77,4 +77,39 @@ public class WidgetPanel {
         hl_main.add(vl_left,vl_right);
         mainLayout.add(hl_main);
     }
+
+    /**
+     * Function for reloading panel
+     */
+    public void reloadPanel(){
+        mainLayout.removeAll();
+        mainLayout.setSizeFull();
+        mainLayout.setVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+        mainLayout.setAlignItems(FlexComponent.Alignment.CENTER);
+        mainLayout.getStyle().set("background-image","radial-gradient(purple,gray)");
+        mainLayout.getStyle().set("text-align", "center");
+        mainLayout.getStyle().set("border-radius","25px");
+
+
+        HorizontalLayout hl_main = new HorizontalLayout();
+        hl_main.setWidth("100%"); hl_main.setHeight("100%");
+        hl_main.setAlignItems(FlexComponent.Alignment.CENTER);
+        hl_main.setVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+
+        VerticalLayout vl_left = new VerticalLayout();
+        VerticalLayout vl_right = new VerticalLayout();
+
+        vl_left.setSizeFull();
+        vl_left.getStyle().set("text-align", "center");
+        vl_left.getStyle().set("border-radius","25px");
+
+        vl_right.setSizeFull();
+        vl_right.getStyle().set("text-align", "center");
+        vl_right.getStyle().set("border-radius","25px");
+
+        vl_left.add(widget1.widget,widget2.widget);
+        vl_right.add(widget3.widget,widget4.widget);
+        hl_main.add(vl_left,vl_right);
+        mainLayout.add(hl_main);
+    }
 }

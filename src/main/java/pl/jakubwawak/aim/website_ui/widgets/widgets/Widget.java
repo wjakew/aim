@@ -33,8 +33,10 @@ public class Widget {
     // clear widget button
     Button addToWidget_button;
 
-    public String widgetDesc = ""; // widget desc for widget picker window
+    public String widgetDesc = "";       // widget desc for widget picker window
     public boolean contentStringCorrect; // flag for checking if string is correct
+
+    public String widgetName = "";       // widget name for widget creation
 
     /**
      * Constructor

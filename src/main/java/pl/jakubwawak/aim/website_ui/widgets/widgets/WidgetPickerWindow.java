@@ -11,12 +11,14 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import lombok.extern.java.Log;
+import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.website_ui.widgets.widgets.widgets.CounterWidget;
 import pl.jakubwawak.aim.website_ui.widgets.widgets.widgets.CreateTaskWidget;
 import pl.jakubwawak.aim.website_ui.widgets.widgets.widgets.TaskDetailsWidget;
@@ -75,7 +77,7 @@ public class WidgetPickerWindow {
         // running in demo mode
 
         previous_button = new Button("", VaadinIcon.ARROW_LEFT.create(),this::setPrevious_button);
-        select_button = new Button("Add Widget",VaadinIcon.PLUS.create());
+        select_button = new Button("Add Widget",VaadinIcon.PLUS.create(),this::setSelect_button);
         next_button = new Button("",VaadinIcon.ARROW_RIGHT.create(),this::setNext_button);
 
         previous_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
@@ -184,6 +186,40 @@ public class WidgetPickerWindow {
         else{
             putWindowContent(selectableWidgetCollection.get(index));
             next_button.setEnabled(false);
+        }
+    }
+
+    /**
+     * select_button action
+     * @param ex
+     */
+    private void setSelect_button(ClickEvent ex){
+        String contentString = configurationstring_field.getValue();
+        Widget widget = null;
+        switch(selectableWidgetCollection.get(index).widgetName){
+            case "counter":{
+                widget = new CounterWidget(100,100,contentString);
+                break;
+            }
+            case "create-task":{
+                widget = new CreateTaskWidget(100,100,contentString);
+                break;
+            }
+            case "task-details":{
+                widget = new TaskDetailsWidget(100,100,contentString);
+                break;
+            }
+        }
+
+        if ( widget.contentStringCorrect){
+            // widget string is correct - create widget
+            this.widgetToChange = widget;
+            Notification.show("Updated widget panel!");
+            AimApplication.currentWidgetPanel.reloadPanel();
+            main_dialog.close();
+        }
+        else{
+            Notification.show("Wrong content string! Check value!");
         }
     }
 }

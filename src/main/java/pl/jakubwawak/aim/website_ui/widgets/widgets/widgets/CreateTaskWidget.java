@@ -40,7 +40,8 @@ public class CreateTaskWidget extends Widget implements Serializable {
      */
     public CreateTaskWidget(int width,int height, String contentString){
         super(width,height);
-        super.widgetDesc = "Widget for creating task in a simple way. Type create to add this widget";
+        super.widgetDesc = "Widget for creating task in a simple way. Type 'create' to add this widget.";
+        super.widgetName = "create-task";
         this.contentString = contentString;
         contentStringCorrect = checkContentStringCorrect();
         if ( contentString.equals("demo") ){

@@ -33,7 +33,6 @@ public class WidgetView extends VerticalLayout {
 
     HorizontalLayout headerLayout;
     Button home_button, terminal_button, addelement_button,logout_button,user_button;
-    WidgetPanel widgetPanel;
 
 
     /**
@@ -110,7 +109,7 @@ public class WidgetView extends VerticalLayout {
         logout_button = new Button("Log out",VaadinIcon.EXIT.create(),this::logoutbutton_action);
         new ButtonStyler().primaryButtonStyle(logout_button,"80%","");
 
-        widgetPanel = new WidgetPanel();
+        AimApplication.currentWidgetPanel = new WidgetPanel();
     }
 
     /**
@@ -121,7 +120,7 @@ public class WidgetView extends VerticalLayout {
             prepare_components();
             prepare_header();
             add(headerLayout);
-            add(widgetPanel.mainLayout);
+            add(AimApplication.currentWidgetPanel.mainLayout);
 
         }
         else{
