@@ -10,6 +10,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_WidgetPanel;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
 import pl.jakubwawak.aim.website_ui.widgets.widgets.Widget;
 import pl.jakubwawak.aim.website_ui.widgets.widgets.widgets.CreateTaskWidget;
@@ -31,6 +32,14 @@ public class WidgetPanel {
     public WidgetPanel(){
         mainLayout = new HorizontalLayout();
         preparePanel();
+    }
+
+    /**
+     * Constructor
+     * @param dwp
+     */
+    public WidgetPanel(AIM_WidgetPanel dwp){
+
     }
 
     /**

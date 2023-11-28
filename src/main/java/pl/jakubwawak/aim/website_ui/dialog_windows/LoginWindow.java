@@ -21,6 +21,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.server.StreamResource;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_User;
+import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMWidgetPanel;
 import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
 import pl.jakubwawak.aim.website_ui.views.WelcomeView;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMUser;
@@ -201,6 +202,8 @@ public class LoginWindow {
                 if ( ans == 1 && AimApplication.loggedUser != null){
                     // logged successfully
                     Notification.show("Welcome back "+AimApplication.loggedUser.aim_user_email+"!");
+                    Database_AIMWidgetPanel dawp = new Database_AIMWidgetPanel(AimApplication.database);
+                    //todo AimApplication.currentWidgetPanel = dawp.getPanelData();
                     if ( AimApplication.loggedUser.aim_user_configuration1.isEmpty()){
                         login_button.getUI().ifPresent(ui ->
                                 ui.navigate("/aim"));

@@ -14,6 +14,7 @@ import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_board.CurrentBoardComposer;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_projects.CurrentProjectComposer;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task.CurrentTaskComposer;
+import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMWidgetPanel;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_Connector;
 import pl.jakubwawak.aim.website_ui.views.HomeView;
 import pl.jakubwawak.aim.website_ui.widgets.WidgetPanel;
@@ -27,7 +28,7 @@ import java.util.Scanner;
 public class AimApplication {
 
 	public static String version = "v1.0.0";
-	public static String build = "aim271123REV01";
+	public static String build = "aim281123REV01";
 	public static String applicationStartup;
 	public static int test_flag = 0; // flag for enabling testing
 	public static int log_database_dump_flag = 1; // flag for enabling database log dump
@@ -81,6 +82,7 @@ public class AimApplication {
 				database.setDatabase_url(connectionStringDebug);
 				database.connect();
 				if(database.connected){
+
 					SpringApplication.run(AimApplication.class, args);
 				}
 				else{

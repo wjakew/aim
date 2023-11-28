@@ -14,6 +14,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
+import org.bson.Document;
 
 /**
  * Main Widget object
@@ -60,6 +61,14 @@ public class Widget {
 
         // creating empty widget as default
         createEmptyWidget();
+    }
+
+    /**
+     * Constructor
+     * @param widgetDocument
+     */
+    public Widget(Document widgetDocument){
+
     }
 
     /**
