@@ -16,15 +16,13 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.theme.lumo.Lumo;
-import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.website_ui.dialog_windows.AddElementWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.UserWindow;
 import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
 
-/**
+/**S
  * Object for showing welcome view
  */
 @PageTitle("Aim Widgets")
@@ -36,7 +34,7 @@ public class WidgetView extends VerticalLayout {
 
 
     /**
-     * Constructor
+     * Constructor for WidgetView
      */
     public WidgetView(){
         this.getElement().setAttribute("theme", Lumo.DARK);
@@ -108,8 +106,6 @@ public class WidgetView extends VerticalLayout {
 
         logout_button = new Button("Log out",VaadinIcon.EXIT.create(),this::logoutbutton_action);
         new ButtonStyler().primaryButtonStyle(logout_button,"80%","");
-
-        AimApplication.currentWidgetPanel = new WidgetPanel();
     }
 
     /**
@@ -121,7 +117,6 @@ public class WidgetView extends VerticalLayout {
             prepare_header();
             add(headerLayout);
             add(AimApplication.currentWidgetPanel.mainLayout);
-
         }
         else{
             // user not logged
