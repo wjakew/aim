@@ -42,11 +42,13 @@ public class WidgetPanel {
      */
     public WidgetPanel(AIM_WidgetPanel dwp){
         try{
+            mainLayout = new HorizontalLayout();
             widget1 = prepareWidget(dwp.widget1Content);
             widget2 = prepareWidget(dwp.widget2Content);
             widget3 = prepareWidget(dwp.widget3Content);
             widget4 = prepareWidget(dwp.widget4Content);
             AimApplication.database.log("WIDGET-PANEL-LOADER","Loaded panel data to the application!");
+            preparePanel();
         }catch(Exception ex){
             AimApplication.database.log("WIGET-PANEL-LOADER","Widget panel failed to load ("+ex.toString()+")");
         }
