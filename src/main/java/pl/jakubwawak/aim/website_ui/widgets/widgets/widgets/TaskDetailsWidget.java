@@ -47,8 +47,8 @@ public class TaskDetailsWidget extends Widget implements Serializable {
      * @param height
      * @param contentString
      */
-    public TaskDetailsWidget(int width,int height, String contentString){
-        super(width,height);
+    public TaskDetailsWidget(int width,int height, String contentString,int widgetID){
+        super(width,height,widgetID);
         super.widgetDesc = "Widget for showing task details. Insert task ID to view!";
         super.widgetName = "task-details";
         this.contentString = contentString;

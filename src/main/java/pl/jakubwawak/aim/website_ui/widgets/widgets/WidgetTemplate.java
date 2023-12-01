@@ -29,8 +29,8 @@ public class WidgetTemplate extends Widget implements Serializable {
      * @param height
      * @param contentString
      */
-    public WidgetTemplate(int width,int height, String contentString){
-        super(width,height);
+    public WidgetTemplate(int width,int height, String contentString,int widgetID){
+        super(width,height,widgetID);
         this.contentString = contentString;
         contentStringCorrect = checkContentStringCorrect();
         if ( contentStringCorrect )

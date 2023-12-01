@@ -50,13 +50,11 @@ public class WidgetPickerWindow {
 
     ArrayList<Widget> selectableWidgetCollection;
 
-    Widget widgetToChange;
 
     /**
      * Constructor
      */
-    public WidgetPickerWindow(Widget widgetToChange){
-        this.widgetToChange = widgetToChange;
+    public WidgetPickerWindow(){
         index = 0;
         main_dialog = new Dialog();
         main_layout = new VerticalLayout();
@@ -71,9 +69,9 @@ public class WidgetPickerWindow {
         selectableWidgetCollection = new ArrayList<>();
 
         // add widgets
-        selectableWidgetCollection.add(new CounterWidget(100,100,""));
-        selectableWidgetCollection.add(new CreateTaskWidget(100,100,"demo"));
-        selectableWidgetCollection.add(new TaskDetailsWidget(100,100,""));
+        selectableWidgetCollection.add(new CounterWidget(100,100,"",1));
+        selectableWidgetCollection.add(new CreateTaskWidget(100,100,"demo",2));
+        selectableWidgetCollection.add(new TaskDetailsWidget(100,100,"",3));
         // running in demo mode
 
         previous_button = new Button("", VaadinIcon.ARROW_LEFT.create(),this::setPrevious_button);
@@ -198,22 +196,21 @@ public class WidgetPickerWindow {
         Widget widget = null;
         switch(selectableWidgetCollection.get(index).widgetName){
             case "counter":{
-                widget = new CounterWidget(100,100,contentString);
+                widget = new CounterWidget(100,100,contentString,0);
                 break;
             }
             case "create-task":{
-                widget = new CreateTaskWidget(100,100,contentString);
+                widget = new CreateTaskWidget(100,100,contentString,0);
                 break;
             }
             case "task-details":{
-                widget = new TaskDetailsWidget(100,100,contentString);
+                widget = new TaskDetailsWidget(100,100,contentString,0);
                 break;
             }
         }
 
         if ( widget.contentStringCorrect){
             // widget string is correct - create widget
-            this.widgetToChange = widget;
             Notification.show("Updated widget panel!");
             AimApplication.currentWidgetPanel.reloadPanel();
             main_dialog.close();

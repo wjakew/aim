@@ -28,10 +28,13 @@ public class WidgetPanel {
     public HorizontalLayout mainLayout;
     Widget widget1,widget2,widget3,widget4;
 
+    int widgetCounter;
+
     /**
      * Constructor
      */
     public WidgetPanel(){
+        widgetCounter = 0;
         mainLayout = new HorizontalLayout();
         preparePanel();
     }
@@ -60,22 +63,23 @@ public class WidgetPanel {
      * @return Widget
      */
     Widget prepareWidget(Document widgetDocument){
+        widgetCounter++;
         if (widgetDocument == null){
-            return new Widget(100,100);
+            return new Widget(100,100,widgetCounter);
         }
         else{
             switch(widgetDocument.getString("widgetType")){
                 case "counter":
                 {
-                    return new CounterWidget(100,100,widgetDocument.getString("widgetContentString"));
+                    return new CounterWidget(100,100,widgetDocument.getString("widgetContentString"),widgetCounter);
                 }
                 case "create-task":
                 {
-                    return new CreateTaskWidget(100,100,widgetDocument.getString("widgetContentString"));
+                    return new CreateTaskWidget(100,100,widgetDocument.getString("widgetContentString"),widgetCounter);
                 }
                 case "task-details":
                 {
-                    return new TaskDetailsWidget(100,100,widgetDocument.getString("widgetContentString"));
+                    return new TaskDetailsWidget(100,100,widgetDocument.getString("widgetContentString"),widgetCounter);
                 }
             }
             return null;
@@ -86,10 +90,10 @@ public class WidgetPanel {
      * Function for preparing widgets
      */
     void prepareWidgets(){
-        widget1 = new Widget(100,100);
-        widget2 = new Widget(100,100);
-        widget3 = new Widget(100,100);
-        widget4 = new Widget(100,100);
+        widget1 = new Widget(100,100,1);
+        widget2 = new Widget(100,100,2);
+        widget3 = new Widget(100,100,3);
+        widget4 = new Widget(100,100,4);
     }
 
     /**

@@ -36,8 +36,8 @@ public class CounterWidget extends Widget implements Serializable {
      * @param height
      * @param contentString
      */
-    public CounterWidget(int width,int height, String contentString){
-        super(width,height);
+    public CounterWidget(int width,int height, String contentString,int widgetID){
+        super(width,height,widgetID);
         super.widgetDesc = "Widget for showing number of tasks, options: task-done, task-new, task-inprogress"; // widget desc for widget picker window
         super.widgetName = "counter";
         this.contentString = contentString;

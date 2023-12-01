@@ -39,12 +39,15 @@ public class Widget {
 
     public String widgetName = "";       // widget name for widget creation
 
+    public int widgetID;
+
     /**
      * Constructor
      * @param width
      * @param height
      */
-    public Widget(int width,int height){
+    public Widget(int width,int height,int widgetID){
+        this.widgetID = widgetID;
         this.width = width;
         this.height = height;
         widget = new VerticalLayout();
@@ -104,7 +107,7 @@ public class Widget {
 
     // button actions
     private void addToWidgetbutton_action(ClickEvent ex){
-        WidgetPickerWindow wpw = new WidgetPickerWindow(this);
+        WidgetPickerWindow wpw = new WidgetPickerWindow();
         widget.add(wpw.main_dialog);
         wpw.main_dialog.open();
     }
