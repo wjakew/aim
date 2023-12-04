@@ -46,6 +46,7 @@ public class CreateTaskWidget extends Widget implements Serializable {
         contentStringCorrect = checkContentStringCorrect();
         if ( contentString.equals("demo") ){
             prepareDemo();
+            AimApplication.database.log("WIDGET","Prepared demo!");
         }
         else{
             if ( contentStringCorrect )

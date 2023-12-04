@@ -100,7 +100,6 @@ public class WidgetPanel {
      * Function for preparing panel
      */
     void preparePanel(){
-        prepareWidgets();
         mainLayout.setSizeFull();
         mainLayout.setVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
         mainLayout.setAlignItems(FlexComponent.Alignment.CENTER);

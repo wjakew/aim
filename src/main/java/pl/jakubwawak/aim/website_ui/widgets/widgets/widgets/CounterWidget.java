@@ -44,6 +44,7 @@ public class CounterWidget extends Widget implements Serializable {
         contentStringCorrect = checkContentStringCorrect();
         if (contentString.isEmpty()){
             prepareDemo();
+            AimApplication.database.log("WIDGET","Prepared demo!");
         }
         else{
             if (contentStringCorrect)

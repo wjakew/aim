@@ -54,6 +54,7 @@ public class TaskDetailsWidget extends Widget implements Serializable {
         this.contentString = contentString;
         contentStringCorrect = checkContentStringCorrect();
         if ( contentString.isEmpty() ){
+            AimApplication.database.log("WIDGET","Prepared demo!");
             prepareDemo();
         }
         else{

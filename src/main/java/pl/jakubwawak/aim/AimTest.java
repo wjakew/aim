@@ -10,6 +10,7 @@ import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_board.CurrentBoardComposer;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task.TaskColumnLayout;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.*;
+import pl.jakubwawak.aim.website_ui.widgets.WidgetPanel;
 import pl.jakubwawak.maintanance.Password_Validator;
 
 import java.util.ArrayList;
@@ -38,16 +39,14 @@ public class AimTest {
             if ( AimApplication.database.connected ){
                 // run tests here
                 Database_AIMUser dau = new Database_AIMUser(AimApplication.database);
+                Database_AIMWidgetPanel dawp = new Database_AIMWidgetPanel(AimApplication.database);
                 Password_Validator pv = new Password_Validator("Vigor2710Vn");
                 dau.loginAIMUser("kubawawak@gmail.com",pv.hash());
 
                 AimApplication.globalConfiguration = AimApplication.database.getGlobalConfiguration();
-
+                AimApplication.currentWidgetPanel = new WidgetPanel(dawp.getPanelData());
                 // test data here
-                Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
-                ArrayList<AIM_Task> taskCollection = dat.getTaskCollection();
-                String share  = dat.shareTask(taskCollection.get(0));
-                System.out.println(share);
+                System.out.println("Test ended!");
             }
         }catch(Exception ex){ex.printStackTrace();}
         // closing application

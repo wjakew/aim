@@ -10,7 +10,9 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertOneResult;
+import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_WidgetPanel;
 
@@ -55,28 +57,47 @@ public class Database_AIMWidgetPanel {
 
     /**
      * Function for updating panel data
-     * @param panelData
+     * @param widgetName
+     * @param widgetID
      * @return Integer
      */
-    public int updatePanelData(AIM_WidgetPanel panelData){
+    public int updatePanelData(String widgetName, String contentString, int widgetID){
         try{
             MongoCollection panelCollection = database.get_data_collection("aim_widgetpanel");
-            DeleteResult result = panelCollection.deleteOne(new Document("aim_user_id",AimApplication.loggedUser.aim_user_id));
-            if (result.wasAcknowledged()){
-                int ans = insertPanelData(panelData);
-                if ( ans == 1){
-                    database.log("DB-WIDGET-UPDATE","Updated widget panel data!");
-                    return 1;
-                }
-                else{
-                    database.log("DB-WIDGET-UPDATE-FAILED","Failed to insert new panel data. Check log!");
+            FindIterable<Document> panelDocuments = panelCollection.find();
+            for(Document panelDocument : panelDocuments){
+                if ( panelDocument.getObjectId("aim_user_id").equals(AimApplication.loggedUser.aim_user_id)){
+                    // user correct
+                    // panelDocument has data to change
+
+                    /*
+                     * widgetContent document
+                     * widgetType: x
+                     * widgetContentString: x
+                     */
+                    Bson update = null;
+                    Document updateDocument =new Document();
+                    updateDocument.append("widgetType",widgetName);
+                    updateDocument.append("widgetContentString",contentString);
+
+                    String documentName = "widget"+widgetID+"Content";
+
+                    update = Updates.combine(Updates.set(documentName,updateDocument));
+
+                    UpdateResult updateResult = panelCollection.updateOne(panelDocument,update);
+
+                    if ( updateResult.wasAcknowledged() ){
+                        database.log("DB-WIDGET-PANEL-UPDATE","Updated widget panel for user ID("+AimApplication.loggedUser.aim_user_id.toString()+")");
+                        return 1;
+                    }
+                    database.log("DB-WIDGET-PANEL-UPDATE","Nothing to update! No changes! Check log");
                     return 0;
                 }
             }
-            database.log("DB-WIDGET-UPDATE","Nothing to update, check widget panel changes!");
+            database.log("DB-WIDGET-PANEL-UPDATE","Cannot find panel collection for ID ("+AimApplication.loggedUser.aim_user_id.toString()+')');
             return 0;
         }catch(Exception ex){
-            database.log("DB-WIDGET-UPDATE-FAILED","Failed to update widget panel data ("+ex.toString()+")");
+            database.log("DB-WIDGET-PANEL-UPDATE-FAILED","Failed to update widget panel ("+ex.toString()+")");
             return -1;
         }
     }

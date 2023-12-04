@@ -65,15 +65,6 @@ public class Widget {
         // creating empty widget as default
         createEmptyWidget();
     }
-
-    /**
-     * Constructor
-     * @param widgetDocument
-     */
-    public Widget(Document widgetDocument){
-
-    }
-
     /**
      * Function for clearing widget data
      */
@@ -100,14 +91,14 @@ public class Widget {
      * Function for creating empty widget
      */
     void createEmptyWidget(){
-        addToWidget_button = new Button("", VaadinIcon.PLUS.create(),this::addToWidgetbutton_action);
+        addToWidget_button = new Button("", VaadinIcon.EXCHANGE.create(),this::addToWidgetbutton_action);
         addToWidget_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
         widget.add(addToWidget_button);
     }
 
     // button actions
     private void addToWidgetbutton_action(ClickEvent ex){
-        WidgetPickerWindow wpw = new WidgetPickerWindow();
+        WidgetPickerWindow wpw = new WidgetPickerWindow(widgetID);
         widget.add(wpw.main_dialog);
         wpw.main_dialog.open();
     }

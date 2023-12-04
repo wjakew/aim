@@ -6,6 +6,7 @@
 package pl.jakubwawak.aim.website_ui.widgets.widgets;
 
 import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -19,9 +20,12 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import lombok.extern.java.Log;
 import pl.jakubwawak.aim.AimApplication;
+import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMWidgetPanel;
+import pl.jakubwawak.aim.website_ui.widgets.WidgetPanel;
 import pl.jakubwawak.aim.website_ui.widgets.widgets.widgets.CounterWidget;
 import pl.jakubwawak.aim.website_ui.widgets.widgets.widgets.CreateTaskWidget;
 import pl.jakubwawak.aim.website_ui.widgets.widgets.widgets.TaskDetailsWidget;
+import pl.jakubwawak.aim.website_ui.widgets.widgets.widgets.TerminalWidget;
 
 import java.util.ArrayList;
 
@@ -49,12 +53,14 @@ public class WidgetPickerWindow {
     int index;
 
     ArrayList<Widget> selectableWidgetCollection;
+    int widgetID;
 
 
     /**
      * Constructor
      */
-    public WidgetPickerWindow(){
+    public WidgetPickerWindow(int widgetID){
+        this.widgetID = widgetID;
         index = 0;
         main_dialog = new Dialog();
         main_layout = new VerticalLayout();
@@ -72,6 +78,7 @@ public class WidgetPickerWindow {
         selectableWidgetCollection.add(new CounterWidget(100,100,"",1));
         selectableWidgetCollection.add(new CreateTaskWidget(100,100,"demo",2));
         selectableWidgetCollection.add(new TaskDetailsWidget(100,100,"",3));
+        selectableWidgetCollection.add(new TerminalWidget(100,100,"",4));
         // running in demo mode
 
         previous_button = new Button("", VaadinIcon.ARROW_LEFT.create(),this::setPrevious_button);
@@ -193,30 +200,17 @@ public class WidgetPickerWindow {
      */
     private void setSelect_button(ClickEvent ex){
         String contentString = configurationstring_field.getValue();
-        Widget widget = null;
-        switch(selectableWidgetCollection.get(index).widgetName){
-            case "counter":{
-                widget = new CounterWidget(100,100,contentString,0);
-                break;
-            }
-            case "create-task":{
-                widget = new CreateTaskWidget(100,100,contentString,0);
-                break;
-            }
-            case "task-details":{
-                widget = new TaskDetailsWidget(100,100,contentString,0);
-                break;
-            }
-        }
-
-        if ( widget.contentStringCorrect){
-            // widget string is correct - create widget
-            Notification.show("Updated widget panel!");
-            AimApplication.currentWidgetPanel.reloadPanel();
-            main_dialog.close();
+        String widgetName = selectableWidgetCollection.get(index).widgetName;
+        // got ID Name and contentString
+        Database_AIMWidgetPanel dawp = new Database_AIMWidgetPanel(AimApplication.database);
+        int ans = dawp.updatePanelData(widgetName,contentString,widgetID);
+        if ( ans == 1 ){
+            AimApplication.currentWidgetPanel = new WidgetPanel(dawp.getPanelData());
+            UI.getCurrent().getPage().reload();
+            Notification.show("Added new widget!");
         }
         else{
-            Notification.show("Wrong content string! Check value!");
+            Notification.show("Failed to update panel data, check application log!");
         }
     }
 }
