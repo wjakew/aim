@@ -5,17 +5,17 @@
  */
 package pl.jakubwawak.aim.website_ui.widgets.widgets.widgets;
 
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextArea;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.textfield.TextField;
 import pl.jakubwawak.aim.AimApplication;
+import pl.jakubwawak.aim.aim_dataengine.aim_terminal_engine.AIMInputParser;
 import pl.jakubwawak.aim.website_ui.widgets.widgets.Widget;
-
 import java.io.Serializable;
 
 /**
@@ -27,9 +27,11 @@ public class TerminalWidget extends Widget implements Serializable {
 
     boolean contentStringCorrect; // flag for checking if string is correct
 
-    TextArea terminalArea;
+    TextField terminalArea;
 
     Button createrequest_button;
+
+    AIMInputParser aip;
 
     /**
      * Constructor
@@ -43,10 +45,16 @@ public class TerminalWidget extends Widget implements Serializable {
         super.widgetName = "terminal";
         super.widgetDesc = "Terminal window for using AIM Terminal in the Widget. Type terminal to create!";
         contentStringCorrect = checkContentStringCorrect();
-        if ( contentStringCorrect )
-            prepareWidget();
-        else
-            AimApplication.database.log("WIDGET","Widget empty! Wrong contentString");
+        if (contentString.isEmpty()){
+            prepareDemo();
+            AimApplication.database.log("WIDGET","Prepared demo!");
+        }
+        else{
+            if (contentStringCorrect)
+                prepareWidget();
+            else
+                AimApplication.database.log("WIDGET","Widget empty! Wrong contentString");
+        }
     }
 
     /**
@@ -72,10 +80,10 @@ public class TerminalWidget extends Widget implements Serializable {
      */
     void prepareContent(){
         // prepare content layout
-        terminalArea = new TextArea("Your Command Line");
+        terminalArea = new TextField("Your Command Line");
         terminalArea.setWidth("100%");
-
-        createrequest_button = new Button("Create Request", VaadinIcon.ARROW_RIGHT.create());
+        aip = new AIMInputParser(widget);
+        createrequest_button = new Button("Create Request", VaadinIcon.ARROW_RIGHT.create(),this::setCreaterequest_button);
         createrequest_button.setWidth("100%");
         createrequest_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
 
@@ -97,6 +105,7 @@ public class TerminalWidget extends Widget implements Serializable {
      */
     public void prepareDemo(){
         // prepare demo content
+        prepareContent();
         super.widget.removeAll();
         addComponent(new H6("AIM TERMINAL"));
         addComponent(terminalArea);
@@ -104,5 +113,22 @@ public class TerminalWidget extends Widget implements Serializable {
 
         terminalArea.setEnabled(false);
         createrequest_button.setEnabled(false);
+    }
+
+    /**
+     * createrequest_button action
+     * @param ex
+     */
+    private void setCreaterequest_button(ClickEvent ex){
+        String command = terminalArea.getValue();
+        if ( !command.isEmpty() ){
+            aip.setUserInput(command);
+            aip.parse();
+            if ( aip.successParsingFlag == 1)
+                terminalArea.setValue("");
+        }
+        else{
+            Notification.show("Terminal field is empty!");
+        }
     }
 }

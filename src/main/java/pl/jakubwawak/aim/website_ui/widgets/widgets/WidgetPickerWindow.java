@@ -22,10 +22,7 @@ import lombok.extern.java.Log;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMWidgetPanel;
 import pl.jakubwawak.aim.website_ui.widgets.WidgetPanel;
-import pl.jakubwawak.aim.website_ui.widgets.widgets.widgets.CounterWidget;
-import pl.jakubwawak.aim.website_ui.widgets.widgets.widgets.CreateTaskWidget;
-import pl.jakubwawak.aim.website_ui.widgets.widgets.widgets.TaskDetailsWidget;
-import pl.jakubwawak.aim.website_ui.widgets.widgets.widgets.TerminalWidget;
+import pl.jakubwawak.aim.website_ui.widgets.widgets.widgets.*;
 
 import java.util.ArrayList;
 
@@ -79,6 +76,9 @@ public class WidgetPickerWindow {
         selectableWidgetCollection.add(new CreateTaskWidget(100,100,"demo",2));
         selectableWidgetCollection.add(new TaskDetailsWidget(100,100,"",3));
         selectableWidgetCollection.add(new TerminalWidget(100,100,"",4));
+        selectableWidgetCollection.add(new TaskListWidget(100,100,"",4));
+        selectableWidgetCollection.add(new ProjectsWidget(100,100,"",4));
+
         // running in demo mode
 
         previous_button = new Button("", VaadinIcon.ARROW_LEFT.create(),this::setPrevious_button);

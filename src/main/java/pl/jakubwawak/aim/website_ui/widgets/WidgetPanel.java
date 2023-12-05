@@ -14,9 +14,7 @@ import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_Task;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_WidgetPanel;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
 import pl.jakubwawak.aim.website_ui.widgets.widgets.Widget;
-import pl.jakubwawak.aim.website_ui.widgets.widgets.widgets.CounterWidget;
-import pl.jakubwawak.aim.website_ui.widgets.widgets.widgets.CreateTaskWidget;
-import pl.jakubwawak.aim.website_ui.widgets.widgets.widgets.TaskDetailsWidget;
+import pl.jakubwawak.aim.website_ui.widgets.widgets.widgets.*;
 
 import java.util.ArrayList;
 
@@ -80,6 +78,18 @@ public class WidgetPanel {
                 case "task-details":
                 {
                     return new TaskDetailsWidget(100,100,widgetDocument.getString("widgetContentString"),widgetCounter);
+                }
+                case "terminal":
+                {
+                    return new TerminalWidget(100,100,widgetDocument.getString("widgetContentString"),widgetCounter);
+                }
+                case "task-list":
+                {
+                    return new TaskListWidget(100,100,widgetDocument.getString("widgetContentString"),widgetCounter);
+                }
+                case "projects-list":
+                {
+                    return new ProjectsWidget(100,100,widgetDocument.getString("widgetContentString"),widgetCounter);
                 }
             }
             return null;

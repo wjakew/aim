@@ -3,25 +3,30 @@
  * all rights reserved
  * kubawawak@gmail.com
  */
-package pl.jakubwawak.aim.website_ui.widgets.widgets;
+package pl.jakubwawak.aim.website_ui.widgets.widgets.widgets;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.H6;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import pl.jakubwawak.aim.AimApplication;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_projects.CurrentProjectComposer;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_projects.ProjectHorizontalColumnLayout;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_projects.ProjectVerticalColumnLayout;
+import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMProject;
+import pl.jakubwawak.aim.website_ui.widgets.widgets.Widget;
 
 import java.io.Serializable;
 
 /**
  * Widget for
  */
-public class WidgetTemplate extends Widget implements Serializable {
+public class ProjectsWidget extends Widget implements Serializable {
 
     String contentString;
 
-    String widgetDesc = ""; // widget desc for widget picker window
     boolean contentStringCorrect; // flag for checking if string is correct
+
+    ProjectVerticalColumnLayout pvcl;
+
 
     /**
      * Constructor
@@ -29,8 +34,10 @@ public class WidgetTemplate extends Widget implements Serializable {
      * @param height
      * @param contentString
      */
-    public WidgetTemplate(int width,int height, String contentString,int widgetID){
+    public ProjectsWidget(int width,int height, String contentString,int widgetID){
         super(width,height,widgetID);
+        super.widgetName = "projects-list";
+        super.widgetDesc = "Widget for presenting current projects, type projects to add!";
         this.contentString = contentString;
         contentStringCorrect = checkContentStringCorrect();
         if (contentString.isEmpty()){
@@ -68,6 +75,9 @@ public class WidgetTemplate extends Widget implements Serializable {
      */
     void prepareContent(){
         // prepare content layout
+        Database_AIMProject dat = new Database_AIMProject(AimApplication.database);
+        pvcl = new ProjectVerticalColumnLayout(dat.getUserProjects(),widget);
+
     }
 
     /**
@@ -76,6 +86,7 @@ public class WidgetTemplate extends Widget implements Serializable {
     void prepareWidget(){
         prepareContent();
         super.reloadBackground();
+        addComponent(pvcl.projectVerticalLayout);
     }
 
     /**
@@ -85,6 +96,6 @@ public class WidgetTemplate extends Widget implements Serializable {
         // prepare demo content
         prepareContent();
         super.widget.removeAll();
-        addComponent(new H6("DEMO"));
+        addComponent(new H6("VIEW YOUR LATEST PROJECTS"));
     }
 }

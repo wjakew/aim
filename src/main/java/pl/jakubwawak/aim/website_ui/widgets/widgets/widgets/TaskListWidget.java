@@ -3,25 +3,29 @@
  * all rights reserved
  * kubawawak@gmail.com
  */
-package pl.jakubwawak.aim.website_ui.widgets.widgets;
+package pl.jakubwawak.aim.website_ui.widgets.widgets.widgets;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import pl.jakubwawak.aim.AimApplication;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task.TaskColumnLayout;
+import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
+import pl.jakubwawak.aim.website_ui.widgets.widgets.Widget;
 
 import java.io.Serializable;
 
 /**
  * Widget for
  */
-public class WidgetTemplate extends Widget implements Serializable {
+public class TaskListWidget extends Widget implements Serializable {
 
     String contentString;
 
-    String widgetDesc = ""; // widget desc for widget picker window
     boolean contentStringCorrect; // flag for checking if string is correct
+
+    TaskColumnLayout tcl;
 
     /**
      * Constructor
@@ -29,8 +33,10 @@ public class WidgetTemplate extends Widget implements Serializable {
      * @param height
      * @param contentString
      */
-    public WidgetTemplate(int width,int height, String contentString,int widgetID){
+    public TaskListWidget(int width,int height, String contentString,int widgetID){
         super(width,height,widgetID);
+        super.widgetName = "task-list";
+        super.widgetDesc = "Widget for showing list of tasks, options: task-new, task-inprogress, task-done!";
         this.contentString = contentString;
         contentStringCorrect = checkContentStringCorrect();
         if (contentString.isEmpty()){
@@ -68,6 +74,24 @@ public class WidgetTemplate extends Widget implements Serializable {
      */
     void prepareContent(){
         // prepare content layout
+        Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
+        switch(contentString){
+            case "task-new":
+            {
+                tcl = new TaskColumnLayout(dat.getNewTaskCollection(),"black","NEW TASKS",null,"","");
+                break;
+            }
+            case "task-inprogress":
+            {
+                tcl = new TaskColumnLayout(dat.getInProgressTaskCollection(),"black","IN PROGRESS",null,"","");
+                break;
+            }
+            case "task-done":
+            {
+                tcl = new TaskColumnLayout(dat.getDoneTaskCollection(),"black","DONE",null,"","");
+                break;
+            }
+        }
     }
 
     /**
@@ -76,6 +100,8 @@ public class WidgetTemplate extends Widget implements Serializable {
     void prepareWidget(){
         prepareContent();
         super.reloadBackground();
+        tcl.columnLayout.setSizeFull();
+        addComponent(tcl.columnLayout);
     }
 
     /**
@@ -85,6 +111,6 @@ public class WidgetTemplate extends Widget implements Serializable {
         // prepare demo content
         prepareContent();
         super.widget.removeAll();
-        addComponent(new H6("DEMO"));
+        addComponent(new H6("TASK LIST WIDGET"));
     }
 }
