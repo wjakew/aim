@@ -9,8 +9,10 @@
 
 ### Roadmap
 
+- Application log viewer - IN FUTURE
+- Notes widget - IN FUTURE
+- Quick floating window widget - IN FUTURE
 - Coding projects and task support - IN FUTURE
-- Widgets and fully customizable page - IN FUTURE
 
 ![screenshot1](https://github.com/wjakew/aim/blob/master/readme_resources/aim_screenshot1.png)
 
@@ -36,8 +38,18 @@ Coming soon!
 8. Ready for full API support for task automation.
 9. UI Customization.
 10. Sharing objects and public viewer.
-11. New page/view with full customization - new widgets! - COMING SOON. 
+11. Page/View with full customization - new widgets!. 
 12. Coding projects and task support - new category of object - COMING SOON.
+
+### Prototype boards
+
+Whole UI.
+
+![screenshot11](https://github.com/wjakew/aim/blob/master/readme_resources/aim_screenshot11.png)
+
+Widgets
+
+![screenshot12](https://github.com/wjakew/aim/blob/master/readme_resources/aim_screenshot12.png)
 
 ### UI Screenshots
 

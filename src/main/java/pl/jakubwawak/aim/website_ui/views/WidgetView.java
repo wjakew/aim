@@ -3,12 +3,17 @@
  * all rights reserved
  * kubawawak@gmail.com
  */
-package pl.jakubwawak.aim.website_ui.widgets;
+package pl.jakubwawak.aim.website_ui.views;
 
 import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.contextmenu.MenuItem;
+import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.menubar.MenuBar;
+import com.vaadin.flow.component.menubar.MenuBarVariant;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
@@ -21,6 +26,8 @@ import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.website_ui.dialog_windows.AddElementWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.UserWindow;
 import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
+
+import java.util.Date;
 
 /**S
  * Object for showing welcome view
@@ -44,8 +51,10 @@ public class WidgetView extends VerticalLayout {
         setJustifyContentMode(JustifyContentMode.CENTER);
         setDefaultHorizontalComponentAlignment(Alignment.CENTER);
         getStyle().set("text-align", "center");
-        if ( AimApplication.loggedUser.aim_user_configuration2.equals("blank") ){
-            getStyle().set("background-image","radial-gradient(white,gray)");
+        if ( AimApplication.loggedUser!=null){
+            if ( AimApplication.loggedUser.aim_user_configuration2.equals("blank") ){
+                getStyle().set("background-image","radial-gradient(white,gray)");
+            }
         }
         else{
             getStyle().set("background-image","radial-gradient("+AimApplication.loggedUser.aim_user_configuration2+")");
@@ -57,19 +66,91 @@ public class WidgetView extends VerticalLayout {
      * Function for preparing header objects
      */
     void prepare_header(){
+        // prepare menu
+
+        MenuBar headerMenuBar= new MenuBar();
+        headerMenuBar.addThemeVariants(MenuBarVariant.LUMO_CONTRAST,MenuBarVariant.LUMO_PRIMARY);
+
+        MenuItem aimItem = headerMenuBar.addItem("Aim");
+        SubMenu subItems = aimItem.getSubMenu();
+
+        MenuItem subItems1 = subItems.addItem(new HorizontalLayout(VaadinIcon.DASHBOARD.create(),new H6("Dashboard")));
+        subItems1.setCheckable(false);
+        subItems1.setChecked(false);
+
+        MenuItem subItems2 = subItems.addItem(new HorizontalLayout(VaadinIcon.TERMINAL.create(),new H6("Terminal")));
+        subItems2.setCheckable(false);
+        subItems2.setChecked(false);
+
+        MenuItem subItems3 = subItems.addItem(new HorizontalLayout(VaadinIcon.PLUS.create(),new H6("Add Element")));
+        subItems3.setCheckable(false);
+        subItems3.setChecked(false);
+
+        MenuItem subItems4 = subItems.addItem(new HorizontalLayout(VaadinIcon.USER.create(),new H6("Your Account")));
+        subItems4.setCheckable(false);
+        subItems4.setChecked(false);
+
+        MenuItem subItems5 = subItems.addItem(new HorizontalLayout(VaadinIcon.USER.create(),new H6("My Space")));
+        subItems5.setCheckable(false);
+        subItems5.setChecked(false);
+
+        MenuItem subItems6 = subItems.addItem(new HorizontalLayout(VaadinIcon.USER.create(),new H6("Glance")));
+        subItems6.setCheckable(false);
+        subItems6.setChecked(false);
+
+        ComponentEventListener<ClickEvent<MenuItem>> listener = event -> {
+            MenuItem selectedItem = event.getSource();
+            if ( selectedItem.equals(subItems1)){
+                System.out.println("Dashboard");
+                getUI().ifPresent(ui -> ui.navigate("/dashboard"));
+            }
+            else if ( selectedItem.equals(subItems2)){
+                System.out.println("Terminal");
+                getUI().ifPresent(ui -> ui.navigate("/terminal"));
+            }
+            else if ( selectedItem.equals(subItems3)){
+                System.out.println("Add Element");
+                AddElementWindow aew = new AddElementWindow();
+                add(aew.main_dialog);
+                aew.main_dialog.open();
+            }
+            else if ( selectedItem.equals(subItems4)){
+                System.out.println("Your Account");
+                UserWindow uw = new UserWindow();
+                add(uw.main_dialog);
+                uw.main_dialog.open();
+            }
+            else if ( selectedItem.equals(subItems5)){
+                System.out.println("My Space");
+                getUI().ifPresent(ui -> ui.navigate("/widgets"));
+            }
+            else if ( selectedItem.equals(subItems6)){
+                System.out.println("Glance");
+                getUI().ifPresent(ui -> ui.navigate("/home"));
+            }
+        };
+
+        subItems1.addClickListener(listener);
+        subItems2.addClickListener(listener);
+        subItems3.addClickListener(listener);
+        subItems4.addClickListener(listener);
+        subItems5.addClickListener(listener);
+        subItems6.addClickListener(listener);
+
         // prepare window layout and components
         FlexLayout center_layout = new FlexLayout();
         center_layout.setSizeFull();
         center_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         center_layout.setAlignItems(FlexComponent.Alignment.CENTER);
-        center_layout.add(new H6("AIM"));
+        center_layout.add(new H6(new Date().toString()));
+
 
         FlexLayout left_layout = new FlexLayout();
         left_layout.setSizeFull();
-        left_layout.setJustifyContentMode(JustifyContentMode.END);
-        left_layout.setAlignItems(FlexComponent.Alignment.START);
+        left_layout.setJustifyContentMode(JustifyContentMode.CENTER);
+        left_layout.setAlignItems(Alignment.CENTER);
         left_layout.setWidth("80%");
-        left_layout.add(home_button,terminal_button,user_button,addelement_button);
+        left_layout.add(headerMenuBar);
 
         FlexLayout right_layout = new FlexLayout();
         right_layout.setSizeFull();
@@ -87,6 +168,7 @@ public class WidgetView extends VerticalLayout {
 
         headerLayout.setMargin(true);
         headerLayout.setAlignItems(Alignment.CENTER);
+        headerLayout.setVerticalComponentAlignment(Alignment.CENTER);
     }
 
     /**
@@ -142,7 +224,7 @@ public class WidgetView extends VerticalLayout {
      * @param ex
      */
     private void logoutbutton_action(ClickEvent ex){
-        home_button.getUI().ifPresent(ui ->
+        logout_button.getUI().ifPresent(ui ->
                 ui.navigate("/"));
         Notification.show("User ("+AimApplication.loggedUser.aim_user_email+") logged out!");
         AimApplication.database.log("DB-AIMUSER-LOGOUT","User logged out from the app ("+AimApplication.loggedUser.aim_user_email+")");
