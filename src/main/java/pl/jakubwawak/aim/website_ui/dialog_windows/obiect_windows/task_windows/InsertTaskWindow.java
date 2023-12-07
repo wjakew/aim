@@ -72,6 +72,7 @@ public class InsertTaskWindow {
      */
     public InsertTaskWindow(AIM_Task taskToUpdate, AIM_Project projectToInsert){
         main_dialog = new Dialog();
+        main_dialog.setDraggable(true);
         this.taskToUpdate = taskToUpdate;
         this.projectToInsert = projectToInsert;
         main_layout = new VerticalLayout();

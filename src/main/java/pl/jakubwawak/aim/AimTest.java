@@ -5,6 +5,7 @@
  */
 package pl.jakubwawak.aim;
 
+import org.bson.Document;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.*;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_board.AIM_BoardTaskListLayout;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_board.CurrentBoardComposer;
@@ -44,8 +45,11 @@ public class AimTest {
                 dau.loginAIMUser("kubawawak@gmail.com",pv.hash());
 
                 AimApplication.globalConfiguration = AimApplication.database.getGlobalConfiguration();
+                AIM_WidgetPanel aimWidgetPanel = dawp.getPanelData();
                 AimApplication.currentWidgetPanel = new WidgetPanel(dawp.getPanelData());
                 // test data here
+
+                // end of tests
                 System.out.println("Test ended!");
             }
         }catch(Exception ex){ex.printStackTrace();}

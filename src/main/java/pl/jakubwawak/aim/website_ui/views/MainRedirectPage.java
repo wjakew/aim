@@ -142,7 +142,7 @@ public class MainRedirectPage extends VerticalLayout {
         subItems5.setCheckable(false);
         subItems5.setChecked(false);
 
-        MenuItem subItems6 = subItems.addItem(new HorizontalLayout(VaadinIcon.USER.create(),new H6("Glance")));
+        MenuItem subItems6 = subItems.addItem(new HorizontalLayout(VaadinIcon.BOMB.create(),new H6("Glance")));
         subItems6.setCheckable(false);
         subItems6.setChecked(false);
 

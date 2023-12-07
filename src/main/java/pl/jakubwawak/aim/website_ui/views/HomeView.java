@@ -25,12 +25,14 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.Lumo;
+import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_board.CurrentBoardComposer;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_projects.CurrentProjectComposer;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_task.CurrentTaskComposer;
 import pl.jakubwawak.aim.aim_dataengine.aim_terminal_engine.AIMInputParser;
 import pl.jakubwawak.aim.website_ui.dialog_windows.AddElementWindow;
+import pl.jakubwawak.aim.website_ui.dialog_windows.FloatingWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.UserWindow;
 import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
 
@@ -49,6 +51,8 @@ public class HomeView extends VerticalLayout {
     Button taskview_button, projectview_button, boardview_button,terminal_button;
 
     TextField terminal_field;
+
+    Button floatingwindow_button;
 
 
 
@@ -105,7 +109,7 @@ public class HomeView extends VerticalLayout {
         subItems5.setCheckable(false);
         subItems5.setChecked(false);
 
-        MenuItem subItems6 = subItems.addItem(new HorizontalLayout(VaadinIcon.USER.create(),new H6("Glance")));
+        MenuItem subItems6 = subItems.addItem(new HorizontalLayout(VaadinIcon.BOMB.create(),new H6("Glance")));
         subItems6.setCheckable(false);
         subItems6.setChecked(false);
 
@@ -148,6 +152,12 @@ public class HomeView extends VerticalLayout {
         subItems5.addClickListener(listener);
         subItems6.addClickListener(listener);
 
+
+        // prepare floating window button
+        floatingwindow_button = new Button("",VaadinIcon.ADJUST.create(),this::floatingbutton_action);
+        floatingwindow_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+
+
         // prepare window layout and components
         FlexLayout center_layout = new FlexLayout();
         center_layout.setSizeFull();
@@ -161,7 +171,7 @@ public class HomeView extends VerticalLayout {
         left_layout.setJustifyContentMode(JustifyContentMode.CENTER);
         left_layout.setAlignItems(Alignment.CENTER);
         left_layout.setWidth("80%");
-        left_layout.add(headerMenuBar);
+        left_layout.add(headerMenuBar,floatingwindow_button);
 
         FlexLayout right_layout = new FlexLayout();
         right_layout.setSizeFull();
@@ -304,6 +314,12 @@ public class HomeView extends VerticalLayout {
         loadMainPageComponent(2);
     }
 
+    private void floatingbutton_action(ClickEvent ex){
+        FloatingWindow fw = new FloatingWindow();
+        add(fw.main_dialog);
+        fw.main_dialog.open();
+    }
+
     /**
      * home_button action
      * @param ex
@@ -318,7 +334,7 @@ public class HomeView extends VerticalLayout {
      * @param ex
      */
     private void logoutbutton_action(ClickEvent ex){
-        home_button.getUI().ifPresent(ui ->
+        logout_button.getUI().ifPresent(ui ->
                 ui.navigate("/"));
         Notification.show("User ("+AimApplication.loggedUser.aim_user_email+") logged out!");
         AimApplication.database.log("DB-AIMUSER-LOGOUT","User logged out from the app ("+AimApplication.loggedUser.aim_user_email+")");

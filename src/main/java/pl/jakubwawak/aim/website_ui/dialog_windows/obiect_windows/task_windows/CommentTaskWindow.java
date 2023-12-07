@@ -42,6 +42,7 @@ public class CommentTaskWindow {
     public CommentTaskWindow(DetailsTaskWindow dtw){
         this.dtw = dtw;
         main_dialog = new Dialog();
+        main_dialog.setDraggable(true);
         main_layout = new VerticalLayout();
         prepare_dialog();
     }

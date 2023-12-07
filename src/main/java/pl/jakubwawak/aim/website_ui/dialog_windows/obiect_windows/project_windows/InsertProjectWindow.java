@@ -47,6 +47,7 @@ public class InsertProjectWindow {
     public InsertProjectWindow(AIM_Project projectToUpdate){
         this.projectToUpdate = projectToUpdate;
         main_dialog = new Dialog();
+        main_dialog.setDraggable(true);
         main_layout = new VerticalLayout();
         prepare_dialog();
     }

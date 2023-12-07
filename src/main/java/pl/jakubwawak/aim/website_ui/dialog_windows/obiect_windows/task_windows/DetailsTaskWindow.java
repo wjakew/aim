@@ -80,6 +80,7 @@ public class DetailsTaskWindow {
     public DetailsTaskWindow(AIM_Task taskObject){
         this.taskObject = taskObject;
         main_dialog = new Dialog();
+        main_dialog.setDraggable(true);
         main_layout = new VerticalLayout();
         assignedUser = null;
         projectWithTask = null;

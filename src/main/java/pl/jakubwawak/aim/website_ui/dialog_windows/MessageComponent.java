@@ -30,6 +30,7 @@ public class MessageComponent {
      */
     public MessageComponent(String message){
         main_dialog = new Dialog();
+        main_dialog.setDraggable(true);
         main_layout = new VerticalLayout();
         ok_button = new Button("Ok", VaadinIcon.CHECK.create(),this::closewindow_action);
         message_label = new Text(message);

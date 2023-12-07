@@ -36,6 +36,7 @@ public class DetailsProjectWindow {
     public DetailsProjectWindow(AIM_Project projectToView){
         this.projectToView = projectToView;
         main_dialog = new Dialog();
+        main_dialog.setDraggable(true);
         main_layout = new VerticalLayout();
         apl = new AIM_ProjectLayout(projectToView);
         prepare_dialog();

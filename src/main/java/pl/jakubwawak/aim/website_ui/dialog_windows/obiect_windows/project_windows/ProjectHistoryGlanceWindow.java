@@ -39,6 +39,7 @@ public class ProjectHistoryGlanceWindow {
     public ProjectHistoryGlanceWindow(AIM_Project projectToShow){
         this.projectToShow = projectToShow;
         main_dialog = new Dialog();
+        main_dialog.setDraggable(true);
         main_layout = new VerticalLayout();
         prepare_dialog();
     }

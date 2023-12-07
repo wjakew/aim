@@ -37,6 +37,7 @@ public class PictureViewerWindow {
         this.imagePath = imagePath;
         this.windowTitle = windowTitle;
         main_dialog = new Dialog();
+        main_dialog.setDraggable(true);
         main_layout = new VerticalLayout();
         prepare_dialog();
     }

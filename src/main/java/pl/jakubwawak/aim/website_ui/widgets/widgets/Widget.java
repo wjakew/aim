@@ -13,6 +13,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.theme.lumo.Lumo;
 import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 import org.bson.Document;
 
@@ -51,6 +52,7 @@ public class Widget {
         this.width = width;
         this.height = height;
         widget = new VerticalLayout();
+        widget.getElement().setAttribute("theme", Lumo.DARK);
 
         widget.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         widget.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
