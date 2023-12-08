@@ -23,6 +23,7 @@ import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMProject;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
 import pl.jakubwawak.aim.website_ui.ProjectListGlanceWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.DashboardWindow;
+import pl.jakubwawak.aim.website_ui.dialog_windows.FloatingWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.PictureViewerWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.UserWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.board_windows.*;
@@ -297,7 +298,13 @@ public class AIMInputParser {
             else if (user_input.contains("-dashboard")){
                 DashboardWindow dw = new DashboardWindow();
                 secondaryLayout.add(dw.main_dialog);
-                dw.main_dialog.open();;
+                dw.main_dialog.open();
+                successParsingFlag = 1;
+            }
+            else if ( user_input.contains("-pin")){
+                FloatingWindow fw = new FloatingWindow();
+                secondaryLayout.add(fw.main_dialog);
+                fw.main_dialog.open();
                 successParsingFlag = 1;
             }
         }

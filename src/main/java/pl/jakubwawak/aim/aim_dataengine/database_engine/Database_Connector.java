@@ -6,10 +6,7 @@
 package pl.jakubwawak.aim.aim_dataengine.database_engine;
 
 import com.mongodb.*;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.*;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
 import com.vaadin.flow.component.notification.Notification;
@@ -22,6 +19,7 @@ import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_ApplicationLog;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_GlobalConfiguration;
 import pl.jakubwawak.maintanance.ConsoleColors;
+import pl.jakubwawak.maintanance.GridElement;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -207,5 +205,25 @@ public class Database_Connector {
                 insertLog(new AIM_ApplicationLog(log_category,log_text));
             }
         }
+    }
+
+    /**
+     * Function for loading log data from database
+     * @return ArrayList
+     */
+    public ArrayList<GridElement> getLog(){
+        ArrayList<GridElement> data = new ArrayList<>();
+        try{
+            MongoCollection<Document> log_collection = get_data_collection("aim_applog");
+            FindIterable<Document> log_documents = log_collection.find();
+            int logID = 0;
+            for(Document log : log_documents ){
+                data.add(new GridElement(log.getString("log_desc"),logID,log.getString("log_code")));
+                logID++;
+            }
+        }catch(Exception ex){
+            log("GET-LOG-FAILED","Failed to get log data ("+ex.toString()+")");
+        }
+        return data;
     }
 }
