@@ -10,7 +10,6 @@
 ### Roadmap
 
 - Application log viewer - IN FUTURE
-- Notes widget - IN FUTURE
 - Coding projects and task support - IN FUTURE
 
 ![screenshot1](https://github.com/wjakew/aim/blob/master/readme_resources/aim_screenshot1.png)

@@ -3,24 +3,32 @@
  * all rights reserved
  * kubawawak@gmail.com
  */
-package pl.jakubwawak.aim.website_ui.widgets.widgets;
+package pl.jakubwawak.aim.website_ui.widgets.widgets.widgets;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H6;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextArea;
 import pl.jakubwawak.aim.AimApplication;
+import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMWidgetPanel;
+import pl.jakubwawak.aim.website_ui.widgets.widgets.Widget;
 
 import java.io.Serializable;
 
 /**
  * Widget for
  */
-public class WidgetTemplate extends Widget implements Serializable {
+public class NotesWidget extends Widget implements Serializable {
 
     String contentString;
 
     boolean contentStringCorrect; // flag for checking if string is correct
+
+    TextArea notesarea;
 
     /**
      * Constructor
@@ -28,11 +36,10 @@ public class WidgetTemplate extends Widget implements Serializable {
      * @param height
      * @param contentString
      */
-    public WidgetTemplate(int width,int height, String contentString,int widgetID){
+    public NotesWidget(int width,int height, String contentString,int widgetID){
         super(width,height,widgetID);
-        // edit name and desc
-        super.widgetName = "template";
-        super.widgetDesc = "Widget template for creating widget templates";
+        super.widgetName = "notes";
+        super.widgetDesc = "Simply press enter in the note widget to save the note. Type notes to add widget!";
         this.contentString = contentString;
         contentStringCorrect = checkContentStringCorrect();
         if (contentString.isEmpty()){
@@ -70,6 +77,23 @@ public class WidgetTemplate extends Widget implements Serializable {
      */
     void prepareContent(){
         // prepare content layout
+        notesarea = new TextArea("");
+        notesarea.setSizeFull();
+        notesarea.setValue(contentString);
+
+        notesarea.addKeyPressListener(e -> {
+            if ( e.getKey().equals(Key.ENTER) ){
+                // update note value on the widget
+                Database_AIMWidgetPanel dawp = new Database_AIMWidgetPanel(AimApplication.database);
+                int ans = dawp.updateWidgetContentString("notes",notesarea.getValue(),widgetID);
+                if (ans == 1){
+                    Notification.show("Notes widget updated!");
+                }
+                else{
+                    Notification.show("Cannot update widget! Check application log!");
+                }
+            }
+        });
     }
 
     /**
@@ -78,6 +102,8 @@ public class WidgetTemplate extends Widget implements Serializable {
     void prepareWidget(){
         prepareContent();
         super.reloadBackground();
+        addComponent(new H1("Note"));
+        addComponent(notesarea);
     }
 
     /**
@@ -87,6 +113,9 @@ public class WidgetTemplate extends Widget implements Serializable {
         // prepare demo content
         prepareContent();
         super.widget.removeAll();
-        addComponent(new H6("DEMO"));
+        addComponent(new H1("Notes"));
+        addComponent(notesarea);
+        notesarea.setValue("Simply press enter in the note widget to save the note. Type notes to add widget!");
+        notesarea.setReadOnly(true);
     }
 }

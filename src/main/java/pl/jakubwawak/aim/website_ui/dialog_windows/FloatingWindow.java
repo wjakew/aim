@@ -92,6 +92,11 @@ public class FloatingWindow {
                     floatingwidget = new ProjectsWidget(100,100,widgetDocument.getString("widgetContentString"),5);
                     break;
                 }
+                case "notes":
+                {
+                    floatingwidget = new NotesWidget(100,100,widgetDocument.getString("widgetContentString"),5);
+                    break;
+                }
             }
         }
         close_button = new Button("", VaadinIcon.CLOSE.create(),this::setClose_button);

@@ -91,6 +91,10 @@ public class WidgetPanel {
                 {
                     return new ProjectsWidget(100,100,widgetDocument.getString("widgetContentString"),widgetCounter);
                 }
+                case "notes":
+                {
+                    return new NotesWidget(100,100,widgetDocument.getString("widgetContentString"),widgetCounter);
+                }
             }
             return null;
         }

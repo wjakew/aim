@@ -78,7 +78,7 @@ public class WidgetPickerWindow {
         selectableWidgetCollection.add(new TerminalWidget(100,100,"",4));
         selectableWidgetCollection.add(new TaskListWidget(100,100,"",4));
         selectableWidgetCollection.add(new ProjectsWidget(100,100,"",4));
-
+        selectableWidgetCollection.add(new NotesWidget(100,100,"",5));
         // running in demo mode
 
         previous_button = new Button("", VaadinIcon.ARROW_LEFT.create(),this::setPrevious_button);
