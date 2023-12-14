@@ -31,7 +31,14 @@ public class AIM_CodingTask {
 
     public String aim_codingtask_desc;
 
+    /*
+        document layout
+        comment_text: info
+        comment_time: time
+        comment_email: email
+     */
     public List<Document> aim_codingtask_comments;
+
 
     public List<Document> aim_codingtask_history;
 

@@ -14,6 +14,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.button.Button;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.board_windows.InsertBoardWindow;
+import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.coding_task_windows.InsertCTaskWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.project_windows.InsertProjectWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.task_windows.InsertTaskWindow;
 import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
@@ -32,7 +33,7 @@ public class AddElementWindow {
     public Dialog main_dialog;
     VerticalLayout main_layout;
 
-    Button addboard_button, addproject_button, addtask_button;
+    Button addboard_button, addproject_button, addtask_button, addctask_button;
 
     /**
      * Constructor
@@ -57,6 +58,9 @@ public class AddElementWindow {
 
         addtask_button = new Button("Add Task", VaadinIcon.PLUS.create(),this::addtaskbutton_action);
         new ButtonStyler().primaryButtonStyle(addtask_button,"200px","200px");
+
+        addctask_button = new Button("Add Coding Task", VaadinIcon.PLUS.create(),this::addctaskbutton_action);
+        new ButtonStyler().primaryButtonStyle(addctask_button,"200px","200px");
     }
 
     /**
@@ -67,7 +71,7 @@ public class AddElementWindow {
         // set layout
         main_layout.add(new H6("Element creator"));
 
-        HorizontalLayout buttonLayout = new HorizontalLayout(addtask_button,addproject_button,addboard_button);
+        HorizontalLayout buttonLayout = new HorizontalLayout(addtask_button,addproject_button,addboard_button,addctask_button);
 
         buttonLayout.setWidth("100");
         buttonLayout.setMargin(true);
@@ -95,6 +99,17 @@ public class AddElementWindow {
         InsertTaskWindow itw = new InsertTaskWindow(null);
         main_layout.add(itw.main_dialog);
         itw.main_dialog.open();
+        main_dialog.close();
+    }
+
+    /**
+     * addctask_button
+     * @param ex
+     */
+    private void addctaskbutton_action(ClickEvent ex){
+        InsertCTaskWindow icw = new InsertCTaskWindow(null);
+        main_layout.add(icw.main_dialog);
+        icw.main_dialog.open();
         main_dialog.close();
     }
 

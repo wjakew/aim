@@ -7,9 +7,11 @@ package pl.jakubwawak.aim.aim_dataengine.database_engine;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.InsertOneResult;
-import com.mongodb.internal.bulk.InsertRequest;
+import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.codingproject.AIM_CodingTask;
@@ -71,6 +73,35 @@ public class Database_AIMCodingTask {
             database.log("DB-CODINGTASK-GET-FAILED","Failed to show coding task list colllection ("+ex.toString()+")");
         }
         return data;
+    }
+
+    /**
+     * Function for updating coding task
+     * @param ctaskToUpdate
+     * @return Integer
+     */
+    public int updateCodingTask(AIM_CodingTask ctaskToUpdate){
+        try{
+            MongoCollection<Document> ctask_collection = database.get_data_collection("aim_codingtask");
+            Document ctask_document = ctask_collection.find(new Document("aim_codingtask_id",ctaskToUpdate.aim_codingtask_id)).first();
+            Bson updates = Updates.combine(
+                    Updates.set("aim_codingtask_tag",ctaskToUpdate.aim_codingtask_tag),
+                    Updates.set("aim_codingtask_name",ctaskToUpdate.aim_codingtask_name),
+                    Updates.set("aim_codintask_desc",ctaskToUpdate.aim_codingtask_desc),
+                    Updates.set("aim_codingtask_comments",ctaskToUpdate.aim_codingtask_comments),
+                    Updates.set("aim_codingtask_history",ctaskToUpdate.aim_codingtask_history));
+
+            UpdateResult result = ctask_collection.updateOne(updates,ctask_document);
+            if ( result.wasAcknowledged() ){
+                database.log("DB-CTASK-UPDATE","Updated ctask data ID ("+ctaskToUpdate.aim_codingproject_id.toString()+")");
+                return 1;
+            }
+            database.log("DB-CTASK-UPDATE","Nothing to update, object probably empty or no changes!");
+            return 0;
+        }catch(Exception ex){
+            database.log("DB-CTASK-UPDATE-FAILED","Failed to update coding task ("+ex.toString()+")");
+            return -1;
+        }
     }
 
     /**
