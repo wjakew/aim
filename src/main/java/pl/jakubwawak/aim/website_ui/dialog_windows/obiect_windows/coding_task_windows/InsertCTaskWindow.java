@@ -5,14 +5,22 @@
  */
 package pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.coding_task_windows;
 
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H6;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import lombok.extern.java.Log;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.codingproject.AIM_CodingTask;
+import pl.jakubwawak.maintanance.GridElement;
+
+import java.util.ArrayList;
 
 /**
  * Window for logging user to the app
@@ -33,14 +41,19 @@ public class InsertCTaskWindow {
 
     TextField ctaskname_field, ctasktag_field;
 
+    TextArea desc_area;
+
+    Grid<GridElement> comment_grid;
+
+    Button addcomment_button;
+
+    Button addtask_button;
+
     /**
      * Constructor
      */
     public InsertCTaskWindow(AIM_CodingTask act){
         this.act = act;
-        if ( this.act == null ){
-            this.act = new AIM_CodingTask();
-        }
         main_dialog = new Dialog();
         main_layout = new VerticalLayout();
         prepare_dialog();
@@ -65,12 +78,36 @@ public class InsertCTaskWindow {
 
         ctaskname_field = new TextField();
         ctaskname_field.setWidth("100%");
-        ctaskname_field.setPlaceholder("task name");
+        ctaskname_field.setPlaceholder("my dear task...");
 
         ctasktag_field = new TextField();
         ctasktag_field.setWidth("100%");
-        ctasktag_field.setPlaceholder("tags");
+        ctasktag_field.setPlaceholder("tag1,tag2,tag69...");
 
+        ArrayList<GridElement> gridContent = new ArrayList<>();
+        comment_grid = new Grid<>(GridElement.class,false);
+        comment_grid.setSizeFull();
+        comment_grid.addColumn(GridElement::getGridelement_text).setHeader("Comments");
+
+        desc_area = new TextArea("Description");
+        desc_area.setSizeFull();
+        desc_area.setPlaceholder("my dear coding task...");
+
+        addtask_button = new Button("Create", VaadinIcon.PLUS.create());
+        addtask_button.setWidth("100%");
+        addtask_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+
+        addcomment_button = new Button("", VaadinIcon.COMMENT.create());
+        addcomment_button.setWidth("100%");
+        addcomment_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+
+        if ( this.act != null ){
+            // object to update - updating fields, setting values for update
+            addtask_button.setText("Update");
+        }
+        else{
+            addtask_button.setText("Create");
+        }
     }
 
     /**
@@ -79,14 +116,26 @@ public class InsertCTaskWindow {
     void prepare_dialog(){
         prepare_components();
         // set layout
-
-        left_layout.add(new H6("NEW CODING"));
+        if ( this.act != null ){
+            left_layout.add(new H6("UPDATE CODING"));
+        }
+        else{
+            left_layout.add(new H6("NEW CODING"));
+        }
         left_layout.add(new H6("TASK"));
         left_layout.add(ctaskname_field);
         left_layout.add(ctasktag_field);
+        left_layout.add(comment_grid);
+        left_layout.add(addcomment_button);
 
+        right_layout.add(desc_area);
+        right_layout.add(addtask_button);
 
-        main_layout.add(left_layout,right_layout);
+        HorizontalLayout main_hl_layout = new HorizontalLayout();
+        main_hl_layout.setSizeFull();
+        main_hl_layout.add(left_layout,right_layout);
+
+        main_layout.add(main_hl_layout);
         main_layout.setSizeFull();
         main_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         main_layout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
