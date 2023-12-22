@@ -5,6 +5,7 @@
  */
 package pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.coding_task_windows;
 
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -17,6 +18,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import lombok.extern.java.Log;
+import org.bson.Document;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.codingproject.AIM_CodingTask;
 import pl.jakubwawak.maintanance.GridElement;
 
@@ -37,13 +39,14 @@ public class InsertCTaskWindow {
     VerticalLayout main_layout;
 
     VerticalLayout left_layout, right_layout;
-    AIM_CodingTask act;
+    public AIM_CodingTask act;
 
     TextField ctaskname_field, ctasktag_field;
 
     TextArea desc_area;
 
     Grid<GridElement> comment_grid;
+    ArrayList<GridElement> gridContent;
 
     Button addcomment_button;
 
@@ -54,6 +57,9 @@ public class InsertCTaskWindow {
      */
     public InsertCTaskWindow(AIM_CodingTask act){
         this.act = act;
+        if ( act == null ){
+            this.act = new AIM_CodingTask();
+        }
         main_dialog = new Dialog();
         main_layout = new VerticalLayout();
         prepare_dialog();
@@ -84,10 +90,13 @@ public class InsertCTaskWindow {
         ctasktag_field.setWidth("100%");
         ctasktag_field.setPlaceholder("tag1,tag2,tag69...");
 
-        ArrayList<GridElement> gridContent = new ArrayList<>();
+        gridContent = new ArrayList<>();
+
         comment_grid = new Grid<>(GridElement.class,false);
         comment_grid.setSizeFull();
         comment_grid.addColumn(GridElement::getGridelement_text).setHeader("Comments");
+        reloadCommentContent();
+        comment_grid.setItems(gridContent);
 
         desc_area = new TextArea("Description");
         desc_area.setSizeFull();
@@ -97,7 +106,7 @@ public class InsertCTaskWindow {
         addtask_button.setWidth("100%");
         addtask_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
 
-        addcomment_button = new Button("", VaadinIcon.COMMENT.create());
+        addcomment_button = new Button("Add Comment", VaadinIcon.COMMENT.create(),this::setAddcomment_button);
         addcomment_button.setWidth("100%");
         addcomment_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
 
@@ -108,6 +117,17 @@ public class InsertCTaskWindow {
         else{
             addtask_button.setText("Create");
         }
+    }
+
+    /**
+     * Function for reloading comment content
+     */
+    public void reloadCommentContent(){
+        gridContent.clear();
+        for(Document comment : act.aim_codingtask_comments){
+            gridContent.add(new GridElement(comment.getString("comment")));
+        }
+        comment_grid.getDataProvider().refreshAll();
     }
 
     /**
@@ -146,5 +166,15 @@ public class InsertCTaskWindow {
         main_layout.getStyle().set("--lumo-font-family","Monospace");
         main_dialog.add(main_layout);
         main_dialog.setWidth(width);main_dialog.setHeight(height);
+    }
+
+    /**
+     * Function for adding comment to the coding task
+     * @param ex
+     */
+    private void setAddcomment_button(ClickEvent ex){
+        AddCommentCTaskWindow acctw = new AddCommentCTaskWindow(this);
+        main_layout.add(acctw.main_dialog);
+        acctw.main_dialog.open();
     }
 }
