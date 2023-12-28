@@ -27,6 +27,8 @@ import pl.jakubwawak.aim.website_ui.dialog_windows.FloatingWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.PictureViewerWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.UserWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.board_windows.*;
+import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.coding_task_windows.CTaskListGlanceWindow;
+import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.coding_task_windows.InsertCTaskWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.project_windows.DetailsProjectWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.project_windows.InsertProjectWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.project_windows.ProjectHistoryGlanceWindow;
@@ -250,6 +252,11 @@ public class AIMInputParser {
                     aimp_commands_creator(userInput);
                     break;
                 }
+                case "ctask":
+                {
+                    ctask_commands_creator(userInput);
+                    break;
+                }
                 case "help":
                 {
                     PictureViewerWindow pvw = new PictureViewerWindow("images/usage_schema.png","AIM Terminal Usage Schema");
@@ -266,6 +273,26 @@ public class AIMInputParser {
         }
         else{
             response_nonKeyWord();
+        }
+    }
+
+    /**
+     * Function for coding task operation
+     * @param userInput
+     */
+    public void ctask_commands_creator(String userInput){
+        String[] user_word_collection = userInput.split(" ");
+        if ( user_word_collection.length == 2){
+            if ( userInput.contains("-create")){
+                InsertCTaskWindow ictw = new InsertCTaskWindow(null);
+                secondaryLayout.add(ictw.main_dialog);
+                ictw.main_dialog.open();
+            }
+            else if ( userInput.contains("-list")){
+                CTaskListGlanceWindow ctlgw = new CTaskListGlanceWindow();
+                secondaryLayout.add(ctlgw.main_dialog);
+                ctlgw.main_dialog.open();
+            }
         }
     }
 

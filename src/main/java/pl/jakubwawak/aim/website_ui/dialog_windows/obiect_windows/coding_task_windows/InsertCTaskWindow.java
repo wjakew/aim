@@ -12,6 +12,7 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -19,10 +20,14 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import lombok.extern.java.Log;
 import org.bson.Document;
+import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.codingproject.AIM_CodingTask;
+import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMCodingTask;
 import pl.jakubwawak.maintanance.GridElement;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Window for logging user to the app
@@ -102,20 +107,27 @@ public class InsertCTaskWindow {
         desc_area.setSizeFull();
         desc_area.setPlaceholder("my dear coding task...");
 
-        addtask_button = new Button("Create", VaadinIcon.PLUS.create());
+        addtask_button = new Button("Create", VaadinIcon.PLUS.create(),this::setAddtask_button);
         addtask_button.setWidth("100%");
-        addtask_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        addtask_button.addThemeVariants(ButtonVariant.LUMO_SUCCESS,ButtonVariant.LUMO_PRIMARY);
 
         addcomment_button = new Button("Add Comment", VaadinIcon.COMMENT.create(),this::setAddcomment_button);
         addcomment_button.setWidth("100%");
         addcomment_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
 
-        if ( this.act != null ){
+        if ( !this.act.isEmpty() ){
             // object to update - updating fields, setting values for update
             addtask_button.setText("Update");
         }
         else{
             addtask_button.setText("Create");
+        }
+
+        //populate UI with object data
+        if ( !act.isEmpty() ){
+            ctaskname_field.setValue(act.aim_codingtask_name);
+            desc_area.setValue(act.aim_codingtask_desc);
+            ctasktag_field.setValue(act.aim_codingtask_tag);
         }
     }
 
@@ -136,7 +148,7 @@ public class InsertCTaskWindow {
     void prepare_dialog(){
         prepare_components();
         // set layout
-        if ( this.act != null ){
+        if ( !this.act.isEmpty() ){
             left_layout.add(new H6("UPDATE CODING"));
         }
         else{
@@ -149,13 +161,12 @@ public class InsertCTaskWindow {
         left_layout.add(addcomment_button);
 
         right_layout.add(desc_area);
-        right_layout.add(addtask_button);
 
         HorizontalLayout main_hl_layout = new HorizontalLayout();
         main_hl_layout.setSizeFull();
         main_hl_layout.add(left_layout,right_layout);
 
-        main_layout.add(main_hl_layout);
+        main_layout.add(main_hl_layout,addtask_button);
         main_layout.setSizeFull();
         main_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         main_layout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
@@ -169,6 +180,29 @@ public class InsertCTaskWindow {
     }
 
     /**
+     * Function for validating tags
+     * @return boolean
+     */
+    boolean isSimilarToTags(String str) {
+        Pattern pattern = Pattern.compile("(\\w+,\\s*)+");
+        Matcher matcher = pattern.matcher(str);
+        if (matcher.matches()) {
+            return true;
+        }
+        Notification.show("Tags cannot be set, it should resolve pattern tag1,tag2,tag3");
+        return false;
+    }
+
+    /**
+     * Function for validating fields
+     * @return boolean
+     */
+    boolean validateFields(){
+        return !ctaskname_field.isEmpty() && !ctasktag_field.isEmpty() && !desc_area.isEmpty()
+                && isSimilarToTags(ctasktag_field.getValue());
+    }
+
+    /**
      * Function for adding comment to the coding task
      * @param ex
      */
@@ -176,5 +210,49 @@ public class InsertCTaskWindow {
         AddCommentCTaskWindow acctw = new AddCommentCTaskWindow(this);
         main_layout.add(acctw.main_dialog);
         acctw.main_dialog.open();
+    }
+
+    /**
+     * addtask_button
+     * @param ex
+     */
+    private void setAddtask_button(ClickEvent ex){
+        if ( validateFields() ){
+            if ( addtask_button.getText().contains("Create")){
+                // creating coding task
+                act.aim_codingtask_desc = desc_area.getValue();
+                act.aim_codingtask_name = ctaskname_field.getValue();
+                act.aim_codingtask_tag = ctasktag_field.getValue();
+                Database_AIMCodingTask dact = new Database_AIMCodingTask(AimApplication.database);
+                int ans = dact.insertCodingTask(act);
+                if ( ans == 1 ){
+                    Notification.show("New coding task ("+act.aim_codingtask_name+") added!");
+                    main_dialog.close();
+                }
+                else{
+                    Notification.show("Failed to add coding task, check application logs!");
+                }
+            }
+            else{
+                // updating coding task
+                // creating coding task
+                act.aim_codingtask_desc = desc_area.getValue();
+                act.aim_codingtask_name = ctaskname_field.getValue();
+                act.aim_codingtask_tag = ctasktag_field.getValue();
+                Database_AIMCodingTask dact = new Database_AIMCodingTask(AimApplication.database);
+                int ans = dact.updateCodingTask(act);
+                if ( ans == 1 ){
+                    Notification.show("Task updated!");
+                    main_dialog.close();
+                }
+                else{
+                    Notification.show("Failed to update coding task, check application logs!");
+                }
+            }
+
+        }
+        else{
+            Notification.show("Wrong user input. Check data!");
+        }
     }
 }

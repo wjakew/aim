@@ -58,11 +58,25 @@ public class AIM_CodingTask {
     }
 
     /**
+     * getter for codingtask_name
+     * @return String
+     */
+    public String getAim_codingtask_name(){return aim_codingtask_name;}
+
+    /**
+     * Function for checking if object is empty
+     * @return boolean
+     */
+    public boolean isEmpty(){
+        return aim_codingtask_name.isEmpty();
+    }
+
+    /**
      * Constructor with document support
      * @param codingDocument
      */
     public AIM_CodingTask(Document codingDocument){
-        this.aim_codingtask_id = codingDocument.getObjectId("aim_codingtask_id");
+        this.aim_codingtask_id = codingDocument.getObjectId("_id");
         this.aim_codingproject_id = codingDocument.getObjectId("aim_codingproject_id");
         this.aim_user_id = codingDocument.getObjectId("aim_user_id");
         this.aim_codingtask_tag = codingDocument.getString("aim_codingtask_tag");
@@ -79,7 +93,6 @@ public class AIM_CodingTask {
      */
     public Document prepareDocument(){
         Document codingDocument = new Document();
-        codingDocument.append("aim_codingtask_id",aim_codingtask_id);
         codingDocument.append("aim_codingproject_id",aim_codingproject_id);
         codingDocument.append("aim_user_id",aim_user_id);
         codingDocument.append("aim_codingtask_tag",aim_codingtask_tag);

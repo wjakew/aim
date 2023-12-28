@@ -83,17 +83,17 @@ public class Database_AIMCodingTask {
     public int updateCodingTask(AIM_CodingTask ctaskToUpdate){
         try{
             MongoCollection<Document> ctask_collection = database.get_data_collection("aim_codingtask");
-            Document ctask_document = ctask_collection.find(new Document("aim_codingtask_id",ctaskToUpdate.aim_codingtask_id)).first();
+            Document ctask_document = ctask_collection.find(new Document("_id",ctaskToUpdate.aim_codingtask_id)).first();
             Bson updates = Updates.combine(
                     Updates.set("aim_codingtask_tag",ctaskToUpdate.aim_codingtask_tag),
                     Updates.set("aim_codingtask_name",ctaskToUpdate.aim_codingtask_name),
-                    Updates.set("aim_codintask_desc",ctaskToUpdate.aim_codingtask_desc),
+                    Updates.set("aim_codingtask_desc",ctaskToUpdate.aim_codingtask_desc),
                     Updates.set("aim_codingtask_comments",ctaskToUpdate.aim_codingtask_comments),
                     Updates.set("aim_codingtask_history",ctaskToUpdate.aim_codingtask_history));
 
-            UpdateResult result = ctask_collection.updateOne(updates,ctask_document);
+            UpdateResult result = ctask_collection.updateOne(ctask_document,updates);
             if ( result.wasAcknowledged() ){
-                database.log("DB-CTASK-UPDATE","Updated ctask data ID ("+ctaskToUpdate.aim_codingproject_id.toString()+")");
+                database.log("DB-CTASK-UPDATE","Updated ctask data ID ("+ctaskToUpdate.aim_codingtask_id.toString()+")");
                 return 1;
             }
             database.log("DB-CTASK-UPDATE","Nothing to update, object probably empty or no changes!");

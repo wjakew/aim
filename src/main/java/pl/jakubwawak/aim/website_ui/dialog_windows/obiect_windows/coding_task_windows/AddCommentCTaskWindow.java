@@ -24,8 +24,8 @@ import java.time.LocalDateTime;
 public class AddCommentCTaskWindow {
 
     // variables for setting x and y of window
-    public String width = "";
-    public String height = "";
+    public String width = "50%";
+    public String height = "50%";
     public String backgroundStyle = "";
 
     // main login components
@@ -55,7 +55,7 @@ public class AddCommentCTaskWindow {
         // set components
         comment_area = new TextArea("Your Comment");
         comment_area.setPlaceholder("Tell me something exciting...");
-        comment_area.setWidth("100%");
+        comment_area.setSizeFull();
         addcomment_button = new Button("Add comment", VaadinIcon.COMMENT.create(),this::setAddcomment_button);
         addcomment_button.setWidth("100%");
         addcomment_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
