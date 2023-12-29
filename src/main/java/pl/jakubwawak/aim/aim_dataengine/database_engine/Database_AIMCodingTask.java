@@ -40,6 +40,8 @@ public class Database_AIMCodingTask {
      */
     public int insertCodingTask(AIM_CodingTask taskToInsert){
         try{
+            taskToInsert.addHistory("CREATE","Created coding task!");
+            taskToInsert.addHistory("UPDATE","Updated c-task fields!");
             MongoCollection<Document> ctask_collection = database.get_data_collection("aim_codingtask");
             InsertOneResult result = ctask_collection.insertOne(taskToInsert.prepareDocument());
             if ( result.wasAcknowledged() ){
@@ -82,6 +84,7 @@ public class Database_AIMCodingTask {
      */
     public int updateCodingTask(AIM_CodingTask ctaskToUpdate){
         try{
+            ctaskToUpdate.addHistory("UPDATE","Task is updated!");
             MongoCollection<Document> ctask_collection = database.get_data_collection("aim_codingtask");
             Document ctask_document = ctask_collection.find(new Document("_id",ctaskToUpdate.aim_codingtask_id)).first();
             Bson updates = Updates.combine(
@@ -90,7 +93,6 @@ public class Database_AIMCodingTask {
                     Updates.set("aim_codingtask_desc",ctaskToUpdate.aim_codingtask_desc),
                     Updates.set("aim_codingtask_comments",ctaskToUpdate.aim_codingtask_comments),
                     Updates.set("aim_codingtask_history",ctaskToUpdate.aim_codingtask_history));
-
             UpdateResult result = ctask_collection.updateOne(ctask_document,updates);
             if ( result.wasAcknowledged() ){
                 database.log("DB-CTASK-UPDATE","Updated ctask data ID ("+ctaskToUpdate.aim_codingtask_id.toString()+")");
@@ -100,6 +102,40 @@ public class Database_AIMCodingTask {
             return 0;
         }catch(Exception ex){
             database.log("DB-CTASK-UPDATE-FAILED","Failed to update coding task ("+ex.toString()+")");
+            return -1;
+        }
+    }
+
+    /**
+     * Function for updating coding status
+     * @param ctaskToUpdate
+     * @param newStatus
+     * @return Integer
+     */
+    public int updateCodingTaskStatus(AIM_CodingTask ctaskToUpdate, String newStatus){
+        try{
+            String status = "NEW, IN PROGRESS, FROZEN, DONE";
+            if ( status.contains(newStatus) ){
+                ctaskToUpdate.aim_codingtask_status = newStatus;
+                ctaskToUpdate.addHistory("STATUS","Task status changed to: "+newStatus);
+                MongoCollection<Document> ctask_collection = database.get_data_collection("aim_codingtask");
+                Document ctask_document = ctask_collection.find(new Document("_id",ctaskToUpdate.aim_codingtask_id)).first();
+                Bson updates = Updates.combine(
+                    Updates.set("aim_codingtask_status",ctaskToUpdate.aim_codingtask_status));
+                UpdateResult result = ctask_collection.updateOne(ctask_document,updates);
+                if ( result.wasAcknowledged() ){
+                    database.log("DB-CTASK-STATUS-UPDATE","Updated ctask status ID ("+ctaskToUpdate.aim_codingtask_id.toString()+") to "+newStatus);
+                    return 1;
+                }
+                database.log("DB-CTASK-STATUS-UPDATE","Nothing to update, object probably empty or no changes!");
+                return 0;
+            }
+            else{
+                database.log("DB-CTASK-STATUS-UPDATE-WR","Wrong status selected ("+newStatus+")");
+                return 0;
+            }
+        }catch(Exception ex){
+            database.log("DB-CTASK-STATUS-UPDATE-FAILED","Failed to update coding task ("+ex.toString()+")");
             return -1;
         }
     }

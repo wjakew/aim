@@ -22,6 +22,7 @@ import lombok.extern.java.Log;
 import org.bson.Document;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.codingproject.AIM_CodingTask;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_ctask.AIM_CTaskViewer;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMCodingTask;
 import pl.jakubwawak.maintanance.GridElement;
 
@@ -56,12 +57,28 @@ public class InsertCTaskWindow {
     Button addcomment_button;
 
     Button addtask_button;
+    AIM_CTaskViewer actv;
 
     /**
      * Constructor
      */
     public InsertCTaskWindow(AIM_CodingTask act){
         this.act = act;
+        if ( act == null ){
+            this.act = new AIM_CodingTask();
+        }
+        this.actv = null;
+        main_dialog = new Dialog();
+        main_layout = new VerticalLayout();
+        prepare_dialog();
+    }
+
+    /**
+     * Constructor
+     */
+    public InsertCTaskWindow(AIM_CodingTask act, AIM_CTaskViewer actv){
+        this.act = act;
+        this.actv = actv;
         if ( act == null ){
             this.act = new AIM_CodingTask();
         }
@@ -227,6 +244,9 @@ public class InsertCTaskWindow {
                 int ans = dact.insertCodingTask(act);
                 if ( ans == 1 ){
                     Notification.show("New coding task ("+act.aim_codingtask_name+") added!");
+                    if ( actv != null ){
+                        actv.updateGrid();
+                    }
                     main_dialog.close();
                 }
                 else{
@@ -243,6 +263,9 @@ public class InsertCTaskWindow {
                 int ans = dact.updateCodingTask(act);
                 if ( ans == 1 ){
                     Notification.show("Task updated!");
+                    if ( actv != null ){
+                        actv.updateGrid();
+                    }
                     main_dialog.close();
                 }
                 else{
