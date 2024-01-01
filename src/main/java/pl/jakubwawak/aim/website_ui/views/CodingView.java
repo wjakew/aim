@@ -21,11 +21,9 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.theme.lumo.Lumo;
-import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 import pl.jakubwawak.aim.AimApplication;
-import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_ctask.AIM_CTaskViewer;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_ctask.AIM_CTaskListViewer;
 import pl.jakubwawak.aim.website_ui.dialog_windows.AddElementWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.UserWindow;
 import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
@@ -41,7 +39,7 @@ public class CodingView extends VerticalLayout {
 
     HorizontalLayout headerLayout;
     Button home_button, terminal_button, addelement_button,logout_button,user_button;
-    AIM_CTaskViewer actv;
+    AIM_CTaskListViewer actv;
 
 
     /**
@@ -182,7 +180,7 @@ public class CodingView extends VerticalLayout {
         logout_button = new Button("Log out",VaadinIcon.EXIT.create(),this::logoutbutton_action);
         new ButtonStyler().primaryButtonStyle(logout_button,"80%","");
 
-        actv = new AIM_CTaskViewer();
+        actv = new AIM_CTaskListViewer();
     }
 
     /**

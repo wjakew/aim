@@ -18,11 +18,10 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
-import lombok.extern.java.Log;
 import org.bson.Document;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.codingproject.AIM_CodingTask;
-import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_ctask.AIM_CTaskViewer;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_ctask.AIM_CTaskListViewer;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMCodingTask;
 import pl.jakubwawak.maintanance.GridElement;
 
@@ -57,7 +56,7 @@ public class InsertCTaskWindow {
     Button addcomment_button;
 
     Button addtask_button;
-    AIM_CTaskViewer actv;
+    AIM_CTaskListViewer actv;
 
     /**
      * Constructor
@@ -76,7 +75,7 @@ public class InsertCTaskWindow {
     /**
      * Constructor
      */
-    public InsertCTaskWindow(AIM_CodingTask act, AIM_CTaskViewer actv){
+    public InsertCTaskWindow(AIM_CodingTask act, AIM_CTaskListViewer actv){
         this.act = act;
         this.actv = actv;
         if ( act == null ){
