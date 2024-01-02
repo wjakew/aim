@@ -98,6 +98,10 @@ public class WidgetView extends VerticalLayout {
         subItems6.setCheckable(false);
         subItems6.setChecked(false);
 
+        MenuItem subItems7 = subItems.addItem(new HorizontalLayout(VaadinIcon.CODE.create(),new H6("Coding")));
+        subItems7.setCheckable(false);
+        subItems7.setChecked(false);
+
         ComponentEventListener<ClickEvent<MenuItem>> listener = event -> {
             MenuItem selectedItem = event.getSource();
             if ( selectedItem.equals(subItems1)){
@@ -127,6 +131,10 @@ public class WidgetView extends VerticalLayout {
             else if ( selectedItem.equals(subItems6)){
                 System.out.println("Glance");
                 getUI().ifPresent(ui -> ui.navigate("/home"));
+            }
+            else if ( selectedItem.equals(subItems7)){
+                System.out.println("Coding");
+                getUI().ifPresent(ui -> ui.navigate("/coding"));
             }
         };
 

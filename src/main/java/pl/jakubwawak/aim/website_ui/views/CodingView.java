@@ -94,6 +94,10 @@ public class CodingView extends VerticalLayout {
         subItems5.setCheckable(false);
         subItems5.setChecked(false);
 
+        MenuItem subItems6 = subItems.addItem(new HorizontalLayout(VaadinIcon.CODE.create(),new H6("Coding")));
+        subItems6.setCheckable(false);
+        subItems6.setChecked(false);
+
         ComponentEventListener<ClickEvent<MenuItem>> listener = event -> {
             MenuItem selectedItem = event.getSource();
             if ( selectedItem.equals(subItems1)){
@@ -120,6 +124,11 @@ public class CodingView extends VerticalLayout {
                 System.out.println("My Space");
                 getUI().ifPresent(ui -> ui.navigate("/widgets"));
             }
+            else if ( selectedItem.equals(subItems6)){
+                System.out.println("Coding");
+                getUI().ifPresent(ui -> ui.navigate("/coding"));
+            }
+
         };
 
         subItems1.addClickListener(listener);

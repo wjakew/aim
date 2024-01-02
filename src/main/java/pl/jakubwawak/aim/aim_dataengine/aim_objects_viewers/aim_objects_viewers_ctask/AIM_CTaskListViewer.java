@@ -32,7 +32,10 @@ public class AIM_CTaskListViewer {
     Grid<AIM_CodingTask> grid;
 
     ArrayList<AIM_CodingTask> gridContent;
+    AIM_CTaskViewer taskViewer;
     Database_AIMCodingTask dact;
+
+    VerticalLayout rightLayout;
 
     /**
      * Constructor
@@ -57,6 +60,16 @@ public class AIM_CTaskListViewer {
         grid.setSizeFull();
         gridContent = dact.getCodingTaskList();
         grid.setItems(gridContent);
+
+        grid.addItemClickListener(event -> {
+            AIM_CodingTask act = event.getItem();
+            if ( act != null ){
+                AIM_CTaskViewer taskViewer1 = new AIM_CTaskViewer(act);
+                rightLayout.removeAll();
+                taskViewer = taskViewer1;
+                rightLayout.add(taskViewer.ctaskviewer_layout);
+            }
+        });
     }
 
     /**
@@ -92,7 +105,7 @@ public class AIM_CTaskListViewer {
         prepareComponents();
         mainLayout.setSizeFull();
 
-        VerticalLayout leftLayout,rightLayout;
+        VerticalLayout leftLayout;
         leftLayout = new VerticalLayout(); rightLayout = new VerticalLayout();
 
         leftLayout.setHeight("100%");leftLayout.setWidth("40%");
@@ -103,11 +116,14 @@ public class AIM_CTaskListViewer {
         leftLayout.add(createnewtask_button);
         leftLayout.add(grid);
 
-
         rightLayout.setSizeFull();
         rightLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         rightLayout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
         rightLayout.getStyle().set("text-align", "center");
+
+        taskViewer = new AIM_CTaskViewer(gridContent.get(0));
+
+        rightLayout.add(taskViewer.ctaskviewer_layout);
 
         mainLayout.add(leftLayout,rightLayout);
     }
