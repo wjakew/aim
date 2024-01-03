@@ -56,7 +56,7 @@ public class AIM_CTaskListViewer {
         createnewtask_button.setWidth("100%");
 
         grid = new Grid<>(AIM_CodingTask.class,false);
-        grid.addColumn(createCTaskRenderer()).setHeader("Task").setAutoWidth(true).setFlexGrow(0);
+        grid.addColumn(createCTaskRenderer()).setHeader("Task");
         grid.setSizeFull();
         gridContent = dact.getCodingTaskList();
         grid.setItems(gridContent);

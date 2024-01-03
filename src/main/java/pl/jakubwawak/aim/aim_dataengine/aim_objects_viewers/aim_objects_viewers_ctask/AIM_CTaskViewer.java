@@ -6,14 +6,21 @@
 package pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_ctask;
 
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextArea;
+import org.bson.Document;
+import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.codingproject.AIM_CodingTask;
+import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMCodingTask;
 import pl.jakubwawak.maintanance.GridElement;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
@@ -28,6 +35,9 @@ public class AIM_CTaskViewer {
     HorizontalLayout bottom_layout;
     ComboBox<GridElement> status_combobox;
     ArrayList<GridElement> combobox_content;
+    Grid<GridElement> history_grid;
+
+    TextArea description_area;
 
     public AIM_CodingTask act;
 
@@ -68,6 +78,47 @@ public class AIM_CTaskViewer {
         status_combobox.setItemLabelGenerator(GridElement::getGridelement_text);
         status_combobox.setValue(new GridElement(act.aim_codingtask_status));
 
+        status_combobox.addValueChangeListener(event -> {
+            String value = status_combobox.getValue().getGridelement_text();
+            if ( !value.equals(act.aim_codingtask_status) ){
+                Database_AIMCodingTask dact = new Database_AIMCodingTask(AimApplication.database);
+                int ans = dact.updateCodingTaskStatus(act,value);
+                if ( ans == 1 ){
+                    Notification.show("Updated status!");
+                    act.aim_codingtask_status = value;
+                }
+            }
+        });
+
+        description_area = new TextArea("Coding Task Description");
+        description_area.setSizeFull();
+        description_area.setValue(act.aim_codingtask_desc);
+
+        // create description update
+        description_area.addBlurListener(event -> {
+            //update descrytption on database
+            String newDesc = description_area.getValue();
+            if ( !newDesc.equals(act.aim_codingtask_desc) ){
+                Database_AIMCodingTask dact = new Database_AIMCodingTask(AimApplication.database);
+                int ans = dact.updateDescriptionTask(act,newDesc);
+                if ( ans == 1 ){
+                    Notification.show("Updated description!");
+                    act.aim_codingtask_desc = newDesc;
+                }
+            }
+        });
+
+        history_grid = new Grid<>(GridElement.class,false);
+        history_grid.addColumn(GridElement::getGridelement_details).setHeader("Category").setAutoWidth(true).setFlexGrow(0);
+        history_grid.addColumn(GridElement::getGridelement_text).setHeader("Description").setAutoWidth(true).setFlexGrow(0);
+        ArrayList<GridElement> historyContent = new ArrayList<>();
+        for(Document document : act.aim_codingtask_history){
+            GridElement element = new GridElement(document.getString("history_text"),document.getString("history_category"),document.getString("history_user"));
+            historyContent.add(element);
+        }
+        history_grid.setItems(historyContent);
+        history_grid.setSizeFull();
+
         FlexLayout left_layout = new FlexLayout();
         left_layout.setSizeFull();
         left_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
@@ -82,7 +133,25 @@ public class AIM_CTaskViewer {
         right_layout.add(status_combobox);
         right_layout.setWidth("80%");
 
+        FlexLayout left_layout_center = new FlexLayout();
+        left_layout_center.setSizeFull();
+        left_layout_center.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+        left_layout_center.setAlignItems(FlexComponent.Alignment.CENTER);
+        left_layout_center.setWidth("50%");
+        left_layout_center.add(history_grid);
+
+        FlexLayout right_layout_center = new FlexLayout();
+        right_layout_center.setSizeFull();
+        right_layout_center.setJustifyContentMode(FlexComponent.JustifyContentMode.START);
+        right_layout_center.setAlignItems(FlexComponent.Alignment.END);
+        right_layout_center.add();
+        right_layout_center.setWidth("50%");
+
         header_layout.add(left_layout,right_layout);
+
+        // add components to layouts
+        center_layout.add(left_layout_center,right_layout_center);
+        bottom_layout.add(description_area);
     }
 
     /**

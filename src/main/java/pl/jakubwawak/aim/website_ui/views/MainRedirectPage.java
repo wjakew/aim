@@ -192,6 +192,7 @@ public class MainRedirectPage extends VerticalLayout {
         subItems4.addClickListener(listener);
         subItems5.addClickListener(listener);
         subItems6.addClickListener(listener);
+        subItems7.addClickListener(listener);
 
         // prepare window layout and components
         FlexLayout center_layout = new FlexLayout();

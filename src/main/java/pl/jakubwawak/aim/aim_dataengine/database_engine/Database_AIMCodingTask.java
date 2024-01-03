@@ -121,7 +121,8 @@ public class Database_AIMCodingTask {
                 MongoCollection<Document> ctask_collection = database.get_data_collection("aim_codingtask");
                 Document ctask_document = ctask_collection.find(new Document("_id",ctaskToUpdate.aim_codingtask_id)).first();
                 Bson updates = Updates.combine(
-                    Updates.set("aim_codingtask_status",ctaskToUpdate.aim_codingtask_status));
+                    Updates.set("aim_codingtask_status",ctaskToUpdate.aim_codingtask_status),
+                        Updates.set("aim_codingtask_history",ctaskToUpdate.aim_codingtask_history));
                 UpdateResult result = ctask_collection.updateOne(ctask_document,updates);
                 if ( result.wasAcknowledged() ){
                     database.log("DB-CTASK-STATUS-UPDATE","Updated ctask status ID ("+ctaskToUpdate.aim_codingtask_id.toString()+") to "+newStatus);
@@ -136,6 +137,34 @@ public class Database_AIMCodingTask {
             }
         }catch(Exception ex){
             database.log("DB-CTASK-STATUS-UPDATE-FAILED","Failed to update coding task ("+ex.toString()+")");
+            return -1;
+        }
+    }
+
+    /**
+     * Function for updating coding task description
+     * @param ctaskToUpdate
+     * @param newDesc
+     * @return Integer
+     */
+    public int updateDescriptionTask(AIM_CodingTask ctaskToUpdate, String newDesc){
+        try{
+            ctaskToUpdate.aim_codingtask_status = newDesc;
+            ctaskToUpdate.addHistory("DESC","Task description changed to: "+newDesc);
+            MongoCollection<Document> ctask_collection = database.get_data_collection("aim_codingtask");
+            Document ctask_document = ctask_collection.find(new Document("_id",ctaskToUpdate.aim_codingtask_id)).first();
+            Bson updates = Updates.combine(
+                    Updates.set("aim_codingtask_desc",ctaskToUpdate.aim_codingtask_status),
+                    Updates.set("aim_codingtask_history",ctaskToUpdate.aim_codingtask_history));
+            UpdateResult result = ctask_collection.updateOne(ctask_document,updates);
+            if ( result.wasAcknowledged() ){
+                database.log("DB-CTASK-DESC-UPDATE","Updated ctask desc ID ("+ctaskToUpdate.aim_codingtask_id.toString()+") to "+newDesc);
+                return 1;
+            }
+            database.log("DB-CTASK-DESC-UPDATE","Nothing to update, object probably empty or no changes!");
+            return 0;
+        }catch(Exception ex){
+            database.log("DB-CTASK-DESC-UPDATE-FAILED","Failed to update coding task ("+ex.toString()+")");
             return -1;
         }
     }

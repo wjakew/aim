@@ -159,6 +159,7 @@ public class HomeView extends VerticalLayout {
         subItems4.addClickListener(listener);
         subItems5.addClickListener(listener);
         subItems6.addClickListener(listener);
+        subItems7.addClickListener(listener);
 
 
         // prepare floating window button
