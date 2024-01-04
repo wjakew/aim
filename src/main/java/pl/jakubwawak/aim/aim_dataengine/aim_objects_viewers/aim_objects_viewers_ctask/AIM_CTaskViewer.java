@@ -5,9 +5,12 @@
  */
 package pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_ctask;
 
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
@@ -36,6 +39,9 @@ public class AIM_CTaskViewer {
     ComboBox<GridElement> status_combobox;
     ArrayList<GridElement> combobox_content;
     Grid<GridElement> history_grid;
+    Grid<GridElement> comments_grid;
+
+    Button addcomment_button, update_button, showfullhistory_button,removetask_button; // TODO create actions for that buttons
 
     TextArea description_area;
 
@@ -64,6 +70,18 @@ public class AIM_CTaskViewer {
         bottom_layout = new HorizontalLayout();
         bottom_layout.setWidth("100%");
         bottom_layout.setHeight("100%");
+
+        addcomment_button = new Button("Add Comment", VaadinIcon.COMMENT.create());
+        addcomment_button.setWidth("100%"); addcomment_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+
+        update_button = new Button("Update Task", VaadinIcon.REFRESH.create());
+        update_button.setWidth("100%"); update_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+
+        showfullhistory_button = new Button("Show Full History", VaadinIcon.ARCHIVE.create());
+        showfullhistory_button.setWidth("100%"); showfullhistory_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+
+        removetask_button = new Button("Send to trash!", VaadinIcon.TRASH.create());
+        removetask_button.setWidth("100%"); removetask_button.addThemeVariants(ButtonVariant.LUMO_ERROR,ButtonVariant.LUMO_PRIMARY);
 
         combobox_content = new ArrayList<>();
         combobox_content.add(new GridElement("NEW"));
@@ -119,6 +137,32 @@ public class AIM_CTaskViewer {
         history_grid.setItems(historyContent);
         history_grid.setSizeFull();
 
+        comments_grid = new Grid<>(GridElement.class,false);
+        comments_grid.addColumn(GridElement::getGridelement_details).setHeader("User").setAutoWidth(true).setFlexGrow(0);
+        comments_grid.addColumn(GridElement::getGridelement_text).setHeader("Comment").setAutoWidth(true).setFlexGrow(0);
+
+        /*
+        document layout
+        comment_text: info
+        comment_time: time
+        comment_email: email
+        */
+        ArrayList<GridElement> comment_content = new ArrayList<>();
+        for(Document document : act.aim_codingtask_comments){
+            comment_content.add(new GridElement(document.getString("comment_text"),document.getString("comment_email"),document.getString("comment_time")));
+        }
+        comments_grid.setItems(comment_content);
+        comments_grid.setSizeFull();
+
+        VerticalLayout right_vl_center = new VerticalLayout();
+        right_vl_center.setSizeFull();
+        right_vl_center.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+        right_vl_center.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
+        right_vl_center.getStyle().set("text-align", "center");
+        right_vl_center.getStyle().set("background-color","black");
+
+        right_vl_center.add(comments_grid,addcomment_button,update_button,showfullhistory_button);
+
         FlexLayout left_layout = new FlexLayout();
         left_layout.setSizeFull();
         left_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
@@ -146,6 +190,7 @@ public class AIM_CTaskViewer {
         right_layout_center.setAlignItems(FlexComponent.Alignment.END);
         right_layout_center.add();
         right_layout_center.setWidth("50%");
+        right_layout_center.add(right_vl_center);
 
         header_layout.add(left_layout,right_layout);
 
@@ -162,6 +207,7 @@ public class AIM_CTaskViewer {
 
         ctaskviewer_layout.add(header_layout);
         ctaskviewer_layout.add(center_layout,bottom_layout);
+        ctaskviewer_layout.add(removetask_button);
 
         ctaskviewer_layout.setSizeFull();
         ctaskviewer_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
