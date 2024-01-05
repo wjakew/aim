@@ -113,6 +113,24 @@ public class AIM_CodingTask {
     }
 
     /**
+     * Function for adding comment to coding task
+     * @param commentText
+     */
+    public void addComment(String commentText){
+        /*
+        document layout
+        comment_text: info
+        comment_time: time
+        comment_email: email
+        */
+        Document commentDocument = new Document();
+        commentDocument.append("comment_text",commentText);
+        commentDocument.append("comment_time",LocalDateTime.now());
+        commentDocument.append("comment_email",AimApplication.loggedUser.aim_user_email);
+        aim_codingtask_comments.add(commentDocument);
+    }
+
+    /**
      * getter for codingtask_name
      * @return String
      */

@@ -5,6 +5,7 @@
  */
 package pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_ctask;
 
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -21,9 +22,11 @@ import org.bson.Document;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.codingproject.AIM_CodingTask;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMCodingTask;
+import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.coding_task_windows.InsertCTaskWindow;
+import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.coding_task_windows.ShowFullHistoryWindow;
 import pl.jakubwawak.maintanance.GridElement;
 
-import java.time.LocalDateTime;
+import javax.swing.text.html.HTMLDocument;
 import java.util.ArrayList;
 
 /**
@@ -74,10 +77,10 @@ public class AIM_CTaskViewer {
         addcomment_button = new Button("Add Comment", VaadinIcon.COMMENT.create());
         addcomment_button.setWidth("100%"); addcomment_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
 
-        update_button = new Button("Update Task", VaadinIcon.REFRESH.create());
+        update_button = new Button("Update Task", VaadinIcon.REFRESH.create(),this::Setupdate_button);
         update_button.setWidth("100%"); update_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
 
-        showfullhistory_button = new Button("Show Full History", VaadinIcon.ARCHIVE.create());
+        showfullhistory_button = new Button("Show Full History", VaadinIcon.ARCHIVE.create(),this::Setshowfullhistory_button);
         showfullhistory_button.setWidth("100%"); showfullhistory_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
 
         removetask_button = new Button("Send to trash!", VaadinIcon.TRASH.create());
@@ -127,8 +130,8 @@ public class AIM_CTaskViewer {
         });
 
         history_grid = new Grid<>(GridElement.class,false);
-        history_grid.addColumn(GridElement::getGridelement_details).setHeader("Category").setAutoWidth(true).setFlexGrow(0);
-        history_grid.addColumn(GridElement::getGridelement_text).setHeader("Description").setAutoWidth(true).setFlexGrow(0);
+        history_grid.addColumn(GridElement::getGridelement_details).setHeader("Category").setAutoWidth(true);
+        history_grid.addColumn(GridElement::getGridelement_text).setHeader("Description").setAutoWidth(true);
         ArrayList<GridElement> historyContent = new ArrayList<>();
         for(Document document : act.aim_codingtask_history){
             GridElement element = new GridElement(document.getString("history_text"),document.getString("history_category"),document.getString("history_user"));
@@ -138,9 +141,8 @@ public class AIM_CTaskViewer {
         history_grid.setSizeFull();
 
         comments_grid = new Grid<>(GridElement.class,false);
-        comments_grid.addColumn(GridElement::getGridelement_details).setHeader("User").setAutoWidth(true).setFlexGrow(0);
-        comments_grid.addColumn(GridElement::getGridelement_text).setHeader("Comment").setAutoWidth(true).setFlexGrow(0);
-
+        comments_grid.addColumn(GridElement::getGridelement_details).setHeader("User");
+        comments_grid.addColumn(GridElement::getGridelement_text).setHeader("Comment");
         /*
         document layout
         comment_text: info
@@ -214,6 +216,25 @@ public class AIM_CTaskViewer {
         ctaskviewer_layout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
         ctaskviewer_layout.getStyle().set("text-align", "center");
         ctaskviewer_layout.getStyle().set("background-color","black");
+    }
 
+    /**
+     * update_button action
+     * @param ex
+     */
+    private void Setupdate_button(ClickEvent ex){
+        InsertCTaskWindow insertCTaskWindow = new InsertCTaskWindow(act);
+        ctaskviewer_layout.add(insertCTaskWindow.main_dialog);
+        insertCTaskWindow.main_dialog.open();
+    }
+
+    /**
+     * showfullhistory_button action
+     * @param ex
+     */
+    private void Setshowfullhistory_button(ClickEvent ex){
+        ShowFullHistoryWindow sfhw = new ShowFullHistoryWindow(act);
+        ctaskviewer_layout.add(sfhw.main_dialog);
+        sfhw.main_dialog.open();
     }
 }
