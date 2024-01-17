@@ -22,6 +22,7 @@ import org.bson.Document;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.codingproject.AIM_CodingTask;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMCodingTask;
+import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.coding_task_windows.AddCommentCTaskWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.coding_task_windows.InsertCTaskWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.coding_task_windows.ShowFullHistoryWindow;
 import pl.jakubwawak.maintanance.GridElement;
@@ -43,6 +44,7 @@ public class AIM_CTaskViewer {
     ArrayList<GridElement> combobox_content;
     Grid<GridElement> history_grid;
     Grid<GridElement> comments_grid;
+    ArrayList<GridElement> comment_content;
 
     Button addcomment_button, update_button, showfullhistory_button,removetask_button; // TODO create actions for that buttons
 
@@ -74,7 +76,7 @@ public class AIM_CTaskViewer {
         bottom_layout.setWidth("100%");
         bottom_layout.setHeight("100%");
 
-        addcomment_button = new Button("Add Comment", VaadinIcon.COMMENT.create());
+        addcomment_button = new Button("Add Comment", VaadinIcon.COMMENT.create(),this::setAddcomment_button);
         addcomment_button.setWidth("100%"); addcomment_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
 
         update_button = new Button("Update Task", VaadinIcon.REFRESH.create(),this::Setupdate_button);
@@ -141,7 +143,6 @@ public class AIM_CTaskViewer {
         history_grid.setSizeFull();
 
         comments_grid = new Grid<>(GridElement.class,false);
-        comments_grid.addColumn(GridElement::getGridelement_details).setHeader("User");
         comments_grid.addColumn(GridElement::getGridelement_text).setHeader("Comment");
         /*
         document layout
@@ -149,7 +150,7 @@ public class AIM_CTaskViewer {
         comment_time: time
         comment_email: email
         */
-        ArrayList<GridElement> comment_content = new ArrayList<>();
+        comment_content = new ArrayList<>();
         for(Document document : act.aim_codingtask_comments){
             comment_content.add(new GridElement(document.getString("comment_text"),document.getString("comment_email"),document.getString("comment_time")));
         }
@@ -202,6 +203,17 @@ public class AIM_CTaskViewer {
     }
 
     /**
+     * Function for reloading comment content
+     */
+    public void reloadCommentContent(){
+        comment_content.clear();
+        for(Document document : act.aim_codingtask_comments){
+            comment_content.add(new GridElement(document.getString("comment_text"),document.getString("comment_email"),document.getString("comment_time")));
+        }
+        comments_grid.getDataProvider().refreshAll();
+    }
+
+    /**
      * Function for preparing layout
      */
     void prepareLayout(){
@@ -236,5 +248,15 @@ public class AIM_CTaskViewer {
         ShowFullHistoryWindow sfhw = new ShowFullHistoryWindow(act);
         ctaskviewer_layout.add(sfhw.main_dialog);
         sfhw.main_dialog.open();
+    }
+
+    /**
+     * addcomment_button action
+     * @param ex
+     */
+    private void setAddcomment_button(ClickEvent ex){
+        AddCommentCTaskWindow acctw = new AddCommentCTaskWindow(this);
+        ctaskviewer_layout.add(acctw.main_dialog);
+        acctw.main_dialog.open();
     }
 }

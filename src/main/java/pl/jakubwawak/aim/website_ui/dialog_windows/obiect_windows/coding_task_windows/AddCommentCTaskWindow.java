@@ -16,6 +16,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import org.bson.Document;
 import pl.jakubwawak.aim.AimApplication;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_ctask.AIM_CTaskViewer;
+import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMCodingTask;
+
 import java.time.LocalDateTime;
 
 /**
@@ -36,13 +39,26 @@ public class AddCommentCTaskWindow {
     Button addcomment_button;
 
     InsertCTaskWindow ictw;
-
+    AIM_CTaskViewer actv;
 
     /**
-     * Constructor
+     * Constructor with insert window support
      */
     public AddCommentCTaskWindow(InsertCTaskWindow ictw){
         this.ictw = ictw;
+        this.actv = null;
+        main_dialog = new Dialog();
+        main_layout = new VerticalLayout();
+        prepare_dialog();
+    }
+
+    /**
+     * Constructor with viewer layout support
+     * @param actv
+     */
+    public AddCommentCTaskWindow(AIM_CTaskViewer actv){
+        this.actv = actv;
+        this.ictw = null;
         main_dialog = new Dialog();
         main_layout = new VerticalLayout();
         prepare_dialog();
@@ -93,9 +109,29 @@ public class AddCommentCTaskWindow {
             comment.append("time", LocalDateTime.now().toString());
             comment.append("user", AimApplication.loggedUser.aim_user_id);
             comment.append("comment",comment_area.getValue());
-            ictw.act.aim_codingtask_comments.add(comment);
-            ictw.reloadCommentContent();
-            main_dialog.close();
+
+            // add comment to new ctask in insert window
+            if ( ictw != null ){
+                ictw.act.aim_codingtask_comments.add(comment);
+                ictw.reloadCommentContent();
+                main_dialog.close();
+            }
+
+            // add comment to coding task in viewer
+            else if ( actv != null ){
+                actv.act.aim_codingtask_comments.add(comment);
+                // add comment to database
+                Database_AIMCodingTask dact = new Database_AIMCodingTask(AimApplication.database);
+                int ans = dact.updateCodingTask(actv.act);
+                if (ans == 1){
+                    Notification.show("New comment added to "+actv.act.aim_codingtask_name);
+                    actv.reloadCommentContent();
+                    main_dialog.close();
+                }
+                else{
+                    Notification.show("Failed to add comment, check application log!");
+                }
+            }
         }
         else{
             Notification.show("Comment window cannot be empty!");

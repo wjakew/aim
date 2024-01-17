@@ -78,20 +78,18 @@ public class NotesWidget extends Widget implements Serializable {
     void prepareContent(){
         // prepare content layout
         notesarea = new TextArea("");
-        notesarea.setSizeFull();
+        notesarea.setWidth("90%");notesarea.setHeight("70%");
         notesarea.setValue(contentString);
 
-        notesarea.addKeyPressListener(e -> {
-            if ( e.getKey().equals(Key.ENTER) ){
-                // update note value on the widget
-                Database_AIMWidgetPanel dawp = new Database_AIMWidgetPanel(AimApplication.database);
-                int ans = dawp.updateWidgetContentString("notes",notesarea.getValue(),widgetID);
-                if (ans == 1){
-                    Notification.show("Notes widget updated!");
-                }
-                else{
-                    Notification.show("Cannot update widget! Check application log!");
-                }
+        notesarea.addBlurListener(e->{
+            // update note value on the widget
+            Database_AIMWidgetPanel dawp = new Database_AIMWidgetPanel(AimApplication.database);
+            int ans = dawp.updateWidgetContentString("notes",notesarea.getValue(),widgetID);
+            if (ans == 1){
+                Notification.show("Notes widget updated!");
+            }
+            else{
+                Notification.show("Cannot update widget! Check application log!");
             }
         });
     }

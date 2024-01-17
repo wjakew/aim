@@ -10,7 +10,8 @@
 ### Roadmap
 
 - Application log viewer - IN FUTURE
-- Coding projects and task support - IN FUTURE
+- Ollama support! - IN FUTURE
+- Coding projects - IN FUTURE
 
 ![screenshot1](https://github.com/wjakew/aim/blob/master/readme_resources/aim_screenshot1.png)
 
@@ -27,17 +28,17 @@ Coming soon!
 ### Core functionality.
 
 1. Creating tasks, projects and boards.
-2. Maintaining tasks by changing owners, adding comments. Check task history right in the task window.
-3. Create projects with full history and API support, add tasks, add comments and check the completion level.
-4. Create collaborative boards  - add task, delegate users. Create members and add privileges.
-5. Two UI modes, simple, normal one and terminal - interact with the app using only the keyboard.
+2. Create coding tasks with full notes / comments and history support!
+3. Maintaining tasks by changing owners, adding comments. Check task history right in the task window.
+4. Create projects with full history and API support, add tasks, add comments and check the completion level.
+5. Create collaborative boards  - add task, delegate users. Create members and add privileges.
 6. Dashboard view with engaging task list.
 7. Simple and easy deployment - you only need MongoDB instance and machine with Java 21.
 8. Ready for full API support for task automation.
 9. UI Customization.
 10. Sharing objects and public viewer.
 11. Page/View with full customization - new widgets - custom floating window for your quick actions! 
-12. Coding projects and task support - new category of object - COMING SOON.
+12. Two UI modes, simple, normal one and terminal - interact with the app using only the keyboard.
 
 ### Prototype boards
 
@@ -57,7 +58,7 @@ Standard View
 
 Terminal View
 
-![screenshot3](https://github.com/wjakew/aim/blob/master/readme_resources/aim_screenshot7.png)
+![screenshot3]( https://github.com/wjakew/aim/blob/master/readme_resources/aim_screenshot7.png)
 
 ### Technology stack:
 
@@ -85,18 +86,34 @@ Current endpoints:
 ```html
 /api/board/board-list/{aim_apikey}
 ```
+You can turn on or off API and create your API key in application settings.
 
-You can turn on or off API and create your API key in application settings
+### Widgets
+
+Application contains widget functionality.
+
+![screenshot13]( https://github.com/wjakew/aim/blob/master/readme_resources/aim_screenshot13.png)
+
+In the /widgets view user has 4 places to store widgets. Widgets can be changed any time using simple
+widget picker
+
+![screenshot14]( https://github.com/wjakew/aim/blob/master/readme_resources/aim_screenshot14.png)
+
+### Main application pages
+1. /dashboard  - shows current statistics about your main tasks, boards and projects
+2. /terminal - simple and mouse free environment to navigate through 
+3. /widgets - space for your widgets
+4. /home - glance window for your "kaban like" task view
+5. /coding - new space for coding task - rich task object
+
 
 ### Deployment
 
 1. Download the latest zip archive from the Release section.
 2. Unzip in desired location.
-3. Run the app with 
-
+3. Run the app with
 ```jsx
-java -jar aim-1.0.0.jar
+java -jar aim.jar
 ```
-
 4. Insert the connection string from your MongoDB tenant.
 5. Create the admin account!

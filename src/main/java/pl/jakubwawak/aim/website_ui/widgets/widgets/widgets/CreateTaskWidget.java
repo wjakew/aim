@@ -81,14 +81,14 @@ public class CreateTaskWidget extends Widget implements Serializable {
         // prepare content layout
         taskName_field = new TextField("");
         taskName_field.setPlaceholder("Task Name");
-        taskName_field.setWidth("100%");
+        taskName_field.setWidth("80%");
 
         taskDesc_field = new TextField("");
         taskDesc_field.setPlaceholder("Task Desc");
-        taskDesc_field.setWidth("100%");
+        taskDesc_field.setWidth("80%");
 
         create_button = new Button("Create",VaadinIcon.TASKS.create(),this::setCreate_button);
-        create_button.setWidth("100%");
+        create_button.setWidth("80%");
         create_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
     }
 

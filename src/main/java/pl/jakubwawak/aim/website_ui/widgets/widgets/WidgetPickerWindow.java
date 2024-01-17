@@ -91,7 +91,7 @@ public class WidgetPickerWindow {
 
         configurationstring_field = new TextField();
         configurationstring_field.setPlaceholder("configuration string...");
-        configurationstring_field.setWidth("50%");
+        configurationstring_field.setWidth("70%");
 
         content_field = new TextArea("Description");
         content_field.setSizeFull();
@@ -132,7 +132,6 @@ public class WidgetPickerWindow {
         main_layout.add(hl_main);
 
         HorizontalLayout hl_buttons = new HorizontalLayout(previous_button,configurationstring_field,next_button);
-        hl_buttons.setWidth("100%");
         hl_buttons.setVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
         main_layout.add(hl_buttons);
         main_layout.add(select_button);

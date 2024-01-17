@@ -81,10 +81,10 @@ public class TerminalWidget extends Widget implements Serializable {
     void prepareContent(){
         // prepare content layout
         terminalArea = new TextField("Your Command Line");
-        terminalArea.setWidth("100%");
+        terminalArea.setWidth("80%");terminalArea.setHeight("50%");
         aip = new AIMInputParser(widget);
         createrequest_button = new Button("Create Request", VaadinIcon.ARROW_RIGHT.create(),this::setCreaterequest_button);
-        createrequest_button.setWidth("100%");
+        createrequest_button.setWidth("80%");
         createrequest_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
 
     }
