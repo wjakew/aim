@@ -68,10 +68,10 @@ public class AIMInputParser {
     /**
      * Constructor
      */
-    public AIMInputParser(VerticalLayout terminalView){
+    public AIMInputParser(VerticalLayout parent){
         successParsingFlag = 0;
         simpleViewFlagNeed = 0;
-        this.secondaryLayout = terminalView;
+        this.secondaryLayout = parent;
         userInputHistory = new ArrayList<>();
         allCommandsCollection = new ArrayList<>();
         createAllCommandsCollection();

@@ -51,13 +51,27 @@ public class WidgetPickerWindow {
 
     ArrayList<Widget> selectableWidgetCollection;
     int widgetID;
-
+    VerticalLayout parent;
 
     /**
-     * Constructor
+     * Constructor with widget support
      */
     public WidgetPickerWindow(int widgetID){
         this.widgetID = widgetID;
+        this.parent = null;
+        index = 0;
+        main_dialog = new Dialog();
+        main_layout = new VerticalLayout();
+        prepare_dialog();
+    }
+
+    /**
+     * Constructor with workspace support
+     * @param parent
+     */
+    public WidgetPickerWindow(VerticalLayout parent){
+        this.widgetID = -99;
+        this.parent = parent;
         index = 0;
         main_dialog = new Dialog();
         main_layout = new VerticalLayout();
@@ -198,18 +212,70 @@ public class WidgetPickerWindow {
      * @param ex
      */
     private void setSelect_button(ClickEvent ex){
-        String contentString = configurationstring_field.getValue();
-        String widgetName = selectableWidgetCollection.get(index).widgetName;
-        // got ID Name and contentString
-        Database_AIMWidgetPanel dawp = new Database_AIMWidgetPanel(AimApplication.database);
-        int ans = dawp.updatePanelData(widgetName,contentString,widgetID);
-        if ( ans == 1 ){
-            AimApplication.currentWidgetPanel = new WidgetPanel(dawp.getPanelData());
-            UI.getCurrent().getPage().reload();
-            Notification.show("Added new widget!");
+        if (widgetID >= 0){
+            String contentString = configurationstring_field.getValue();
+            String widgetName = selectableWidgetCollection.get(index).widgetName;
+            // got ID Name and contentString
+            Database_AIMWidgetPanel dawp = new Database_AIMWidgetPanel(AimApplication.database);
+            int ans = dawp.updatePanelData(widgetName,contentString,widgetID);
+            if ( ans == 1 ){
+                AimApplication.currentWidgetPanel = new WidgetPanel(dawp.getPanelData());
+                UI.getCurrent().getPage().reload();
+                Notification.show("Added new widget!");
+            }
+            else{
+                Notification.show("Failed to update panel data, check application log!");
+            }
         }
         else{
-            Notification.show("Failed to update panel data, check application log!");
+            String contentString = configurationstring_field.getValue();
+            String widgetName = selectableWidgetCollection.get(index).widgetName;
+            Widget widget = null;
+            switch(widgetName){
+                case "counter":
+                {
+                    widget = new CounterWidget(100,100,contentString,0);
+                    break;
+                }
+                case "create-task":
+                {
+                    widget = new CreateTaskWidget(100,100,contentString,0);
+                    break;
+                }
+                case "task-details":
+                {
+                    widget = new TaskDetailsWidget(100,100,contentString,0);
+                    break;
+                }
+                case "terminal":
+                {
+                    widget = new TerminalWidget(100,100,contentString,0);
+                    break;
+                }
+                case "task-list":
+                {
+                    widget = new TaskListWidget(100,100,contentString,0);
+                    break;
+                }
+                case "projects-list":
+                {
+                    widget = new ProjectsWidget(100,100,contentString,0);
+                    break;
+                }
+                case "notes":
+                {
+                    widget = new NotesWidget(100,100,contentString,0);
+                    break;
+                }
+            }
+
+            if ( widget != null ){
+                // create modable window for showing widget data
+                WidgetFloatingWindow wfw = new WidgetFloatingWindow(widget);
+                parent.add(wfw.main_dialog);
+                wfw.main_dialog.open();
+                main_dialog.close();
+            }
         }
     }
 }

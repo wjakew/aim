@@ -62,4 +62,22 @@ Table AIM_GlobalConfiguration{
   globalConfigurationFeature4 vachar
 }
 
+Table AIM_CodingTask{
+  aim_codingtask_id ObjectID
+  aim_codingproject_id integer
+  aim_codingtask_status varchar
+  aim_user_id AIM_User
+  aim_codingtask_tag varchar
+  aim_codingtask_timestamp LocalDateTime
+  aim_codingtask_name varchar
+  aim_codingtask_desc varchar
+  aim_codingtask_comments List
+  aim_codingtask_history List
+}
 
+Table AIM_Workspace{
+  aim_workspace_id ObjectID
+  aim_user_id AIM_User
+  aim_workspace_name varchar
+  aim_workspace_objects List
+}

@@ -28,6 +28,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_terminal_engine.AIMInputParser;
+import pl.jakubwawak.aim.website_ui.PageHeader;
 import pl.jakubwawak.aim.website_ui.dialog_windows.AddElementWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.CommandSuggestionWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.UserWindow;
@@ -44,11 +45,11 @@ public class TerminalView extends VerticalLayout {
 
     public TextField terminal_field;
 
+    PageHeader pageHeader;
+
     AIMInputParser aip;
 
     Button normalmode_button;
-
-    HorizontalLayout headerLayout;
 
     Button runcommand_button,help_button;
     H6 simpleViewHeader;
@@ -80,118 +81,6 @@ public class TerminalView extends VerticalLayout {
         getStyle().set("--lumo-font-family","Monospace");
     }
 
-    /**
-     * Function for preparing header objects
-     */
-    void prepare_header(){
-        // prepare menu
-        logout_button = new Button("Log out",VaadinIcon.EXIT.create(),this::logoutbutton_action);
-        new ButtonStyler().primaryButtonStyle(logout_button,"80%","");
-
-        MenuBar headerMenuBar= new MenuBar();
-        headerMenuBar.addThemeVariants(MenuBarVariant.LUMO_CONTRAST,MenuBarVariant.LUMO_PRIMARY);
-
-        MenuItem aimItem = headerMenuBar.addItem("Aim");
-        SubMenu subItems = aimItem.getSubMenu();
-
-        MenuItem subItems1 = subItems.addItem(new HorizontalLayout(VaadinIcon.DASHBOARD.create(),new H6("Dashboard")));
-        subItems1.setCheckable(false);
-        subItems1.setChecked(false);
-
-        MenuItem subItems2 = subItems.addItem(new HorizontalLayout(VaadinIcon.TERMINAL.create(),new H6("Terminal")));
-        subItems2.setCheckable(false);
-        subItems2.setChecked(false);
-
-        MenuItem subItems3 = subItems.addItem(new HorizontalLayout(VaadinIcon.PLUS.create(),new H6("Add Element")));
-        subItems3.setCheckable(false);
-        subItems3.setChecked(false);
-
-        MenuItem subItems4 = subItems.addItem(new HorizontalLayout(VaadinIcon.USER.create(),new H6("Your Account")));
-        subItems4.setCheckable(false);
-        subItems4.setChecked(false);
-
-        MenuItem subItems5 = subItems.addItem(new HorizontalLayout(VaadinIcon.USER.create(),new H6("My Space")));
-        subItems5.setCheckable(false);
-        subItems5.setChecked(false);
-
-        MenuItem subItems6 = subItems.addItem(new HorizontalLayout(VaadinIcon.CODE.create(),new H6("Coding")));
-        subItems6.setCheckable(false);
-        subItems6.setChecked(false);
-
-        ComponentEventListener<ClickEvent<MenuItem>> listener = event -> {
-            MenuItem selectedItem = event.getSource();
-            if ( selectedItem.equals(subItems1)){
-                System.out.println("Dashboard");
-                getUI().ifPresent(ui -> ui.navigate("/dashboard"));
-            }
-            else if ( selectedItem.equals(subItems2)){
-                System.out.println("Terminal");
-                getUI().ifPresent(ui -> ui.navigate("/terminal"));
-            }
-            else if ( selectedItem.equals(subItems3)){
-                System.out.println("Add Element");
-                AddElementWindow aew = new AddElementWindow();
-                add(aew.main_dialog);
-                aew.main_dialog.open();
-            }
-            else if ( selectedItem.equals(subItems4)){
-                System.out.println("Your Account");
-                UserWindow uw = new UserWindow();
-                add(uw.main_dialog);
-                uw.main_dialog.open();
-            }
-            else if ( selectedItem.equals(subItems5)){
-                System.out.println("My Space");
-                getUI().ifPresent(ui -> ui.navigate("/widgets"));
-            }
-            else if ( selectedItem.equals(subItems6)){
-                System.out.println("Coding");
-                getUI().ifPresent(ui -> ui.navigate("/coding"));
-            }
-
-        };
-
-        subItems1.addClickListener(listener);
-        subItems2.addClickListener(listener);
-        subItems3.addClickListener(listener);
-        subItems4.addClickListener(listener);
-        subItems5.addClickListener(listener);
-        subItems6.addClickListener(listener);
-
-        // prepare window layout and components
-        FlexLayout center_layout = new FlexLayout();
-        center_layout.setSizeFull();
-        center_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
-        center_layout.setAlignItems(FlexComponent.Alignment.CENTER);
-        center_layout.add(new H6(new Date().toString()));
-
-
-        FlexLayout left_layout = new FlexLayout();
-        left_layout.setSizeFull();
-        left_layout.setJustifyContentMode(JustifyContentMode.CENTER);
-        left_layout.setAlignItems(Alignment.CENTER);
-        left_layout.setWidth("80%");
-        left_layout.add(headerMenuBar);
-
-        FlexLayout right_layout = new FlexLayout();
-        right_layout.setSizeFull();
-        right_layout.setJustifyContentMode(JustifyContentMode.START);
-        right_layout.setAlignItems(FlexComponent.Alignment.END);
-        right_layout.add(logout_button);
-        right_layout.setWidth("80%");
-
-        headerLayout = new HorizontalLayout(left_layout,center_layout,right_layout);
-        headerLayout.setWidth("70%");
-        headerLayout.setMargin(true);
-        headerLayout.getStyle().set("background-color","gray");
-        headerLayout.getStyle().set("color","black");
-        headerLayout.getStyle().set("border-radius","15px");
-
-        headerLayout.setMargin(true);
-        headerLayout.setAlignItems(Alignment.CENTER);
-        headerLayout.setVerticalComponentAlignment(Alignment.CENTER);
-    }
-
 
     /**
      * Function for preparing components
@@ -204,6 +93,8 @@ public class TerminalView extends VerticalLayout {
         terminal_field.setPrefixComponent(VaadinIcon.TERMINAL.create());
         terminal_field.setPlaceholder("let's create something...");
         terminal_field.setWidth("50%");
+
+        pageHeader = new PageHeader();
 
         terminal_field.addKeyPressListener(e->
         {
@@ -265,7 +156,7 @@ public class TerminalView extends VerticalLayout {
      * Function for preparing layout
      */
     void prepare_layout(){
-        upperLayout.add(headerLayout);
+        upperLayout.add(pageHeader);
         centerLayout.add(new H6(AimApplication.loggedUser.aim_user_email));
         centerLayout.add(help_button);
 
@@ -279,7 +170,6 @@ public class TerminalView extends VerticalLayout {
      */
     void prepare_view(){
         if (AimApplication.loggedUser != null){
-            prepare_header();
             prepare_components();
             prepare_layout();
         }

@@ -40,7 +40,6 @@ import pl.jakubwawak.aim.website_ui.views.WelcomeView;
 @Route(value = "/viewer")
 public class ViewerRedirectPage extends VerticalLayout {
 
-    HorizontalLayout headerLayout;
     Button home_button, terminal_button, addelement_button,logout_button,user_button;
 
     Button go_button;
@@ -61,42 +60,6 @@ public class ViewerRedirectPage extends VerticalLayout {
         getStyle().set("text-align", "center");
         getStyle().set("background-image","radial-gradient(white,gray)");
         getStyle().set("--lumo-font-family","Monospace");
-    }
-
-    /**
-     * Function for preparing header objects
-     */
-    void prepare_header(){
-        // prepare window layout and components
-        FlexLayout center_layout = new FlexLayout();
-        center_layout.setSizeFull();
-        center_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
-        center_layout.setAlignItems(FlexComponent.Alignment.CENTER);
-        center_layout.add(new H6("AIM"));
-
-        FlexLayout left_layout = new FlexLayout();
-        left_layout.setSizeFull();
-        left_layout.setJustifyContentMode(JustifyContentMode.END);
-        left_layout.setAlignItems(FlexComponent.Alignment.START);
-        left_layout.setWidth("80%");
-        left_layout.add(home_button,terminal_button,user_button,addelement_button);
-
-        FlexLayout right_layout = new FlexLayout();
-        right_layout.setSizeFull();
-        right_layout.setJustifyContentMode(JustifyContentMode.START);
-        right_layout.setAlignItems(FlexComponent.Alignment.END);
-        right_layout.add(logout_button);
-        right_layout.setWidth("80%");
-
-        headerLayout = new HorizontalLayout(left_layout,center_layout,right_layout);
-        headerLayout.setWidth("70%");
-        headerLayout.setMargin(true);
-        headerLayout.getStyle().set("background-color","gray");
-        headerLayout.getStyle().set("color","black");
-        headerLayout.getStyle().set("border-radius","15px");
-
-        headerLayout.setMargin(true);
-        headerLayout.setAlignItems(Alignment.CENTER);
     }
 
     /**
