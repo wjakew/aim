@@ -4,14 +4,14 @@
 
 ### Web application for task scheduling and project maintaining. More advanced “todo application”.
 
-> Current version in Proof Of Concept state - do not use that in mission-critical tasks.
+> Current version is in ALPHA - ready to test.
 > 
 
 ### Roadmap
 
-- Application log viewer - IN FUTURE
 - Ollama support! - IN FUTURE
-- Coding projects - IN FUTURE
+- Journal functionality - IN FUTURE
+- New API features - IN FUTURE
 
 ![screenshot1](https://github.com/wjakew/aim/blob/master/readme_resources/aim_screenshot1.png)
 
@@ -54,7 +54,7 @@ Widgets
 
 Standard View
 
-![screenshot2](https://github.com/wjakew/aim/blob/master/readme_resources/aim_screenshot5.png)
+![screenshot2](https://github.com/wjakew/aim/blob/master/readme_resources/aim_screenshot6.png)
 
 Terminal View
 
@@ -95,7 +95,7 @@ Application contains widget functionality.
 ![screenshot13]( https://github.com/wjakew/aim/blob/master/readme_resources/aim_screenshot13.png)
 
 In the /widgets view user has 4 places to store widgets. Widgets can be changed any time using simple
-widget picker
+widget picker. You can also add widgets as floating windows in /workspace.
 
 ![screenshot14]( https://github.com/wjakew/aim/blob/master/readme_resources/aim_screenshot14.png)
 
@@ -105,6 +105,7 @@ widget picker
 3. /widgets - space for your widgets
 4. /home - glance window for your "kaban like" task view
 5. /coding - new space for coding task - rich task object
+6. /workspace - space for creating floating windows with widgets
 
 
 ### Deployment

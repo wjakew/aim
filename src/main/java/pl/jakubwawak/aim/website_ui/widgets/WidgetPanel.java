@@ -95,6 +95,10 @@ public class WidgetPanel {
                 {
                     return new NotesWidget(100,100,widgetDocument.getString("widgetContentString"),widgetCounter);
                 }
+                case "codingtask-widget":
+                {
+                    return new CodingTaskWidget(100,100,widgetDocument.getString("widgetContentString"),widgetCounter);
+                }
             }
             return null;
         }

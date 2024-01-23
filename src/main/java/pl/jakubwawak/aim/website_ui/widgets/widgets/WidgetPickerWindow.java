@@ -93,6 +93,7 @@ public class WidgetPickerWindow {
         selectableWidgetCollection.add(new TaskListWidget(100,100,"",4));
         selectableWidgetCollection.add(new ProjectsWidget(100,100,"",4));
         selectableWidgetCollection.add(new NotesWidget(100,100,"",5));
+        selectableWidgetCollection.add(new CodingTaskWidget(100,100,"",5));
         // running in demo mode
 
         previous_button = new Button("", VaadinIcon.ARROW_LEFT.create(),this::setPrevious_button);
@@ -266,6 +267,10 @@ public class WidgetPickerWindow {
                 {
                     widget = new NotesWidget(100,100,contentString,0);
                     break;
+                }
+                case "codingtask-widget":
+                {
+                    widget = new CodingTaskWidget(100,100,contentString,0);
                 }
             }
 

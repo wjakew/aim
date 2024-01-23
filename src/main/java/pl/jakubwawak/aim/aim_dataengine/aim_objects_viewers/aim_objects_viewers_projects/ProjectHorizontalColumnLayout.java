@@ -48,9 +48,9 @@ public class ProjectHorizontalColumnLayout {
         next_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
 
         prepareLayout();
-        //projectHorizontalColumnLayout.setWidth("100%");
         projectHorizontalColumnLayout.getStyle().set("color","black");
         projectHorizontalColumnLayout.getStyle().set("border-radius","15px");
+        projectHorizontalColumnLayout.setWidth("100%");
 
         //projectHorizontalColumnLayout.setMargin(true);
         projectHorizontalColumnLayout.setAlignItems(FlexComponent.Alignment.CENTER);
