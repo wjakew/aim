@@ -15,7 +15,7 @@
 	<description>Simple and cute to-do application.</description>
 	<properties>
 		<java.version>17</java.version>
-		<vaadin.version>24.1.6</vaadin.version>
+		<vaadin.version>24.3.3</vaadin.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -31,6 +31,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-maven-plugin</artifactId>
+			<version>24.3.3</version>
 		</dependency>
 
 		<dependency>
@@ -90,6 +96,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>3.2.2</version>
 			</plugin>
 		</plugins>
 	</build>
