@@ -23,6 +23,10 @@ import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_APIUserKey;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_APIKey;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.time.LocalDateTime;
+
 /**
  * Window for managing API keys
  */
@@ -42,6 +46,8 @@ public class APIManagerWindow {
     Database_APIKey databaseApiKey;
     Button createapi_button;
     Button blockapi_button;
+
+    Button downloadakey_button;
 
     Button apikey_button;
 
@@ -68,6 +74,7 @@ public class APIManagerWindow {
         // set components
         createapi_button = new Button("error", VaadinIcon.PLUG.create(),this::createapibutton_action);
         blockapi_button = new Button("error",VaadinIcon.STOP.create(),this::blockapibutton_action);
+        downloadakey_button = new Button("Download aKey",VaadinIcon.DOWNLOAD.create(),this::setDownloadakey_button);
 
         if ( userKey != null ){
             apikey_button = new Button(userKey.apiuserkey_value,VaadinIcon.KEY.create(),this::apikeybutton_action);
@@ -77,6 +84,7 @@ public class APIManagerWindow {
 
         createapi_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
         blockapi_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        downloadakey_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
 
         if ( userKey != null ){
             createapi_button.setText("Remove key");
@@ -106,6 +114,7 @@ public class APIManagerWindow {
             main_layout.add(new H6(userKey.apiuserkey_timegenerated));
             main_layout.add(new H6(status));
             main_layout.add(new HorizontalLayout(blockapi_button,createapi_button));
+            main_layout.add(downloadakey_button);
         }
         else{
             main_layout.add(new H6("NO API KEY CREATED"));
@@ -173,32 +182,55 @@ public class APIManagerWindow {
      * blockapi_button action
      * @param ex
      */
-    private void blockapibutton_action(ClickEvent ex){
-        switch(status){
-            case "API ACTIVE":
-            {
-                int ans = databaseApiKey.changeAPIKeyStatus(userKey,0);
-                if (ans == 1){
+    private void blockapibutton_action(ClickEvent ex) {
+        switch (status) {
+            case "API ACTIVE": {
+                int ans = databaseApiKey.changeAPIKeyStatus(userKey, 0);
+                if (ans == 1) {
                     Notification.show("Status changed");
                     main_dialog.close();
-                }
-                else{
+                } else {
                     Notification.show("Failed to change status, check log");
                 }
                 break;
             }
-            case "API INACTIVE":
-            {
-                int ans = databaseApiKey.changeAPIKeyStatus(userKey,1);
-                if (ans == 1){
+            case "API INACTIVE": {
+                int ans = databaseApiKey.changeAPIKeyStatus(userKey, 1);
+                if (ans == 1) {
                     Notification.show("Status changed");
                     main_dialog.close();
-                }
-                else{
+                } else {
                     Notification.show("Failed to change status, check log");
                 }
                 break;
             }
         }
+    }
+
+    /**
+     * downloadakey_button action
+     * @param ex
+     */
+    private void setDownloadakey_button(ClickEvent ex){
+        try{
+            FileWriter fw = new FileWriter("aim_instance.akey");
+            fw.write("#this is the key to connect to the aim server - don't change\n");
+            fw.write("connectionString%"+AimApplication.connectionStringDebug+"\n");
+            fw.write("userLogged%"+AimApplication.loggedUser.aim_user_email+"\n");
+            fw.write("apiKey%"+apikey_button.getText()+"\n");
+            fw.write("time%"+ LocalDateTime.now()+"\n");
+            fw.write("#do not change this file, file is validated"+"\n");
+            fw.close();
+            File file = new File("aim_instance.akey");
+            if ( file.exists() ){
+                FileDownloaderComponent fdc = new FileDownloaderComponent(file);
+                main_dialog.add(fdc.dialog);
+                fdc.dialog.open();
+            }
+        }catch(Exception e){
+            Notification.show(e.toString());
+        }
+
+
     }
 }

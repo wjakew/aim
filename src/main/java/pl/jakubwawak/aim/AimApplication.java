@@ -5,6 +5,7 @@
  */
 package pl.jakubwawak.aim;
 
+import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.spring.annotation.EnableVaadin;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -27,8 +28,8 @@ import java.util.Scanner;
 @EnableVaadin({"pl.jakubwawak"})
 public class AimApplication {
 
-	public static String version = "v1.0.0";
-	public static String build = "aim250124REV01";
+	public static String version = "v1.0.1";
+	public static String build = "aim120224REV01";
 	public static String applicationStartup;
 	public static int test_flag = 0; // flag for enabling testing
 	public static int log_database_dump_flag = 1; // flag for enabling database log dump
@@ -105,6 +106,14 @@ public class AimApplication {
 				" \\__,_|_|_| |_| |_|";
 		header = header + version+"/"+build;
 		System.out.println(ConsoleColors.YELLOW_BRIGHT+header+ConsoleColors.RESET);
+	}
+
+	/**
+	 * Function for loading connection string
+	 * @return String
+	 */
+	public String getConnectionString(){
+		return connectionStringDebug;
 	}
 
 }

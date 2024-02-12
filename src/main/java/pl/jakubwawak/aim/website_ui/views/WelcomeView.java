@@ -11,7 +11,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
+import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.StreamResource;
+import com.vaadin.flow.theme.Theme;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.website_ui.dialog_windows.LoginWindow;
 
@@ -20,6 +22,7 @@ import pl.jakubwawak.aim.website_ui.dialog_windows.LoginWindow;
  * Object for showing welcome view
  */
 @PageTitle("aim by Jakub Wawak")
+//@PWA(name = "AimApplication", shortName = "Aim")
 @Route(value = "/welcome")
 @RouteAlias(value = "/")
 public class WelcomeView extends VerticalLayout {
