@@ -28,8 +28,8 @@ import java.util.Scanner;
 @EnableVaadin({"pl.jakubwawak"})
 public class AimApplication {
 
-	public static String version = "v1.0.1";
-	public static String build = "aim120224REV02";
+	public static String version = "v1.0.2";
+	public static String build = "aim040324REV01";
 	public static String applicationStartup;
 	public static int test_flag = 0; // flag for enabling testing
 	public static int log_database_dump_flag = 1; // flag for enabling database log dump
@@ -63,6 +63,7 @@ public class AimApplication {
 		currentWidgetPanel = null;
 		currentBoardTaskList = null;
 		database = new Database_Connector();
+		AimApplicationMenu aam = new AimApplicationMenu();
 		if ( test_flag == 0 ){
 			// run application in normal mode
 			if ( connectionStringDebug.isBlank() ){
@@ -72,6 +73,7 @@ public class AimApplication {
 				database.connect();
 				if(database.connected){
 					SpringApplication.run(AimApplication.class, args);
+					aam.run();
 				}
 				else{
 					System.out.println(ConsoleColors.RED_BACKGROUND+"Cannot connect to database. Check connection string!");
@@ -83,6 +85,7 @@ public class AimApplication {
 				database.connect();
 				if(database.connected){
 					SpringApplication.run(AimApplication.class, args);
+					aam.run();
 				}
 				else{
 					System.out.println(ConsoleColors.RED_BACKGROUND+"Cannot connect to database. Check connection string!");

@@ -80,6 +80,16 @@ public class Database_Connector {
     }
 
     /**
+     * Function for creating
+     * @param login
+     * @return
+     */
+    public int makeAdmin(String login){
+        //TODO make admin
+        return 0;
+    }
+
+    /**
      * Function for loading global configuration from database
      * @return AIM_GlobalConfiguration
      */
