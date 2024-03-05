@@ -66,7 +66,7 @@ public class AimApplicationMenu {
                         if( ans == 1 ){
                             menuPrint("Created "+login+" as admin!");
                         }
-                        else if ( ans == 2 ){
+                        else if ( ans == 0 ){
                             menuPrint("No such login: "+login);
                         }
                         else{

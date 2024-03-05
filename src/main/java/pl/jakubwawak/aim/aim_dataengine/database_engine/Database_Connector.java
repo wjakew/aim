@@ -18,6 +18,7 @@ import org.bson.conversions.Bson;
 import pl.jakubwawak.aim.AimApplication;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_ApplicationLog;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_GlobalConfiguration;
+import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_User;
 import pl.jakubwawak.maintanance.ConsoleColors;
 import pl.jakubwawak.maintanance.GridElement;
 
@@ -81,11 +82,15 @@ public class Database_Connector {
 
     /**
      * Function for creating
-     * @param login
+     * @param email
      * @return
      */
-    public int makeAdmin(String login){
-        //TODO make admin
+    public int makeAdmin(String email){
+        Database_AIMUser dau = new Database_AIMUser(this);
+        AIM_User user = dau.getAIMUser(email);
+        if ( user != null ){
+            return dau.setUserAdmin(user);
+        }
         return 0;
     }
 
