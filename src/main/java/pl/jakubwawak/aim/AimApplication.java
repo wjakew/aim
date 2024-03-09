@@ -5,10 +5,12 @@
  */
 package pl.jakubwawak.aim;
 
+import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.spring.annotation.EnableVaadin;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_GlobalConfiguration;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects.AIM_User;
 import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_board.AIM_BoardTaskListLayout;
@@ -26,17 +28,21 @@ import java.util.Scanner;
 
 @SpringBootApplication
 @EnableVaadin({"pl.jakubwawak"})
-public class AimApplication {
+@PWA(
+		name = "Aim Application",
+		shortName = "Aim"
+)
+public class AimApplication extends SpringBootServletInitializer implements AppShellConfigurator {
 
-	public static String version = "v1.0.2";
-	public static String build = "aim050324REV01";
+	public static String version = "v1.0.4";
+	public static String build = "aim090324REV01";
 	public static String applicationStartup;
 	public static int test_flag = 0; // flag for enabling testing
 	public static int log_database_dump_flag = 1; // flag for enabling database log dump
 
 	public static Database_Connector database;
 	public static AIM_GlobalConfiguration globalConfiguration;
-	public static String connectionStringDebug = "";
+	public static String connectionStringDebug = "mongodb://localhost:27017";
 
 	public static AIM_User loggedUser;
 

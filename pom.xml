@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>pl.jakubwawak</groupId>
 	<artifactId>aim</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.4</version>
 	<name>aim</name>
 	<description>Simple and cute to-do application.</description>
 	<properties>
