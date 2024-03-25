@@ -48,20 +48,13 @@ public class CodingView extends VerticalLayout {
      * Constructor
      */
     public CodingView(){
+        addClassName("home-view");
         this.getElement().setAttribute("theme", Lumo.DARK);
         prepare_view();
-
         setSizeFull();
         setJustifyContentMode(JustifyContentMode.CENTER);
         setDefaultHorizontalComponentAlignment(Alignment.CENTER);
         getStyle().set("text-align", "center");
-        if ( AimApplication.loggedUser.aim_user_configuration2.equals("blank") ){
-            getStyle().set("background-image","radial-gradient(white,gray)");
-        }
-        else{
-            getStyle().set("background-image","radial-gradient("+AimApplication.loggedUser.aim_user_configuration2+")");
-        }
-        getStyle().set("--lumo-font-family","Monospace");
     }
 
     /**

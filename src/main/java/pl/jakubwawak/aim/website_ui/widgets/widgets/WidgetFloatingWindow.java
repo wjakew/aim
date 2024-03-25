@@ -37,6 +37,7 @@ public class WidgetFloatingWindow {
     public WidgetFloatingWindow(Widget widget){
         this.widget = widget;
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window");
         main_dialog.setDraggable(true);
         main_dialog.setModal(false);
         main_dialog.setResizable(true);

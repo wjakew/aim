@@ -1,0 +1,176 @@
+/*----------------------------------standard normal components*/
+.aim-inputfield-bright{
+    font-family: Monospace;
+    --vaadin-input-field-border-width: 1px;
+    --vaadin-input-field-border-color: white;
+    --vaadin-input-field-placeholder-color: white;
+    --vaadin-input-field-value-color: white;
+    --vaadin-input-field-label-color: white;
+    --vaadin-input-field-focused-label-color: purple;
+    --vaadin-input-field-hover-highlight: purple;
+}
+.aim-grid{
+    background-color: black;
+}
+.aim-grid::part(cell){
+    background-color: black;
+    color: white;
+    font-family: Monospace;
+}
+.aim-button-transparent{
+    --lumo-primary-color:white;
+    background-color: transparent;
+    color: white;
+    font-family: Monospace;
+}
+.aim-button-black{
+    --lumo-primary-color:white;
+    background-color: black;
+    color: white;
+    font-family: Monospace;
+    border-style: solid;
+    border-color: white;
+}
+.aim-menu{
+    --lumo-primary-color:white;
+    background-color: black;
+    color: white;
+    font-family: Monospace;
+    border-radius: 25px;
+}
+.aim-menu::part(overlay){
+    --lumo-primary-color:white;
+    color: white;
+    font-family: Monospace;
+}
+.aim-window::part(overlay){
+    background-color: transparent;
+}
+.aim-window-normal::part(overlay){
+    background-color: black;
+    color: white;
+    border-radius: 10px;
+    border-color: white;
+    border-style: solid;
+}
+.aim-window-normal::part(backdrop){
+    background-color: transparent;
+}
+.aim-window-normal  H6{
+    font-family: Monospace;
+    color: white;
+}
+.page-header{
+    background-color: black;
+    color: white;
+    font-family: Monospace;
+    border-style: solid;
+    border-color: white;
+    border-radius: 25px;
+}
+.page-header H6{
+    color: white;
+}
+/*----------------------------------task components*/
+.task-column-layout{
+    background-color: black;
+    border-radius: 25px;
+    border-style: solid;
+    border-color: black;
+}
+.current-task-composer{
+    background-color: black;
+    text-align: center;
+    font-family: Monospace;
+}
+.task-layout{
+    background-color: black;
+    border-radius: 25px;
+    text-align: left;
+    font-family: Monospace;
+    border-style: solid;
+    border-color: white;
+}
+.task-layout H6{
+    color: white;
+}
+/*----------------------------------HomeView styling and components*/
+.home-view{
+    background-color: black;
+}
+.mainredirect-page{
+    background-color: black;
+    overflow: hidden;
+}
+/*----------------------------------WelcomeView styling and components*/
+.welcome-view{
+    background-color: black;
+    color: white;
+}
+.welcome-view H6{
+    font-family: Monospace;
+    color: white;
+}
+/*----------------------------------LoginWindow styling and components*/
+.loginwindow-dialog::part(overlay){
+    background-color: black;
+    color: white;
+    border-radius: 10px;
+    border-color: white;
+    border-style: solid;
+}
+.loginwindow-dialog::part(backdrop){
+    background-color: transparent;
+}
+.loginwindow-dialog H6{
+    font-family: Monospace;
+    color: white;
+}
+/*----------------------------------DashboardView styling and components*/
+.dashboard-view{
+    background-color: black;
+}
+.dashboard-view H6{
+    font-family: Monospace;
+    color: white;
+}
+/*----------------------------------TerminalView styling and components*/
+.terminal-view{
+    background-color: black;
+}
+.terminal-view H6{
+    font-family: Monospace;
+    color: white;
+}
+/*----------------------------------Project styling and components*/
+.current-project-composer{
+    background-color: black;
+    border-radius: 25px;
+    text-align: left;
+    font-family: Monospace;
+    border-style: solid;
+    border-color: white;
+}
+.project-layout{
+    background-color: black;
+    border-radius: 25px;
+    text-align: left;
+    font-family: Monospace;
+    border-style: solid;
+    border-color: white;
+}
+.horizontal-picker-page{
+    background-color: black;
+    border-radius: 25px;
+    text-align: center;
+    font-family: Monospace;
+}
+/*-----------------------------------Board styling and components */
+.current-board-composer{
+    background-color: black;
+        border-radius: 25px;
+        text-align: center;
+        font-family: Monospace;
+        border-style: solid;
+        border-color: white;
+}

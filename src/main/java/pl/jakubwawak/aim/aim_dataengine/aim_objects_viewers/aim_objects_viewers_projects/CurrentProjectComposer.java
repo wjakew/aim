@@ -28,6 +28,7 @@ public class CurrentProjectComposer {
      */
     public CurrentProjectComposer(){
         mainLayout = new VerticalLayout();
+        mainLayout.addClassName("current-project-composer");
         Database_AIMProject dat = new Database_AIMProject(AimApplication.database);
         currentProjectSelectionLayout = new ProjectHorizontalColumnLayout(dat.getUserProjects(),this);
         prepareLayout();
@@ -40,11 +41,7 @@ public class CurrentProjectComposer {
         mainLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         mainLayout.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
         mainLayout.setSizeFull();
-        mainLayout.getStyle().set("text-align", "center");
-        mainLayout.getStyle().set("border-radius","25px");
         //mainLayout.getStyle().set("margin","75px");
-        mainLayout.getStyle().set("background-image","radial-gradient(#90e9e4,#cca8b2)");
-        mainLayout.getStyle().set("--lumo-font-family","Monospace");
         updateLayout();
     }
 

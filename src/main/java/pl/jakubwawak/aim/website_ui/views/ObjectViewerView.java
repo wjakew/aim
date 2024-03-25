@@ -47,6 +47,7 @@ public class ObjectViewerView extends VerticalLayout implements HasUrlParameter<
      * Constructor
      */
     public ObjectViewerView(){
+        addClassName("home-view");
         this.getElement().setAttribute("theme", Lumo.LIGHT);
         prepare_view();
 
@@ -54,8 +55,6 @@ public class ObjectViewerView extends VerticalLayout implements HasUrlParameter<
         setJustifyContentMode(JustifyContentMode.CENTER);
         setDefaultHorizontalComponentAlignment(Alignment.CENTER);
         getStyle().set("text-align", "center");
-        getStyle().set("background-image","radial-gradient(white,gray)");
-        getStyle().set("--lumo-font-family","Monospace");
     }
 
 

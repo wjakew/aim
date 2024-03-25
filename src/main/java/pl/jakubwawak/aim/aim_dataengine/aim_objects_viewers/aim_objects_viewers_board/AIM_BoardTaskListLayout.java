@@ -46,9 +46,12 @@ public class AIM_BoardTaskListLayout {
         this.board = board;
         pages = new ArrayList<>();
         main_layout = new VerticalLayout();
+        main_layout.addClassName("task-layout");
         currentPage = 0;
         previous_button = new Button("", VaadinIcon.ARROW_LEFT.create(),this::previousbutton_action);
+        previous_button.addClassName("aim-button-black");
         next_button = new Button("",VaadinIcon.ARROW_RIGHT.create(),this::nextbutton_action);
+        next_button.addClassName("aim-button-black");
         prepareLayout();
     }
 
@@ -132,11 +135,6 @@ public class AIM_BoardTaskListLayout {
         reloadView();
         main_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         main_layout.setSizeFull();
-        main_layout.getStyle().set("text-align", "center");
-        main_layout.getStyle().set("border-radius","25px");
-        main_layout.getStyle().set("background-color","black");
-        main_layout.getStyle().set("color","#FFFFFF");
-        main_layout.getStyle().set("--lumo-font-family","Monospace");
     }
 
     /**

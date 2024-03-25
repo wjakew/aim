@@ -33,6 +33,7 @@ public class AIM_BoardGlanceLayout {
     public AIM_BoardGlanceLayout(AIM_Board boardObject){
         this.boardObject = boardObject;
         main_layout = new VerticalLayout();
+        main_layout.addClassName("current-board-composer");
         prepareLayout();
     }
 
@@ -41,8 +42,7 @@ public class AIM_BoardGlanceLayout {
      */
     void prepareLayout(){
         showDetails_button = new Button("", VaadinIcon.INFO_CIRCLE.create(),this::detailsbutton_action);
-        showDetails_button.getStyle().set("background-image","linear-gradient(#FFC0CB, #FFD4C0)");
-        showDetails_button.getStyle().set("color","white");
+        showDetails_button.setClassName("aim-button-black");
 
         FlexLayout left_layout = new FlexLayout();
         left_layout.setSizeFull();
@@ -73,18 +73,6 @@ public class AIM_BoardGlanceLayout {
         main_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         main_layout.setWidth("100%");
         main_layout.setHeight("100%");
-        main_layout.getStyle().set("text-align", "center");
-        main_layout.getStyle().set("border-radius","25px");
-
-        if ( boardObject.ownerLabel().equals("Member")){
-            main_layout.getStyle().set("background-image","linear-gradient(#e38ad9, #199f97)");
-        }
-        else if (boardObject.ownerLabel().equals("Owner")){
-            main_layout.getStyle().set("background-image","linear-gradient(#bce38a, #19849f)");
-        }
-
-        main_layout.getStyle().set("color","#FFFFFF");
-        main_layout.getStyle().set("--lumo-font-family","Monospace");
     }
 
     /**

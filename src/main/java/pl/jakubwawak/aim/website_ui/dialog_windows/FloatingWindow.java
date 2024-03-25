@@ -42,6 +42,7 @@ public class FloatingWindow {
      */
     public FloatingWindow(){
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window");
         main_dialog.setModal(false);
         main_dialog.setResizable(true);
         main_dialog.setDraggable(true);

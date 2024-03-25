@@ -58,6 +58,7 @@ public class LoginWindow {
      */
     public LoginWindow(){
         main_dialog = new Dialog();
+        main_dialog.addClassName("loginwindow-dialog");
         main_layout = new VerticalLayout();
         prepare_dialog();
     }
@@ -72,34 +73,28 @@ public class LoginWindow {
         login_field.setPrefixComponent(VaadinIcon.USER.create());
         login_field.setWidth("100%");
         login_field.setMaxLength(100);
+        login_field.addClassName("aim-inputfield-bright");
 
         password_field = new PasswordField();
         password_field.setPlaceholder("password");
         password_field.setPrefixComponent(VaadinIcon.LOCK.create());
         password_field.setWidth("100%");
         password_field.setMaxLength(100);
+        password_field.addClassName("aim-inputfield-bright");
 
         login_button = new Button("Login",VaadinIcon.ARROW_RIGHT.create(),this::loginbutton_action);
+        login_button.addClassName("aim-button-transparent"); login_button.setWidth("100%");
         createaccount_button = new Button("Create Account",VaadinIcon.PLUS.create(),this::createaccoutnbutton_action);
+        createaccount_button.addClassName("aim-button-transparent"); createaccount_button.setWidth("50%");
         resetpassword_button = new Button("Reset Password",VaadinIcon.LOCK.create(),this::resetpasswordbutton_action);
+        resetpassword_button.addClassName("aim-button-transparent"); resetpassword_button.setWidth("50%");
 
         aimviewer_button = new Button("AIM Viewer",VaadinIcon.SEARCH.create(),this::aimviewerbutton_action);
+        aimviewer_button.addClassName("aim-button-transparent");
 
         if ( AimApplication.globalConfiguration.userCreationFlag == 0 ){
             createaccount_button.setEnabled(false);
         }
-
-        // styling buttons
-        new ButtonStyler().primaryButtonStyle(login_button,"100%","");
-        new ButtonStyler().primaryButtonStyle(aimviewer_button,"100%","");
-        new ButtonStyler().primaryButtonStyle(createaccount_button,"50%","");
-        new ButtonStyler().primaryButtonStyle(resetpassword_button,"50%","");
-        createaccount_button.getStyle().set("background-color","white");
-        createaccount_button.getStyle().set("color","#000000");
-        resetpassword_button.getStyle().set("background-color","white");
-        resetpassword_button.getStyle().set("color","#000000");
-        aimviewer_button.getStyle().set("background-color","white");
-        aimviewer_button.getStyle().set("color","#000000");
     }
 
     /**
@@ -140,9 +135,6 @@ public class LoginWindow {
         main_layout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
         main_layout.getStyle().set("text-align", "center");
 
-        main_layout.getStyle().set("border-radius","25px");
-        main_layout.getStyle().set("background-color",backgroundStyle);
-        main_layout.getStyle().set("--lumo-font-family","Monospace");
         main_dialog.add(main_layout);
         main_dialog.setWidth(width);main_dialog.setHeight(height);
 

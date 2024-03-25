@@ -63,22 +63,13 @@ public class TerminalView extends VerticalLayout {
      * Constructor
      */
     public TerminalView(){
+        addClassName("terminal-view");
         prepare_view();
 
         setSizeFull();
         setJustifyContentMode(JustifyContentMode.CENTER);
         setDefaultHorizontalComponentAlignment(Alignment.CENTER);
         getStyle().set("text-align", "center");
-        if ( AimApplication.loggedUser!=null){
-            if ( AimApplication.loggedUser.aim_user_configuration2.equals("blank") ){
-                getStyle().set("background-image","radial-gradient(white,gray)");
-            }
-        }
-        else{
-            getStyle().set("background-image","radial-gradient("+AimApplication.loggedUser.aim_user_configuration2+")");
-        }
-        getStyle().set("color","black");
-        getStyle().set("--lumo-font-family","Monospace");
     }
 
 
@@ -93,6 +84,7 @@ public class TerminalView extends VerticalLayout {
         terminal_field.setPrefixComponent(VaadinIcon.TERMINAL.create());
         terminal_field.setPlaceholder("let's create something...");
         terminal_field.setWidth("50%");
+        terminal_field.addClassName("aim-inputfield-bright");
 
         pageHeader = new PageHeader();
 
@@ -119,16 +111,14 @@ public class TerminalView extends VerticalLayout {
         });
 
         normalmode_button = new Button("Go to standard mode",VaadinIcon.NOTEBOOK.create(),this::normalmodebutton_action);
-        normalmode_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
-        normalmode_button.getStyle().set("background-color","white");
-        normalmode_button.getStyle().set("color","black");
+        normalmode_button.addClassName("aim-button-black");
 
         runcommand_button = new Button("Run Command",VaadinIcon.COMPILE.create(),this::runcommandbutton_action);
-        runcommand_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        runcommand_button.addClassName("aim-button-transparent");
         runcommand_button.setWidth("50%");
 
         help_button = new Button("",VaadinIcon.QUESTION_CIRCLE.create(),this::helpbutton_action);
-        help_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        help_button.addClassName("aim-button-black");
 
         upperLayout = new VerticalLayout();
         upperLayout.setSizeFull();

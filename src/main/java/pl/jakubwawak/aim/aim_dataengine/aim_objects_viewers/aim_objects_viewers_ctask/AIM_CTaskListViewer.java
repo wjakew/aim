@@ -42,6 +42,7 @@ public class AIM_CTaskListViewer {
      */
     public AIM_CTaskListViewer(){
         mainLayout = new HorizontalLayout();
+        mainLayout.addClassName("home-view");
         gridContent = new ArrayList<>();
         dact = new Database_AIMCodingTask(AimApplication.database);
         prepareLayout();
@@ -52,10 +53,11 @@ public class AIM_CTaskListViewer {
      */
     void prepareComponents(){
         createnewtask_button = new Button("Create new CTask", VaadinIcon.PLUS.create(),this::setCreatenewtask_button);
-        createnewtask_button.addThemeVariants(ButtonVariant.LUMO_SUCCESS,ButtonVariant.LUMO_PRIMARY);
+        createnewtask_button.addClassName("aim-button-black");
         createnewtask_button.setWidth("100%");
 
         grid = new Grid<>(AIM_CodingTask.class,false);
+        grid.addClassName("aim-grid");
         grid.addColumn(createCTaskRenderer()).setHeader("Task");
         grid.setSizeFull();
         gridContent = dact.getCodingTaskList();

@@ -52,6 +52,7 @@ public class AdminConsoleWindow {
      */
     public AdminConsoleWindow(){
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window-normal");
         main_layout = new VerticalLayout();
         prepare_dialog();
     }
@@ -80,13 +81,13 @@ public class AdminConsoleWindow {
         setadmin_button = new Button("Set Admin",VaadinIcon.PENCIL.create(),this::setadminbutton_action);
         logasuser_button = new Button("Log as selected user",VaadinIcon.USER.create(),this::logasuserbutton_action);
         enableaccountcreation_button = new Button("Enable Account Creation",VaadinIcon.USER_CLOCK.create(),this::enableaccountcreationbutton_action);
-        adduser_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
-        setadmin_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
-        logasuser_button.addThemeVariants(ButtonVariant.LUMO_ERROR,ButtonVariant.LUMO_PRIMARY);
+        adduser_button.addClassName("aim-button-black");
+        setadmin_button.addClassName("aim-button-black");
+        logasuser_button.addClassName("aim-button-black");
+        enableaccountcreation_button.addClassName("aim-button-black");
         logasuser_button.setWidth("100%");
 
-        remove_button.addThemeVariants(ButtonVariant.LUMO_ERROR,ButtonVariant.LUMO_PRIMARY);
-        enableaccountcreation_button.addThemeVariants(ButtonVariant.LUMO_ERROR,ButtonVariant.LUMO_PRIMARY);
+        remove_button.addClassName("aim-button-black");
 
         if ( AimApplication.globalConfiguration.userCreationFlag == 0){
             enableaccountcreation_button.setText("Enable Account Creation");

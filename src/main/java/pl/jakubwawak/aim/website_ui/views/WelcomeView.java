@@ -31,14 +31,13 @@ public class WelcomeView extends VerticalLayout {
      * Constructor
      */
     public WelcomeView(){
+        addClassName("welcome-view");
         prepare_view();
         setSizeFull();
         setSpacing(true);
         setJustifyContentMode(JustifyContentMode.CENTER);
         setDefaultHorizontalComponentAlignment(Alignment.CENTER);
         getStyle().set("text-align", "center");
-        getStyle().set("background-image","radial-gradient(white,gray)");
-        getStyle().set("--lumo-font-family","Monospace");
     }
 
     /**

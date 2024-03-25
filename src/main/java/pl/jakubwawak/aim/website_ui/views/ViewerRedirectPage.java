@@ -51,15 +51,13 @@ public class ViewerRedirectPage extends VerticalLayout {
      * Constructor
      */
     public ViewerRedirectPage(){
+        addClassName("viewerredirect-page");
         this.getElement().setAttribute("theme", Lumo.LIGHT);
         prepare_view();
 
         setSizeFull();
         setJustifyContentMode(JustifyContentMode.CENTER);
         setDefaultHorizontalComponentAlignment(Alignment.CENTER);
-        getStyle().set("text-align", "center");
-        getStyle().set("background-image","radial-gradient(white,gray)");
-        getStyle().set("--lumo-font-family","Monospace");
     }
 
     /**

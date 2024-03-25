@@ -8,6 +8,7 @@ package pl.jakubwawak.aim;
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.spring.annotation.EnableVaadin;
+import com.vaadin.flow.theme.Theme;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -32,17 +33,18 @@ import java.util.Scanner;
 		name = "Aim Application",
 		shortName = "Aim"
 )
+@Theme(value="aim_theme")
 public class AimApplication extends SpringBootServletInitializer implements AppShellConfigurator {
 
-	public static String version = "v1.0.4";
-	public static String build = "aim090324REV01";
+	public static String version = "v1.1.0";
+	public static String build = "aim250324REV01";
 	public static String applicationStartup;
 	public static int test_flag = 0; // flag for enabling testing
 	public static int log_database_dump_flag = 1; // flag for enabling database log dump
 
 	public static Database_Connector database;
 	public static AIM_GlobalConfiguration globalConfiguration;
-	public static String connectionStringDebug = "";
+	public static String connectionStringDebug = "mongodb://localhost:27017";
 
 	public static AIM_User loggedUser;
 

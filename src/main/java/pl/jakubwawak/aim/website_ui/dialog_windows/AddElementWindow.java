@@ -25,8 +25,8 @@ import pl.jakubwawak.aim.website_ui.style.ButtonStyler;
 public class AddElementWindow {
 
     // variables for setting x and y of window
-    public String width = "80%";
-    public String height = "60%";
+    public String width = "60%";
+    public String height = "30%";
     public String backgroundStyle = "";
 
     // main login components
@@ -41,6 +41,7 @@ public class AddElementWindow {
     public AddElementWindow(){
         main_dialog = new Dialog();
         main_dialog.setDraggable(true);
+        main_dialog.addClassName("loginwindow-dialog");
         main_layout = new VerticalLayout();
         prepare_dialog();
     }
@@ -51,16 +52,16 @@ public class AddElementWindow {
     void prepare_components(){
         // set components
         addboard_button = new Button("Add Board", VaadinIcon.PLUS.create(),this::addboardbutton_action);
-        new ButtonStyler().primaryButtonStyle(addboard_button,"200px","200px");
+        addboard_button.addClassName("aim-button-black");
 
         addproject_button = new Button("Add Project", VaadinIcon.PLUS.create(),this::addprojectbutton_action);
-        new ButtonStyler().primaryButtonStyle(addproject_button,"200px","200px");
+        addproject_button.addClassName("aim-button-black");
 
         addtask_button = new Button("Add Task", VaadinIcon.PLUS.create(),this::addtaskbutton_action);
-        new ButtonStyler().primaryButtonStyle(addtask_button,"200px","200px");
+        addtask_button.addClassName("aim-button-black");
 
         addctask_button = new Button("Add Coding Task", VaadinIcon.PLUS.create(),this::addctaskbutton_action);
-        new ButtonStyler().primaryButtonStyle(addctask_button,"200px","200px");
+        addctask_button.addClassName("aim-button-black");
     }
 
     /**

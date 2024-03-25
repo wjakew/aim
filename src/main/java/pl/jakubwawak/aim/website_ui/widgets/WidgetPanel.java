@@ -44,6 +44,7 @@ public class WidgetPanel {
     public WidgetPanel(AIM_WidgetPanel dwp){
         try{
             mainLayout = new HorizontalLayout();
+            mainLayout.addClassName("task-layout");
             widget1 = prepareWidget(dwp.widget1Content);
             widget2 = prepareWidget(dwp.widget2Content);
             widget3 = prepareWidget(dwp.widget3Content);
@@ -121,9 +122,6 @@ public class WidgetPanel {
         mainLayout.setSizeFull();
         mainLayout.setVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
         mainLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-        mainLayout.getStyle().set("background-image","radial-gradient(purple,gray)");
-        mainLayout.getStyle().set("text-align", "center");
-        mainLayout.getStyle().set("border-radius","25px");
 
         HorizontalLayout hl_main = new HorizontalLayout();
         hl_main.setWidth("100%"); hl_main.setHeight("100%");

@@ -44,11 +44,7 @@ public class CurrentBoardComposer {
         mainLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         mainLayout.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
         mainLayout.setSizeFull();
-        mainLayout.getStyle().set("text-align", "center");
-        mainLayout.getStyle().set("border-radius","25px");
-        mainLayout.getStyle().set("margin","75px");
-        mainLayout.getStyle().set("background-image","radial-gradient(#e990e7,#56d580)");
-        mainLayout.getStyle().set("--lumo-font-family","Monospace");
+        mainLayout.addClassName("current-board-composer");
         previous_button = new Button("", VaadinIcon.ARROW_LEFT.create(),this::previousbutton_action);
         next_button = new Button("",VaadinIcon.ARROW_RIGHT.create(),this::nextbutton_action);
         updateLayout(currentPage);

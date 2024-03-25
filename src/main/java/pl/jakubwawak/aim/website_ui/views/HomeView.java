@@ -61,20 +61,12 @@ public class HomeView extends VerticalLayout {
      */
     public HomeView(){
         this.getElement().setAttribute("theme", Lumo.DARK);
+        addClassName("home-view");
         prepare_view();
         setSizeFull();
         setJustifyContentMode(JustifyContentMode.CENTER);
         setDefaultHorizontalComponentAlignment(Alignment.CENTER);
         getStyle().set("text-align", "center");
-        if ( AimApplication.loggedUser!=null){
-            if ( AimApplication.loggedUser.aim_user_configuration2.equals("blank") ){
-                getStyle().set("background-image","radial-gradient(white,gray)");
-            }
-        }
-        else{
-            getStyle().set("background-image","radial-gradient("+AimApplication.loggedUser.aim_user_configuration2+")");
-        }
-        getStyle().set("--lumo-font-family","Monospace");
     }
 
 
@@ -86,9 +78,9 @@ public class HomeView extends VerticalLayout {
         projectview_button = new Button("Projects",VaadinIcon.BOOK.create(),this::projectviewbutton_action);
         boardview_button = new Button("Boards", VaadinIcon.DASHBOARD.create(),this::boardviewbutton_action);
 
-        projectview_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_CONTRAST);
-        boardview_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_CONTRAST);
-        taskview_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_CONTRAST);
+        projectview_button.addClassName("aim-button-black");
+        boardview_button.addClassName("aim-button-black");
+        taskview_button.addClassName("aim-button-black");
 
         navigationLayout = new HorizontalLayout(taskview_button,projectview_button,boardview_button);
         navigationLayout.setMargin(true);
@@ -142,6 +134,7 @@ public class HomeView extends VerticalLayout {
         terminal_field.setPrefixComponent(VaadinIcon.TERMINAL.create());
         terminal_field.setPlaceholder("type command...");
         terminal_field.setWidth("50%");
+        terminal_field.addClassName("aim-inputfield-bright");
 
         terminal_field.addKeyPressListener(Key.ENTER, e->
         {

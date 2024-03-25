@@ -38,6 +38,7 @@ public class UserWindow {
      */
     public UserWindow(){
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window-normal");
         main_layout = new VerticalLayout();
         prepare_dialog();
     }
@@ -49,21 +50,27 @@ public class UserWindow {
         // set components
         removeaccount_button = new Button("Remove Account", VaadinIcon.USER.create());
         new ButtonStyler().primaryButtonStyle(removeaccount_button,"100%","");
+        removeaccount_button.addClassName("aim-button-black");
 
         applicationsettings_button = new Button("Application Settings", VaadinIcon.CHART_TIMELINE.create(),this::applicationsettingsbutton_actionc);
         new ButtonStyler().primaryButtonStyle(applicationsettings_button,"100%","");
+        applicationsettings_button.addClassName("aim-button-black");
 
         changepassword_button = new Button("Change Password", VaadinIcon.PENCIL.create(),this::changepasswordbutton);
         new ButtonStyler().primaryButtonStyle(changepassword_button,"100%","");
+        changepassword_button.addClassName("aim-button-black");
 
         adminconsole_button = new Button("Admin Console", VaadinIcon.UMBRELLA.create(),this::adminconsolebutton_action);
         new ButtonStyler().primaryButtonStyle(adminconsole_button,"100%","");
+        adminconsole_button.addClassName("aim-button-black");
 
         datamanagment_button = new Button("Data Managment", VaadinIcon.DATABASE.create(),this::datamanagmentbutton_action);
         new ButtonStyler().primaryButtonStyle(datamanagment_button,"100%","");
+        datamanagment_button.addClassName("aim-button-black");
 
         apimanagment_button = new Button("API Managment", VaadinIcon.PLUG.create(),this::apimanagmentbutton_action);
         new ButtonStyler().primaryButtonStyle(apimanagment_button,"100%","");
+        apimanagment_button.addClassName("aim-button-black");
     }
 
     /**

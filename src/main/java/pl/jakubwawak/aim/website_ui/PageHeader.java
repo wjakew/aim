@@ -20,6 +20,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import pl.jakubwawak.aim.AimApplication;
+import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMCodingTask;
 import pl.jakubwawak.aim.website_ui.dialog_windows.AddElementWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.FloatingWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.LogViewerWindow;
@@ -41,6 +42,7 @@ public class PageHeader extends HorizontalLayout{
      */
     public PageHeader(){
         prepare_header();
+        addClassName("page-header");
     }
 
 
@@ -50,9 +52,10 @@ public class PageHeader extends HorizontalLayout{
     void prepare_header(){
         // prepare menu
         headerMenuBar = new MenuBar();
-        headerMenuBar.addThemeVariants(MenuBarVariant.LUMO_CONTRAST,MenuBarVariant.LUMO_PRIMARY);
+        headerMenuBar.addClassName("aim-menu");
 
         MenuItem aimItem = headerMenuBar.addItem("Aim");
+        aimItem.addClassName("aim-button-black");
         SubMenu subItems = aimItem.getSubMenu();
 
         MenuItem subItems1 = subItems.addItem(new HorizontalLayout(VaadinIcon.DASHBOARD.create(),new H6("Dashboard")));
@@ -119,7 +122,13 @@ public class PageHeader extends HorizontalLayout{
             }
             else if ( selectedItem.equals(subItems7)){
                 System.out.println("Coding");
-                getUI().ifPresent(ui -> ui.navigate("/coding"));
+                Database_AIMCodingTask dact = new Database_AIMCodingTask(AimApplication.database);
+                if ( dact.getCodingTaskList().size() > 0 ){
+                    getUI().ifPresent(ui -> ui.navigate("/coding"));
+                }
+                else{
+                    Notification.show("No coding tasks! Create coding task to enter!");
+                }
             }
             else if ( selectedItem.equals(subItems8)){
                 System.out.println("Workspace");
@@ -137,16 +146,16 @@ public class PageHeader extends HorizontalLayout{
 
         // prepare floating window button
         floatingwindow_button = new Button("",VaadinIcon.ADJUST.create(),this::floatingbutton_action);
-        floatingwindow_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        floatingwindow_button.addClassName("aim-button-black");
 
         // prepare logout button
         logout_button = new Button("",VaadinIcon.EXIT.create(),this::logoutbutton_action);
-        logout_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        logout_button.addClassName("aim-button-black");
         logout_button.setWidth("40%");
 
         // prepare log button
         log_button = new Button("",VaadinIcon.INFO.create(),this::setLog_button);
-        log_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        log_button.addClassName("aim-button-black");
         log_button.setWidth("20%");
 
         // prepare window layout and components
@@ -173,9 +182,6 @@ public class PageHeader extends HorizontalLayout{
         add(left_layout,center_layout,right_layout);
         setWidth("70%");
         setMargin(true);
-        getStyle().set("background-color","gray");
-        getStyle().set("color","black");
-        getStyle().set("border-radius","15px");
 
         setMargin(true);
         setAlignItems(Alignment.CENTER);

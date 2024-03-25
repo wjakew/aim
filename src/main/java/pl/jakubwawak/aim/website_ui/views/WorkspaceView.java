@@ -37,6 +37,7 @@ public class WorkspaceView extends VerticalLayout {
      * Constructor
      */
     public WorkspaceView(){
+        addClassName("home-view");
         this.getElement().setAttribute("theme", Lumo.DARK);
         prepare_view();
 
@@ -44,13 +45,6 @@ public class WorkspaceView extends VerticalLayout {
         setJustifyContentMode(JustifyContentMode.CENTER);
         setDefaultHorizontalComponentAlignment(Alignment.CENTER);
         getStyle().set("text-align", "center");
-        if ( AimApplication.loggedUser.aim_user_configuration2.equals("blank") ){
-            getStyle().set("background-image","radial-gradient(black,gray)");
-        }
-        else{
-            getStyle().set("background-image","radial-gradient("+AimApplication.loggedUser.aim_user_configuration2+")");
-        }
-        getStyle().set("--lumo-font-family","Monospace");
     }
 
     /**
@@ -66,7 +60,7 @@ public class WorkspaceView extends VerticalLayout {
         mainLayout.getStyle().set("text-align", "center");
 
         addtoworkspace_button = new Button("Add window to workspace", VaadinIcon.PLUS.create(),this::setAddtoworkspace_button);
-        addtoworkspace_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        addtoworkspace_button.addClassName("aim-button-black");
     }
 
     /**

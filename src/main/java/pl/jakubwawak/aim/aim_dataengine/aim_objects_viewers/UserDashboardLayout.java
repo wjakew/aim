@@ -142,7 +142,7 @@ public class UserDashboardLayout {
         }
 
         getrandomtask_button = new Button("FIND OTHER", VaadinIcon.REFRESH.create(),this::getrandomtaskbutton_action);
-        getrandomtask_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        getrandomtask_button.addClassName("aim-button-black");
         nestedCenterLayout.add(center_layout,getrandomtask_button);
     }
 

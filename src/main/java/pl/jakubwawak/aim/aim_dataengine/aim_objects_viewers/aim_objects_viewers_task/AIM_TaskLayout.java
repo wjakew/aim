@@ -44,6 +44,7 @@ public class AIM_TaskLayout {
      */
     public AIM_TaskLayout(AIM_Task taskObject){
         main_layout = new VerticalLayout();
+        main_layout.addClassName("task-layout");
         this.taskObject = taskObject;
         prepareLayout();
     }
@@ -55,6 +56,7 @@ public class AIM_TaskLayout {
      */
     public AIM_TaskLayout(AIM_Task taskObject, AIM_Project projectLinked){
         main_layout = new VerticalLayout();
+        main_layout.addClassName("task-layout");
         this.taskObject = taskObject;
         this.projectLinked = projectLinked;
         prepareLayout();
@@ -65,12 +67,12 @@ public class AIM_TaskLayout {
      */
     void prepareLayout(){
         changestatus_button = new Button("", VaadinIcon.ARROW_RIGHT.create(),this::changestatusbutton_action);
-        changestatus_button.getStyle().set("background-color","grey");
-        changestatus_button.getStyle().set("color","white");
+        changestatus_button.getStyle().set("background-color","white");
+        changestatus_button.getStyle().set("color","black");
 
         showDetails_button = new Button("", VaadinIcon.INFO_CIRCLE.create(),this::showdetailsbutton_action);
-        showDetails_button.getStyle().set("background-color","grey");
-        showDetails_button.getStyle().set("color","white");
+        showDetails_button.getStyle().set("background-color","white");
+        showDetails_button.getStyle().set("color","black");
 
         FlexLayout left_layout = new FlexLayout();
         left_layout.setSizeFull();
@@ -91,25 +93,18 @@ public class AIM_TaskLayout {
         hl_center.addClassNames("py-0", "px-m");
 
         main_layout.add(hl_center);
+        if ( taskObject.aim_task_id != null ){
+            main_layout.add(new HorizontalLayout(new H6(taskObject.aim_task_id.toString())));
+        }
+        else{
+            main_layout.add(new HorizontalLayout(new H6("NO ID")));
+        }
+
+        main_layout.add(new HorizontalLayout(new H6(taskObject.status)));
 
         main_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         main_layout.setWidth("100%");
         main_layout.setHeight("100%");
-        main_layout.getStyle().set("text-align", "center");
-        main_layout.getStyle().set("border-radius","25px");
-
-        if ( taskObject.status.equals("NEW")){
-            main_layout.getStyle().set("background-image","radial-gradient(#90e9cc, #56d580)");
-        }
-        else if ( taskObject.status.equals("IN PROGRESS")){
-            main_layout.getStyle().set("background-image","radial-gradient(#d5bc56, #90e9cc)");
-        }
-        else if ( taskObject.status.equals("DONE")){
-            main_layout.getStyle().set("background-image","radial-gradient(#9f68e7, #d5bc56)");
-            changestatus_button.setVisible(false);
-        }
-        main_layout.getStyle().set("color","#FFFFFF");
-        main_layout.getStyle().set("--lumo-font-family","Monospace");
 
         if (AimApplication.loggedUser == null){
             changestatus_button.setVisible(false);

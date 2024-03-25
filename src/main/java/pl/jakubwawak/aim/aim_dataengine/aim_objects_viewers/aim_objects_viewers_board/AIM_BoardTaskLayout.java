@@ -46,6 +46,7 @@ public class AIM_BoardTaskLayout{
         this.taskObject = taskObject;
         this.boardObject = boardObject;
         main_layout = new VerticalLayout();
+        main_layout.addClassName("task-layout");
         prepareLayout();
     }
 
@@ -63,8 +64,7 @@ public class AIM_BoardTaskLayout{
     void prepareLayout(){
         if ( taskObject != null ){
             showDetails_button = new Button("", VaadinIcon.INFO_CIRCLE.create(),this::showdetailsbutton_action);
-            showDetails_button.getStyle().set("background-color","grey");
-            showDetails_button.getStyle().set("color","white");
+            showDetails_button.addClassName("aim-button-black");
 
             Icon statusIcon = VaadinIcon.ERASER.create();
             Icon ownerIcon = VaadinIcon.ERASER.create();
@@ -100,8 +100,8 @@ public class AIM_BoardTaskLayout{
                 }
             }
 
-            statusIcon.getStyle().set("color","black");
-            ownerIcon.getStyle().set("color","black");
+            statusIcon.getStyle().set("color","white");
+            ownerIcon.getStyle().set("color","white");
 
             FlexLayout left_layout = new FlexLayout();
             left_layout.setSizeFull();
@@ -122,58 +122,15 @@ public class AIM_BoardTaskLayout{
 
             main_layout.add(new HorizontalLayout(statusIcon,ownerIcon),hl_center);
 
-
-            // show by colors assigned to and current status
-            String assignedColorHex = "";
-            String currentStatusColorHex = "";
-            if ( taskObject.aim_user_assigned == null){
-                // task assigned to no one
-                assignedColorHex = "#EACBD2";
-            }
-            else if ( taskObject.aim_user_assigned.equals(AimApplication.loggedUser.prepareDocument())){
-                // task assigned to logged user
-                assignedColorHex = "#DD9AC2";
-            }
-            else {
-                // task assigned to other user
-                assignedColorHex = "#82667F";
-            }
-
-            switch(taskObject.status){
-                case "NEW":
-                {
-                    currentStatusColorHex = "#DBFCFF";
-                    break;
-                }
-                case "IN PROGRESS":
-                {
-                    currentStatusColorHex = "#8390FA";
-                    break;
-                }
-                case "DONE":
-                {
-                    currentStatusColorHex = "#1D2F6F";
-                    break;
-                }
-            }
-            String backgroundValue = "radial-gradient("+assignedColorHex +","+ currentStatusColorHex+")";
-            main_layout.getStyle().set("background-image",backgroundValue);
         }
         else{
             addtask_button = new Button("", VaadinIcon.PLUS.create(),this::addtaskbutton_action);
-            addtask_button.getStyle().set("background-color","red");
-            addtask_button.getStyle().set("color","white");
-            main_layout.getStyle().set("background-color","white");
+            addtask_button.addClassName("aim-button-black");
             main_layout.add(addtask_button);
         }
         main_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         main_layout.setWidth("100%");
         main_layout.setHeight("100%");
-        main_layout.getStyle().set("text-align", "center");
-        main_layout.getStyle().set("border-radius","25px");
-
-        main_layout.getStyle().set("color","#FFFFFF");
-        main_layout.getStyle().set("--lumo-font-family","Monospace");
     }
 
     /**

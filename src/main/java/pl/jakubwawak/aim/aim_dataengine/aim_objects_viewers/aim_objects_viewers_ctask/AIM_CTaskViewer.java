@@ -58,6 +58,7 @@ public class AIM_CTaskViewer {
     public AIM_CTaskViewer(AIM_CodingTask act){
         this.act = act;
         ctaskviewer_layout = new VerticalLayout();
+        ctaskviewer_layout.addClassName("task-layout");
         prepareLayout();
     }
 
@@ -77,16 +78,16 @@ public class AIM_CTaskViewer {
         bottom_layout.setHeight("100%");
 
         addcomment_button = new Button("Add Comment", VaadinIcon.COMMENT.create(),this::setAddcomment_button);
-        addcomment_button.setWidth("100%"); addcomment_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        addcomment_button.setWidth("100%"); addcomment_button.addClassName("aim-button-black");
 
         update_button = new Button("Update Task", VaadinIcon.REFRESH.create(),this::Setupdate_button);
-        update_button.setWidth("100%"); update_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        update_button.setWidth("100%"); update_button.addClassName("aim-button-black");
 
         showfullhistory_button = new Button("Show Full History", VaadinIcon.ARCHIVE.create(),this::Setshowfullhistory_button);
-        showfullhistory_button.setWidth("100%"); showfullhistory_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        showfullhistory_button.setWidth("100%"); showfullhistory_button.addClassName("aim-button-black");
 
         removetask_button = new Button("Send to trash!", VaadinIcon.TRASH.create());
-        removetask_button.setWidth("100%"); removetask_button.addThemeVariants(ButtonVariant.LUMO_ERROR,ButtonVariant.LUMO_PRIMARY);
+        removetask_button.setWidth("100%"); removetask_button.addClassName("aim-button-black");
 
         combobox_content = new ArrayList<>();
         combobox_content.add(new GridElement("NEW"));
@@ -95,6 +96,7 @@ public class AIM_CTaskViewer {
         combobox_content.add(new GridElement("DONE"));
 
         status_combobox = new ComboBox<>();
+        status_combobox.addClassName("aim-button-black");
         status_combobox.setAllowCustomValue(false);
         status_combobox.setWidth("100%");
         status_combobox.setItems(combobox_content);
@@ -116,6 +118,8 @@ public class AIM_CTaskViewer {
         description_area = new TextArea("Coding Task Description");
         description_area.setSizeFull();
         description_area.setValue(act.aim_codingtask_desc);
+        description_area.setReadOnly(true);
+        description_area.addClassName("aim-inputfield-bright");
 
         // create description update
         description_area.addBlurListener(event -> {
@@ -141,8 +145,10 @@ public class AIM_CTaskViewer {
         }
         history_grid.setItems(historyContent);
         history_grid.setSizeFull();
+        history_grid.addClassName("aim-grid");
 
         comments_grid = new Grid<>(GridElement.class,false);
+        comments_grid.addClassName("aim-grid");
         comments_grid.addColumn(GridElement::getGridelement_text).setHeader("Comment");
         /*
         document layout

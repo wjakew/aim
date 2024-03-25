@@ -61,6 +61,7 @@ public class WidgetPickerWindow {
         this.parent = null;
         index = 0;
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window-normal");
         main_layout = new VerticalLayout();
         prepare_dialog();
     }
@@ -100,17 +101,19 @@ public class WidgetPickerWindow {
         select_button = new Button("Add Widget",VaadinIcon.PLUS.create(),this::setSelect_button);
         next_button = new Button("",VaadinIcon.ARROW_RIGHT.create(),this::setNext_button);
 
-        previous_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
-        select_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
-        next_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        previous_button.addClassName("aim-button-black");
+        select_button.addClassName("aim-button-black");
+        next_button.addClassName("aim-button-black");
 
         configurationstring_field = new TextField();
         configurationstring_field.setPlaceholder("configuration string...");
         configurationstring_field.setWidth("70%");
+        configurationstring_field.addClassName("aim-inputfield-bright");
 
         content_field = new TextArea("Description");
         content_field.setSizeFull();
         content_field.setReadOnly(true);
+        content_field.addClassName("aim-inputfield-bright");
 
     }
 

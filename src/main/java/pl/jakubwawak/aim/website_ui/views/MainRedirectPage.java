@@ -55,22 +55,14 @@ public class MainRedirectPage extends VerticalLayout {
      * Constructor
      */
     public MainRedirectPage(){
+        addClassName("mainredirect-page");
         prepare_view();
 
         setSizeFull();
         setJustifyContentMode(JustifyContentMode.CENTER);
         setDefaultHorizontalComponentAlignment(Alignment.CENTER);
         getStyle().set("text-align", "center");
-        if ( AimApplication.loggedUser!=null){
-            if ( AimApplication.loggedUser.aim_user_configuration2.equals("blank") ){
-                getStyle().set("background-image","radial-gradient(white,gray)");
-            }
-        }
-        else{
-            getStyle().set("background-image","radial-gradient("+AimApplication.loggedUser.aim_user_configuration2+")");
-        }
-        getStyle().set("color","black");
-        getStyle().set("--lumo-font-family","Monospace");
+
     }
 
 
@@ -116,8 +108,8 @@ public class MainRedirectPage extends VerticalLayout {
             return WelcomeView.class.getClassLoader().getResourceAsStream("images/aim_logo.png");
         });
         Image logo = new Image(res,"aim logo");
-        logo.setHeight("10rem");
-        logo.setWidth("10rem");
+        logo.setHeight("5rem");
+        logo.setWidth("5rem");
 
         upperLayout.add(logo);
         UserDashboardLayout udl = new UserDashboardLayout(0);

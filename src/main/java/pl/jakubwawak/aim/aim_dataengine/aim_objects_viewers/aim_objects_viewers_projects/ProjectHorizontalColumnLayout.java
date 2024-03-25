@@ -39,17 +39,16 @@ public class ProjectHorizontalColumnLayout {
     public ProjectHorizontalColumnLayout(ArrayList<AIM_Project> projectContent,CurrentProjectComposer cpc){
         this.projectContent = projectContent;
         projectHorizontalColumnLayout = new HorizontalLayout();
+        projectHorizontalColumnLayout.addClassName("horizontal-picker-page");
         projectPages = new ArrayList<>();
         currentPageNumber = 0;
 
         previous_button = new Button("", VaadinIcon.ARROW_LEFT.create(),this::previousbutton_action);
-        previous_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        previous_button.addClassName("aim-button-black");
         next_button = new Button("",VaadinIcon.ARROW_RIGHT.create(),this::nextbutton_action);
-        next_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        next_button.addClassName("aim-button-black");
 
         prepareLayout();
-        projectHorizontalColumnLayout.getStyle().set("color","black");
-        projectHorizontalColumnLayout.getStyle().set("border-radius","15px");
         projectHorizontalColumnLayout.setWidth("100%");
 
         //projectHorizontalColumnLayout.setMargin(true);

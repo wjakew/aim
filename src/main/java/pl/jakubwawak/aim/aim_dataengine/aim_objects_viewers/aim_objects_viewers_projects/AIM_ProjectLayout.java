@@ -55,11 +55,13 @@ public class AIM_ProjectLayout {
     public AIM_ProjectLayout(AIM_Project projectObject){
         this.projectObject = projectObject;
         this.projectLayout = new VerticalLayout();
+        this.projectLayout.addClassName("project-layout");
         shareClickCount = 0;
 
         grid_history = new Grid<>(GridElement.class,false);
         grid_history.addColumn(GridElement::getGridelement_text).setHeader("Project History");
         grid_history.setHeight("100%");grid_history.setWidth("100%");
+        grid_history.addClassName("aim-grid");
 
         tcl = new TaskColumnLayout(projectObject.getTaskCollection(),"gray","Linked Tasks",projectObject,"60%","90%");
 
@@ -70,14 +72,14 @@ public class AIM_ProjectLayout {
         }
         grid_history.setItems(historycontent);
         addtask_button = new Button("Task",VaadinIcon.PLUS.create(),this::addtaskbutton_action);
-        addtask_button.addThemeVariants(ButtonVariant.LUMO_SUCCESS,ButtonVariant.LUMO_PRIMARY);
+        addtask_button.addClassName("aim-button-black");
         update_button = new Button("Update",VaadinIcon.FILE_REFRESH.create(),this::updateprojectbutton_action);
-        update_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        update_button.addClassName("aim-button-black");
         closeproject_button = new Button("Close",VaadinIcon.TRASH.create(),this::closeprojectbutton_action);
-        closeproject_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        closeproject_button.addClassName("aim-button-black");
 
         share_button = new Button("Share", VaadinIcon.SHARE.create(),this::sharebutton_action);
-        share_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        share_button.addClassName("aim-button-black");
         Database_AIMProject dap = new Database_AIMProject(AimApplication.database);
         String share = dap.checkShare(projectObject);
 
@@ -121,11 +123,6 @@ public class AIM_ProjectLayout {
         projectLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         projectLayout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
         projectLayout.getStyle().set("text-align", "center");
-        projectLayout.getStyle().set("--lumo-font-family","Monospace");
-
-        projectLayout.getStyle().set("border-radius","25px");
-        projectLayout.getStyle().set("background-image","radial-gradient(#eeaeca,#94bbe9)");
-        projectLayout.getStyle().set("color","#FFFFFF");
     }
 
     /**

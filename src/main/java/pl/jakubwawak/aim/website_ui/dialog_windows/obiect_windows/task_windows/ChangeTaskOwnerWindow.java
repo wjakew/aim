@@ -47,6 +47,7 @@ public class ChangeTaskOwnerWindow {
     public ChangeTaskOwnerWindow(AIM_Task taskToUpdate){
         this.taskToUpdate = taskToUpdate;
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window-normal");
         main_layout = new VerticalLayout();
         prepare_dialog();
     }
@@ -60,10 +61,12 @@ public class ChangeTaskOwnerWindow {
         ownerlogin_field.setPrefixComponent(VaadinIcon.USER.create());
         ownerlogin_field.setPlaceholder("New Owner Email...");
         ownerlogin_field.setWidth("100%");
+        ownerlogin_field.addClassName("aim-inputfield-bright");
 
         change_button = new Button("Change Owner",this::changebutton_action);
         change_button.addThemeVariants(ButtonVariant.LUMO_ERROR,ButtonVariant.LUMO_PRIMARY);
         change_button.setWidth("100%");
+        change_button.addClassName("aim-inputfield-bright");
 
     }
 

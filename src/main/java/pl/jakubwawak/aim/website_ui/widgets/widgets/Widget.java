@@ -52,16 +52,13 @@ public class Widget {
         this.width = width;
         this.height = height;
         widget = new VerticalLayout();
+        widget.addClassName("task-layout");
         widget.getElement().setAttribute("theme", Lumo.DARK);
 
         widget.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         widget.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
         widget.getStyle().set("text-align", "center");
 
-        widget.getStyle().set("border-radius","25px");
-        widget.getStyle().set(backgroundType,backgroundStyle);
-        widget.getStyle().set("color","white");
-        widget.getStyle().set("--lumo-font-family","Monospace");
         widget.setHeight(height+"%");widget.setWidth(width+"%");
 
         // creating empty widget as default

@@ -27,6 +27,7 @@ public class CurrentTaskComposer {
      */
     public CurrentTaskComposer(){
         mainLayout = new HorizontalLayout();
+        mainLayout.addClassName("current-task-composer");
         Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
         newTaskColumn = new TaskColumnLayout(dat.getNewTaskCollection(),"black","NEW TASKS",null,"","");
         inProgressTaskColumn = new TaskColumnLayout(dat.getInProgressTaskCollection(),"black","IN PROGRESS",null,"","");
@@ -41,11 +42,6 @@ public class CurrentTaskComposer {
 
         mainLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         mainLayout.setSizeFull();
-        mainLayout.getStyle().set("text-align", "center");
-        mainLayout.getStyle().set("border-radius","25px");
-        mainLayout.getStyle().set("margin","75px");
-        mainLayout.getStyle().set("background-image","radial-gradient(#eeaeca,#94bbe9)");
-        mainLayout.getStyle().set("--lumo-font-family","Monospace");
         mainLayout.add(newTaskColumn.columnLayout,inProgressTaskColumn.columnLayout,doneTaskColumn.columnLayout);
     }
 

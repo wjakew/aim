@@ -42,6 +42,7 @@ public class TaskColumnLayout {
         this.taskCollection = taskCollection;
         this.hexColor = hexColor;
         columnLayout = new VerticalLayout();
+        columnLayout.addClassName("task-column-layout");
         taskContent = new ArrayList<>();
         this.header = header;
         this.projectLinked = projectLinked;
@@ -50,7 +51,9 @@ public class TaskColumnLayout {
         this.height = height;
 
         previous_button = new Button("", VaadinIcon.ARROW_LEFT.create(),this::previousbutton_action);
+        previous_button.addClassName("aim-button-black");
         next_button = new Button("",VaadinIcon.ARROW_RIGHT.create(),this::nextbutton_action);
+        next_button.addClassName("aim-button-black");
 
         prepareLayout();
     }
@@ -69,11 +72,6 @@ public class TaskColumnLayout {
         }
         columnLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         columnLayout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
-        columnLayout.getStyle().set("text-align", "center");
-        columnLayout.getStyle().set("border-radius","25px");
-        columnLayout.getStyle().set("margin","25px");
-        columnLayout.getStyle().set("background-color",hexColor);
-        columnLayout.getStyle().set("--lumo-font-family","Monospace");
 
         reloadTaskContent(); // reloading task content
 
