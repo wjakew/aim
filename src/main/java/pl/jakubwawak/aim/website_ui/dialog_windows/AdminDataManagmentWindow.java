@@ -51,6 +51,7 @@ public class AdminDataManagmentWindow {
      */
     public AdminDataManagmentWindow(){
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window-normal");
         main_layout = new VerticalLayout();
         prepare_dialog();
     }
@@ -70,6 +71,7 @@ public class AdminDataManagmentWindow {
         task_grid.addColumn(AIM_Task::getAim_task_timestamp).setHeader("Time Created");
         task_grid.addColumn(AIM_Task::getStatus).setHeader("Task Status");
         task_grid.setItems(taskCollection);
+        task_grid.addClassName("aim-grid");
         task_grid.setWidth("100%");task_grid.setHeight("100%");
 
         // projects_tab
@@ -137,11 +139,7 @@ public class AdminDataManagmentWindow {
         main_layout.setSizeFull();
         main_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         main_layout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
-        main_layout.getStyle().set("text-align", "center");
 
-        main_layout.getStyle().set("border-radius","25px");
-        main_layout.getStyle().set("background-color",backgroundStyle);
-        main_layout.getStyle().set("--lumo-font-family","Monospace");
         main_dialog.add(main_layout);
         main_dialog.setWidth(width);main_dialog.setHeight(height);
     }

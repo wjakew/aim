@@ -42,6 +42,7 @@ public class CommentTaskWindow {
     public CommentTaskWindow(DetailsTaskWindow dtw){
         this.dtw = dtw;
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window-normal");
         main_dialog.setDraggable(true);
         main_layout = new VerticalLayout();
         prepare_dialog();
@@ -55,10 +56,11 @@ public class CommentTaskWindow {
         comment_field = new TextField("");
         comment_field.setPlaceholder("type comment here...");
         comment_field.setWidth("100%");
+        comment_field.addClassName("aim-inputfield-bright");
 
         placecomment_button = new Button("Place comment", VaadinIcon.COMMENT.create(),this::setPlacecomment_button);
         placecomment_button.setWidth("100%");
-        placecomment_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        placecomment_button.addClassName("aim-button-black");
     }
 
     /**

@@ -63,6 +63,7 @@ public class APIManagerWindow {
         databaseApiKey = new Database_APIKey(AimApplication.database);
         userKey = databaseApiKey.checkloggedUserAPIKey();
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window-normal");
         main_layout = new VerticalLayout();
         prepare_dialog();
     }
@@ -81,10 +82,9 @@ public class APIManagerWindow {
             apikey_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
         }
 
-
-        createapi_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
-        blockapi_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
-        downloadakey_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        createapi_button.addClassName("aim-button-black");
+        blockapi_button.addClassName("aim-button-black");
+        downloadakey_button.addClassName("aim-button-black");
 
         if ( userKey != null ){
             createapi_button.setText("Remove key");
@@ -123,11 +123,6 @@ public class APIManagerWindow {
         main_layout.setSizeFull();
         main_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         main_layout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
-        main_layout.getStyle().set("text-align", "center");
-
-        main_layout.getStyle().set("border-radius","25px");
-        main_layout.getStyle().set("background-color",backgroundStyle);
-        main_layout.getStyle().set("--lumo-font-family","Monospace");
         main_dialog.add(main_layout);
         main_dialog.setWidth(width);main_dialog.setHeight(height);
     }

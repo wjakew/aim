@@ -47,6 +47,7 @@ public class InsertProjectWindow {
     public InsertProjectWindow(AIM_Project projectToUpdate){
         this.projectToUpdate = projectToUpdate;
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window-normal");
         main_dialog.setDraggable(true);
         main_layout = new VerticalLayout();
         prepare_dialog();
@@ -61,15 +62,17 @@ public class InsertProjectWindow {
         projectname_field.setPlaceholder("My New Project");
         projectname_field.setWidth("100%");
         projectname_field.setMaxLength(40);
+        projectname_field.addClassName("aim-inputfield-bright");
 
         projectdesc_field = new TextArea("Project Description");
         projectdesc_field.setPlaceholder("That's gonna be awesome!");
         projectdesc_field.setWidth("100%");
         projectname_field.setMaxLength(40);
+        projectdesc_field.addClassName("aim-inputfield-bright");
 
         addproject_button = new Button("Create Project", VaadinIcon.PLUS.create(),this::addprojectbutton_action);
         addproject_button.setWidth("100%");
-        addproject_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_CONTRAST);
+        addproject_button.addClassName("aim-button-black");
 
         if ( projectToUpdate != null ){
             projectname_field.setValue(projectToUpdate.aim_project_name);
@@ -93,11 +96,7 @@ public class InsertProjectWindow {
         main_layout.setSizeFull();
         main_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         main_layout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
-        main_layout.getStyle().set("text-align", "center");
 
-        main_layout.getStyle().set("border-radius","25px");
-        main_layout.getStyle().set("background-color",backgroundStyle);
-        main_layout.getStyle().set("--lumo-font-family","Monospace");
         main_dialog.add(main_layout);
         main_dialog.setWidth(width);main_dialog.setHeight(height);
     }

@@ -40,6 +40,7 @@ public class BoardMembersWindow {
      */
     public BoardMembersWindow(AIM_Board board){
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window-normal");
         main_layout = new VerticalLayout();
         this.board = board;
         prepare_dialog();
@@ -51,6 +52,7 @@ public class BoardMembersWindow {
     void prepare_components(){
         // set components
         members_grid = new Grid<>(GridElement.class,false);
+        members_grid.addClassName("aim-grid");
         ArrayList<GridElement> data = new ArrayList<>();
         for(Document user_document : board.board_members){
             data.add(new GridElement(user_document.getString("aim_user_email")));

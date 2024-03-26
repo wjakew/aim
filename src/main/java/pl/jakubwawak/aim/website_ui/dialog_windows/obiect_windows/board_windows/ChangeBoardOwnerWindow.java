@@ -46,6 +46,7 @@ public class ChangeBoardOwnerWindow {
     public ChangeBoardOwnerWindow(DetailsBoardWindow dbw){
         this.dbw = dbw;
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window-normal");
         main_layout = new VerticalLayout();
         prepare_dialog();
     }
@@ -59,9 +60,10 @@ public class ChangeBoardOwnerWindow {
         email_field.setPlaceholder("Aim User Email...");
         email_field.setWidth("100%");
         email_field.setMaxLength(50);
+        email_field.addClassName("aim-inputfield-bright");
 
         change_button = new Button("Change Owner", VaadinIcon.USER_CARD.create(),this::changebutton_action);
-        change_button.addThemeVariants(ButtonVariant.LUMO_ERROR,ButtonVariant.LUMO_PRIMARY);
+        change_button.addClassName("aim-button-black");
         change_button.setWidth("100%");
 
     }
@@ -81,11 +83,6 @@ public class ChangeBoardOwnerWindow {
         main_layout.setSizeFull();
         main_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         main_layout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
-        main_layout.getStyle().set("text-align", "center");
-
-        main_layout.getStyle().set("border-radius","25px");
-        main_layout.getStyle().set("background-color",backgroundStyle);
-        main_layout.getStyle().set("--lumo-font-family","Monospace");
         main_dialog.add(main_layout);
         main_dialog.setWidth(width);main_dialog.setHeight(height);
     }

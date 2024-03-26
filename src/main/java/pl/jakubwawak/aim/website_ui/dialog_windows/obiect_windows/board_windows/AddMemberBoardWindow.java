@@ -46,6 +46,7 @@ public class AddMemberBoardWindow {
     public AddMemberBoardWindow(InsertBoardWindow boardInsertWindow){
         this.boardInsertWindow = boardInsertWindow;
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window-normal");
         main_layout = new VerticalLayout();
         prepare_dialog();
     }
@@ -59,9 +60,10 @@ public class AddMemberBoardWindow {
         email_field.setPlaceholder("Your friend email...");
         email_field.setWidth("100%");
         email_field.setMaxLength(30);
+        email_field.addClassName("aim-inputfield-bright");
 
         add_button = new Button("Add Member", VaadinIcon.PLUS.create(),this::addbutton_action);
-        add_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        add_button.addClassName("aim-button-black");
         add_button.setWidth("100%");
     }
 
@@ -78,11 +80,6 @@ public class AddMemberBoardWindow {
         main_layout.setSizeFull();
         main_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         main_layout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
-        main_layout.getStyle().set("text-align", "center");
-
-        main_layout.getStyle().set("border-radius","25px");
-        main_layout.getStyle().set("background-color",backgroundStyle);
-        main_layout.getStyle().set("--lumo-font-family","Monospace");
         main_dialog.add(main_layout);
         main_dialog.setWidth(width);main_dialog.setHeight(height);
     }

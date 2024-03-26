@@ -44,6 +44,7 @@ public class CloseProjectWindow {
     public CloseProjectWindow(AIM_Project projectToRemove){
         this.projectToRemove = projectToRemove;
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window-normal");
         main_layout = new VerticalLayout();
         prepare_dialog();
     }
@@ -54,10 +55,10 @@ public class CloseProjectWindow {
     void prepare_components(){
         // set components
         closeproject_button = new Button("Close project", VaadinIcon.TRASH.create(),this::closeprojectbutton_action);
-        closeproject_button.setWidth("100%");closeproject_button.addThemeVariants(ButtonVariant.LUMO_ERROR,ButtonVariant.LUMO_PRIMARY);
-
+        closeproject_button.setWidth("100%");
+        closeproject_button.addClassName("aim-button-black");
         close_button = new Button("Close",this::close_button);
-        close_button.setWidth("100%");
+        close_button.setWidth("100%");close_button.addClassName("aim-button-black");
     }
 
     /**
@@ -75,11 +76,6 @@ public class CloseProjectWindow {
         main_layout.setSizeFull();
         main_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         main_layout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
-        main_layout.getStyle().set("text-align", "center");
-
-        main_layout.getStyle().set("border-radius","25px");
-        main_layout.getStyle().set("background-color",backgroundStyle);
-        main_layout.getStyle().set("--lumo-font-family","Monospace");
         main_dialog.add(main_layout);
         main_dialog.setWidth(width);main_dialog.setHeight(height);
     }

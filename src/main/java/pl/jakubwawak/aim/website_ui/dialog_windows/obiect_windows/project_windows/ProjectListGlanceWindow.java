@@ -3,7 +3,7 @@
  * kubawawak@gmail.com
  * all rights reserved
  */
-package pl.jakubwawak.aim.website_ui;
+package pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.project_windows;
 
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
@@ -35,6 +35,7 @@ public class ProjectListGlanceWindow {
      */
     public ProjectListGlanceWindow(){
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window-normal");
         main_layout = new VerticalLayout();
         prepare_dialog();
     }
@@ -50,6 +51,7 @@ public class ProjectListGlanceWindow {
         project_grid.addColumn(AIM_Project::openTaskAmount).setHeader("Opened Tasks");
         project_grid.setItems(dap.getUserProjects());
         project_grid.setSizeFull();
+        project_grid.addClassName("aim-grid");
     }
 
     /**

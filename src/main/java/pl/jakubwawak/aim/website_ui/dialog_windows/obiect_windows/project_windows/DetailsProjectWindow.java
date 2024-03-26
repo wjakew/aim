@@ -36,6 +36,7 @@ public class DetailsProjectWindow {
     public DetailsProjectWindow(AIM_Project projectToView){
         this.projectToView = projectToView;
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window-normal");
         main_dialog.setDraggable(true);
         main_layout = new VerticalLayout();
         apl = new AIM_ProjectLayout(projectToView);
@@ -63,11 +64,6 @@ public class DetailsProjectWindow {
         main_layout.setSizeFull();
         main_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         main_layout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
-        main_layout.getStyle().set("text-align", "center");
-
-        main_layout.getStyle().set("border-radius","25px");
-        main_layout.getStyle().set("background-color",backgroundStyle);
-        main_layout.getStyle().set("--lumo-font-family","Monospace");
         main_dialog.add(main_layout);
         main_dialog.setWidth(width);main_dialog.setHeight(height);
     }

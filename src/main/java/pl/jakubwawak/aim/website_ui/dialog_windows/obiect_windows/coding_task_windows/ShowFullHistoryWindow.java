@@ -42,6 +42,7 @@ public class ShowFullHistoryWindow {
     public ShowFullHistoryWindow(AIM_CodingTask act){
         this.act = act;
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window-normal");
         main_layout = new VerticalLayout();
         prepare_dialog();
     }
@@ -55,7 +56,7 @@ public class ShowFullHistoryWindow {
         grid.addColumn(GridElement::getGridelement_details2).setHeader("Time");
         grid.addColumn(GridElement::getGridelement_details).setHeader("Category");
         grid.addColumn(GridElement::getGridelement_text).setHeader("Description");
-
+        grid.addClassName("aim-grid");
         gridContent = new ArrayList<>();
         for(Document document : act.aim_codingtask_history){
             /*

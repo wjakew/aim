@@ -66,6 +66,7 @@ public class AddTaskBoardWindow {
      */
     public AddTaskBoardWindow(AIM_Board board, AIM_BoardTask task){
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window-normal");
         main_layout = new VerticalLayout();
         this.board = board;
         this.task = task;
@@ -82,13 +83,16 @@ public class AddTaskBoardWindow {
         taskname_field.setPlaceholder("Your New Board Task!");
         taskname_field.setWidth("100%");
         taskname_field.setMaxLength(30);
+        taskname_field.addClassName("aim-inputfield-bright");
 
         taskdesc_field = new TextArea("Task Description");
         taskdesc_field.setPlaceholder("Tell me something about that task...");
         taskdesc_field.setWidth("100%");
         taskdesc_field.setMaxLength(150);
+        taskdesc_field.addClassName("aim-inputfield-bright");
 
         status_combobox = new ComboBox<>("Task Status");
+        status_combobox.addClassName("aim-inputfield-bright");
 
         ArrayList<GridElement> statusData = new ArrayList<>();
         statusData.add(new GridElement("NEW"));
@@ -99,6 +103,7 @@ public class AddTaskBoardWindow {
         status_combobox.setItemLabelGenerator(GridElement::getGridelement_text);
 
         assignedmember_combobox = new ComboBox<>("Assigned User");
+        assignedmember_combobox.addClassName("aim-inputfield-bright");
 
         ArrayList<GridElement> membersData = new ArrayList<>();
 
@@ -114,7 +119,7 @@ public class AddTaskBoardWindow {
         assignedmember_combobox.setItemLabelGenerator(GridElement::getGridelement_text);
 
         add_button = new Button("Add Task to Board", VaadinIcon.PLUS.create(),this::addbutton_action);
-        add_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        add_button.addClassName("aim-button-black");
         add_button.setWidth("100%");
 
         if ( task!= null){
@@ -166,11 +171,6 @@ public class AddTaskBoardWindow {
         main_layout.setSizeFull();
         main_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         main_layout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
-        main_layout.getStyle().set("text-align", "center");
-
-        main_layout.getStyle().set("border-radius","25px");
-        main_layout.getStyle().set("background-color",backgroundStyle);
-        main_layout.getStyle().set("--lumo-font-family","Monospace");
         main_dialog.add(main_layout);
         main_dialog.setWidth(width);main_dialog.setHeight(height);
     }

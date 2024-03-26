@@ -6,15 +6,19 @@
 package pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.task_windows;
 
 import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.contextmenu.MenuItem;
+import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -30,7 +34,9 @@ import pl.jakubwawak.aim.aim_dataengine.aim_objects_viewers.aim_objects_viewers_
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMBoard;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMProject;
 import pl.jakubwawak.aim.aim_dataengine.database_engine.Database_AIMTask;
+import pl.jakubwawak.aim.website_ui.dialog_windows.AddElementWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.MessageComponent;
+import pl.jakubwawak.aim.website_ui.dialog_windows.UserWindow;
 import pl.jakubwawak.aim.website_ui.dialog_windows.obiect_windows.board_windows.AddTaskBoardWindow;
 import pl.jakubwawak.maintanance.GridElement;
 
@@ -43,8 +49,8 @@ import java.util.Set;
 public class DetailsTaskWindow {
 
     // variables for setting x and y of window
-    public String width = "50%";
-    public String height = "70%";
+    public String width = "70%";
+    public String height = "80%";
     public String backgroundStyle = "";
 
     // main login components
@@ -60,9 +66,8 @@ public class DetailsTaskWindow {
 
     ComboBox<GridElement> status_combobox;
 
-    Button update_button, changeowner_button, delete_button,addcomment_button;
-
-    Button sharetask_button;
+    MenuBar taskMenuBar;
+    MenuItem subItems5; // share
 
     AIM_Project projectWithTask;
     AIM_Board boardWithTask;
@@ -80,6 +85,7 @@ public class DetailsTaskWindow {
     public DetailsTaskWindow(AIM_Task taskObject){
         this.taskObject = taskObject;
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window-normal");
         main_dialog.setDraggable(true);
         main_layout = new VerticalLayout();
         assignedUser = null;
@@ -101,6 +107,7 @@ public class DetailsTaskWindow {
         assignedUser = null;
         main_dialog = new Dialog();
         main_layout = new VerticalLayout();
+        main_dialog.addClassName("aim-window-normal");
         shareClickCount = 0;
         prepare_dialog();
     }
@@ -118,6 +125,7 @@ public class DetailsTaskWindow {
         this.boardWithTask = boardWithTask;
         main_dialog = new Dialog();
         main_layout = new VerticalLayout();
+        main_dialog.addClassName("aim-window-normal");
         shareClickCount = 0;
         prepare_dialog();
     }
@@ -128,13 +136,16 @@ public class DetailsTaskWindow {
     void prepare_components(){
         // set components
         taskname_header = new H1(taskObject.aim_task_name);
+        taskname_header.getStyle().set("color","white");
 
         taskdesc_area = new TextArea("Task description");
         taskdesc_area.setValue(taskObject.aim_task_desc);
         taskdesc_area.setReadOnly(true);
         taskdesc_area.setWidth("100%");
+        taskdesc_area.addClassName("aim-inputfield-bright");
 
         history_grid = new Grid<>(GridElement.class,false);
+        history_grid.addClassName("aim-grid");
         data = new ArrayList<>();
 
         for(String element : taskObject.aim_task_history){
@@ -157,28 +168,83 @@ public class DetailsTaskWindow {
         status_combobox.setValue(new GridElement(taskObject.status));
         status_combobox.setWidth("100%");
         status_combobox.setAllowCustomValue(false);
+        status_combobox.addClassName("aim-inputfield-bright");
 
-        update_button = new Button("Update", VaadinIcon.PENCIL.create(),this::updatebutton_action);
-        update_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_CONTRAST);
-        update_button.setWidth("100%");
+        taskMenuBar = new MenuBar();
+        taskMenuBar.addClassName("aim-menu");
 
-        changeowner_button = new Button("Change Owner", VaadinIcon.USER.create(),this::changeowner_button);
-        changeowner_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_CONTRAST);
-        changeowner_button.setWidth("100%");
+        MenuItem taskItem = taskMenuBar.addItem("Actions");
+        taskItem.addClassName("aim-button-black");
+        SubMenu subItems = taskItem.getSubMenu();
 
-        sharetask_button= new Button("Share Task", VaadinIcon.SHARE.create(),this::sharetaskbutton_action);
-        sharetask_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_CONTRAST);
-        sharetask_button.setWidth("100%");
+        MenuItem subItems1 = subItems.addItem(new HorizontalLayout(VaadinIcon.REFRESH.create(),new H6("Update Task")));
+        subItems1.setCheckable(false);
+        subItems1.setChecked(false);
 
-        addcomment_button = new Button("Add comment",VaadinIcon.COMMENT.create(),this::setAddcomment_button);
-        addcomment_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_CONTRAST);
-        addcomment_button.setWidth("100%");
+        MenuItem subItems2 = subItems.addItem(new HorizontalLayout(VaadinIcon.GROUP.create(),new H6("Change owner")));
+        subItems2.setCheckable(false);
+        subItems2.setChecked(false);
 
-        delete_button = new Button("Remove Task", VaadinIcon.TRASH.create(),this::deletebutton_action);
-        delete_button.addThemeVariants(ButtonVariant.LUMO_PRIMARY,ButtonVariant.LUMO_ERROR);
-        delete_button.setWidth("100%");
+        MenuItem subItems3 = subItems.addItem(new HorizontalLayout(VaadinIcon.COMMENT.create(),new H6("Add Comment")));
+        subItems3.setCheckable(false);
+        subItems3.setChecked(false);
+
+        MenuItem subItems4;
+        subItems4 = subItems.addItem(new HorizontalLayout(VaadinIcon.TRAIN.create(),new H6("Delete")));
+        subItems4.setCheckable(false);
+        subItems4.setChecked(false);
+
+        if ( AimApplication.loggedUser != null){
+            if ( AimApplication.loggedUser.aim_user_id.equals(taskObject.aim_task_owner.getObjectId("aim_user_id"))){
+                subItems4.setEnabled(true);
+            }
+            else{
+                subItems4.setEnabled(false);
+            }
+        }
+        else{
+            subItems4.setEnabled(false);
+            status_combobox.setEnabled(false);
+        }
+
+
+        // setting share button text
+        Database_AIMTask datask = new Database_AIMTask(AimApplication.database);
+        String share = datask.checkShare(taskObject);
+        if ( share!= null ){
+            subItems5 = subItems.addItem(new HorizontalLayout(VaadinIcon.SHARE.create(),new H6(share)));
+            subItems5.setCheckable(false);
+            subItems5.setChecked(false);
+        }
+        else{
+            subItems5 = subItems.addItem(new HorizontalLayout(VaadinIcon.SHARE.create(),new H6("Share Task")));
+            subItems5.setCheckable(false);
+            subItems5.setChecked(false);
+        }
+
+
+        ComponentEventListener<ClickEvent<MenuItem>> listener = event -> {
+            MenuItem selectedItem = event.getSource();
+            if (selectedItem.equals(subItems1)) {
+                updatebutton_action();
+            } else if (selectedItem.equals(subItems2)) {
+                changeowner_button();
+            } else if (selectedItem.equals(subItems3)) {
+                setAddcomment_button();
+            } else if (selectedItem.equals(subItems4)) {
+                deletebutton_action();
+            } else if (selectedItem.equals(subItems5)) {
+                sharetaskbutton_action();
+            }
+        };
+        subItems1.addClickListener(listener);
+        subItems2.addClickListener(listener);
+        subItems3.addClickListener(listener);
+        subItems4.addClickListener(listener);
+        subItems5.addClickListener(listener);
 
         assignedmember_combobox = new ComboBox<>("Assigned User");
+        assignedmember_combobox.addClassName("aim-inputfield-bright");
 
         if ( boardWithTask != null ){
             ArrayList<GridElement> membersData = new ArrayList<>();
@@ -260,18 +326,6 @@ public class DetailsTaskWindow {
                 break;
             }
         });
-
-        // setting share button text
-        Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
-        String share = dat.checkShare(taskObject);
-
-        if ( share!= null ){
-            sharetask_button.setText(share);
-        }
-        else{
-            sharetask_button.setText("Share Task");
-        }
-
     }
 
     /**
@@ -327,9 +381,9 @@ public class DetailsTaskWindow {
         vl_right.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
         vl_right.getStyle().set("text-align", "center");
 
-        vl_left.add(history_grid,addcomment_button);
+        vl_left.add(history_grid);
 
-        vl_right.add(new H6("Created: "+taskObject.aim_task_timestamp),new H6("Deadline: "+taskObject.aim_task_deadline),status_combobox,update_button,changeowner_button,sharetask_button);
+        vl_right.add(new H6("Created: "+taskObject.aim_task_timestamp),new H6("Deadline: "+taskObject.aim_task_deadline),status_combobox);
 
         if ( boardWithTask != null ){
             vl_right.add(assignedmember_combobox);
@@ -340,7 +394,7 @@ public class DetailsTaskWindow {
         hl_down_layout.setSizeFull();
 
         main_layout.add(hl_down_layout);
-        main_layout.add(delete_button);
+        main_layout.add(taskMenuBar);
 
         main_layout.setSizeFull();
         main_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
@@ -356,36 +410,19 @@ public class DetailsTaskWindow {
 
         // cannot change owner or update if task is in project
         if ( taskObject.aim_task_id == null ){
-            changeowner_button.setEnabled(false);
-            update_button.setEnabled(false);
-            sharetask_button.setEnabled(false);
-            addcomment_button.setEnabled(false);
+            taskMenuBar.setEnabled(false);
         }
 
         if ( boardWithTask == null ){
             assignedmember_combobox.setEnabled(false);
         }
 
-        if ( AimApplication.loggedUser != null){
-            if ( AimApplication.loggedUser.aim_user_id.equals(taskObject.aim_task_owner.getObjectId("aim_user_id"))){
-                delete_button.setEnabled(true);
-            }
-            else{
-                delete_button.setEnabled(false);
-            }
-        }
-        else{
-            delete_button.setEnabled(false);
-            status_combobox.setEnabled(false);
-        }
-
     }
 
     /**
      * changeowner_button action
-     * @param ex
      */
-    private void changeowner_button(ClickEvent ex){
+    private void changeowner_button(){
         ChangeTaskOwnerWindow ctow = new ChangeTaskOwnerWindow(taskObject);
         main_layout.add(ctow.main_dialog);
         ctow.main_dialog.open();
@@ -394,9 +431,8 @@ public class DetailsTaskWindow {
 
     /**
      * update_button action
-     * @param ex
      */
-    private void updatebutton_action(ClickEvent ex){
+    private void updatebutton_action(){
         if ( boardWithTask == null ){
             InsertTaskWindow itw = new InsertTaskWindow(taskObject);
             main_layout.add(itw.main_dialog);
@@ -406,9 +442,8 @@ public class DetailsTaskWindow {
 
     /**
      * addcomment_button action
-     * @param ex
      */
-    private void setAddcomment_button(ClickEvent ex){
+    private void setAddcomment_button(){
         CommentTaskWindow ctw = new CommentTaskWindow(this);
         main_layout.add(ctw.main_dialog);
         ctw.main_dialog.open();
@@ -416,9 +451,8 @@ public class DetailsTaskWindow {
 
     /**
      * delete_button action
-     * @param ex
      */
-    private void deletebutton_action(ClickEvent ex){
+    private void deletebutton_action(){
 
         if ( taskObject.aim_task_id != null ){
             Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
@@ -455,15 +489,14 @@ public class DetailsTaskWindow {
 
     /**
      * sharetask_button action
-     * @param ex
      */
-    private void sharetaskbutton_action(ClickEvent ex){
+    private void sharetaskbutton_action(){
         Database_AIMTask dat = new Database_AIMTask(AimApplication.database);
-        if ( sharetask_button.getText().equals("Share Task") ){
+        if ( subItems5.getText().equals("Share Task") ){
             String share = dat.shareTask(taskObject);
             if (share != null){
                 shareClickCount = 0;
-                sharetask_button.setText(share);
+                subItems5.setText(share);
                 Notification.show("Task was shared!");
                 UI.getCurrent().getPage().executeJs("window.copyToClipboard($0)", share);
                 Notification.show("Share code copied to clipboard!");
@@ -477,18 +510,18 @@ public class DetailsTaskWindow {
                 int ans = dat.removeShareTask(taskObject);
                 if ( ans == 1 ){
                     Notification.show("Share removed!");
-                    sharetask_button.setText("Share Task");
+                    subItems5.setText("Share Task");
                     shareClickCount = 0;
                 }
             }
             else if (shareClickCount == 1){
                 Notification.show("Next click remove sharing in the task object!");
-                UI.getCurrent().getPage().executeJs("window.copyToClipboard($0)", sharetask_button.getText());
+                UI.getCurrent().getPage().executeJs("window.copyToClipboard($0)", subItems5.getText());
                 Notification.show("Share code copied to clipboard!");
                 shareClickCount++;
             }
             else{
-                UI.getCurrent().getPage().executeJs("window.copyToClipboard($0)", sharetask_button.getText());
+                UI.getCurrent().getPage().executeJs("window.copyToClipboard($0)", subItems5.getText());
                 Notification.show("Share code copied to clipboard!");
                 shareClickCount++;
             }

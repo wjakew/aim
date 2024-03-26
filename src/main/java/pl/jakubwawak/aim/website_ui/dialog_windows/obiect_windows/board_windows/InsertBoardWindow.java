@@ -61,6 +61,7 @@ public class InsertBoardWindow {
      */
     public InsertBoardWindow(AIM_Board boardToAdd){
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window-normal");
         main_layout = new VerticalLayout();
         if ( boardToAdd!= null ){
             this.boardToAdd = boardToAdd;
@@ -82,28 +83,31 @@ public class InsertBoardWindow {
         boardname_field.setPlaceholder("My new amazing board :)");
         boardname_field.setWidth("100%");
         boardname_field.setMaxLength(60);
+        boardname_field.addClassName("aim-inputfield-bright");
         membersContent = new ArrayList<>();
         boarddesc_field = new TextArea("Board Description");
         boarddesc_field.setPlaceholder("Oh my god such a cute board!");
         boarddesc_field.setWidth("100%");
+        boarddesc_field.addClassName("aim-inputfield-bright");
         boardname_field.setMaxLength(200);
         members_grid = new Grid<>();
+        members_grid.addClassName("aim-grid");
         members_grid.addColumn(GridElement::getGridelement_text).setHeader("Members");
         reloadMembersGrid();
 
         add_button = new Button("Create Board",this::addboardbutton_action);
         add_button.setWidth("100%");
-        add_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        add_button.addClassName("aim-button-black");
 
         if ( newBoard == 0 ){
             add_button.setText("Update Board");
         }
 
         addmember_button = new Button("", VaadinIcon.PLUS.create(),this::addmemberbutton_action);
-        addmember_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        addmember_button.addClassName("aim-button-black");
 
         removemember_button = new Button("",VaadinIcon.MINUS.create(),this::removememberbutton_action);
-        removemember_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        removemember_button.addClassName("aim-button-black");
     }
 
     /**
@@ -159,11 +163,6 @@ public class InsertBoardWindow {
         main_layout.setSizeFull();
         main_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         main_layout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
-        main_layout.getStyle().set("text-align", "center");
-
-        main_layout.getStyle().set("border-radius","25px");
-        main_layout.getStyle().set("background-color",backgroundStyle);
-        main_layout.getStyle().set("--lumo-font-family","Monospace");
         main_dialog.add(main_layout);
         main_dialog.setWidth(width);main_dialog.setHeight(height);
     }

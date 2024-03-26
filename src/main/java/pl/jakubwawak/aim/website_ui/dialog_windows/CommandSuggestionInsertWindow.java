@@ -53,6 +53,7 @@ public class CommandSuggestionInsertWindow {
         this.selectedCommand = selectedCommand;
 
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window-normal");
         main_layout = new VerticalLayout();
         prepare_dialog();
     }
@@ -66,17 +67,18 @@ public class CommandSuggestionInsertWindow {
             property1_field = new TextField(property1);
             property1_field.setWidth("100%");
             property1_field.setPlaceholder("value");
+            property1_field.addClassName("aim-inputfield-bright");
         }
         if ( property2 != null ){
             if (!property2.isEmpty()){
                 property2_field = new TextField(property2);
                 property2_field.setWidth("100%");
                 property2_field.setPlaceholder("value");
+                property2_field.addClassName("aim-inputfield-bright");
             }
         }
-
         createcommand_button = new Button("Create Command", VaadinIcon.ARROW_RIGHT.create(),this::createcommandbutton_action);
-        createcommand_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        createcommand_button.addClassName("aim-button-black");
         createcommand_button.setWidth("100%");
 
     }
@@ -102,11 +104,7 @@ public class CommandSuggestionInsertWindow {
         main_layout.setSizeFull();
         main_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         main_layout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
-        main_layout.getStyle().set("text-align", "center");
 
-        main_layout.getStyle().set("border-radius","25px");
-        main_layout.getStyle().set("background-color",backgroundStyle);
-        main_layout.getStyle().set("--lumo-font-family","Monospace");
         main_dialog.add(main_layout);
         main_dialog.setWidth(width);main_dialog.setHeight(height);
     }

@@ -48,6 +48,7 @@ public class AddCommentCTaskWindow {
         this.ictw = ictw;
         this.actv = null;
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window-normal");
         main_layout = new VerticalLayout();
         prepare_dialog();
     }
@@ -72,9 +73,10 @@ public class AddCommentCTaskWindow {
         comment_area = new TextArea("Your Comment");
         comment_area.setPlaceholder("Tell me something exciting...");
         comment_area.setSizeFull();
+        comment_area.addClassName("aim-inputfield-bright");
         addcomment_button = new Button("Add comment", VaadinIcon.COMMENT.create(),this::setAddcomment_button);
         addcomment_button.setWidth("100%");
-        addcomment_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        addcomment_button.addClassName("aim-button-black");
     }
 
     /**
@@ -90,11 +92,7 @@ public class AddCommentCTaskWindow {
         main_layout.setSizeFull();
         main_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         main_layout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
-        main_layout.getStyle().set("text-align", "center");
 
-        main_layout.getStyle().set("border-radius","25px");
-        main_layout.getStyle().set("background-color",backgroundStyle);
-        main_layout.getStyle().set("--lumo-font-family","Monospace");
         main_dialog.add(main_layout);
         main_dialog.setWidth(width);main_dialog.setHeight(height);
     }

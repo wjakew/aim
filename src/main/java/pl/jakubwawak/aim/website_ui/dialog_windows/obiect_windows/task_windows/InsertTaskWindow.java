@@ -60,6 +60,7 @@ public class InsertTaskWindow {
      */
     public InsertTaskWindow(AIM_Task taskToUpdate){
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window-normal");
         this.taskToUpdate = taskToUpdate;
         main_layout = new VerticalLayout();
         prepare_dialog();
@@ -73,6 +74,7 @@ public class InsertTaskWindow {
     public InsertTaskWindow(AIM_Task taskToUpdate, AIM_Project projectToInsert){
         main_dialog = new Dialog();
         main_dialog.setDraggable(true);
+        main_dialog.addClassName("aim-window-normal");
         this.taskToUpdate = taskToUpdate;
         this.projectToInsert = projectToInsert;
         main_layout = new VerticalLayout();
@@ -88,16 +90,22 @@ public class InsertTaskWindow {
         taskname_field.setWidth("100%");
         taskname_field.setPlaceholder("My New Amazing Task");
         taskname_field.setMaxLength(40);
+        taskname_field.addClassName("aim-inputfield-bright");
 
         taskdeadline_picker = new DatePicker("Task Deadline");
         taskdeadline_picker.setWidth("100%");
-
+        taskdeadline_picker.addClassName("aim-inputfield-bright");
         taskdeadline_picker.setPlaceholder("29.11.1996");
+
         taskdesc_field = new TextArea("Task Description");
         taskdesc_field.setWidth("100%");
         taskdesc_field.setMaxLength(200);
         taskdesc_field.setPlaceholder("Tell me something about this task!");
+        taskdesc_field.addClassName("aim-inputfield-bright");
+
         addtask_button = new Button("",this::addtaskbutton_action);
+        new ButtonStyler().primaryButtonStyle(addtask_button,"100%","");
+        addtask_button.addClassName("aim-button-black");
         if ( taskToUpdate != null ){
             addtask_button.setText("Update Task");
             taskname_field.setValue(taskToUpdate.aim_task_name);
@@ -109,7 +117,6 @@ public class InsertTaskWindow {
         else{
             addtask_button.setText("Create Task");
         }
-        new ButtonStyler().primaryButtonStyle(addtask_button,"100%","");
     }
 
     /**
@@ -128,11 +135,7 @@ public class InsertTaskWindow {
         main_layout.setSizeFull();
         main_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         main_layout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
-        main_layout.getStyle().set("text-align", "center");
 
-        main_layout.getStyle().set("border-radius","25px");
-        main_layout.getStyle().set("background-color",backgroundStyle);
-        main_layout.getStyle().set("--lumo-font-family","Monospace");
         main_dialog.add(main_layout);
         main_dialog.setWidth(width);main_dialog.setHeight(height);
     }

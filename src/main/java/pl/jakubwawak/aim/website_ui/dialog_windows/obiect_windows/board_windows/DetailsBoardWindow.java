@@ -38,6 +38,7 @@ public class DetailsBoardWindow {
     public DetailsBoardWindow(AIM_Board boardToShow){
         board = boardToShow;
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window-normal");
         boardDetailsLayout = new VerticalLayout();
         prepareLayout();
     }
@@ -47,19 +48,19 @@ public class DetailsBoardWindow {
      */
     void prepareComponents(){
         members_button = new Button("Members("+board.board_members.size()+")", VaadinIcon.USERS.create(),this::membersbutton_action);
-        members_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        members_button.addClassName("aim-button-black");
 
         update_button = new Button("Update Data",VaadinIcon.DATABASE.create(),this::updatebutton_action);
-        update_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        update_button.addClassName("aim-button-black");
 
         changeowner_button = new Button("Change Owner",VaadinIcon.USER.create(),this::changeownerbutton_action);
-        changeowner_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        changeowner_button.addClassName("aim-button-black");
 
         addtask_button = new Button("Add Task",VaadinIcon.PLUS.create(),this::addtaskbutton_action);
-        addtask_button.addThemeVariants(ButtonVariant.LUMO_SUCCESS,ButtonVariant.LUMO_PRIMARY);
+        addtask_button.addClassName("aim-button-black");
 
         boardhistory_button = new Button("History",VaadinIcon.TIME_BACKWARD.create(),this::historybutton_action);
-        boardhistory_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        boardhistory_button.addClassName("aim-button-black");
 
         AimApplication.currentBoardTaskList = new AIM_BoardTaskListLayout(board);
    }

@@ -41,6 +41,7 @@ public class BoardListGlanceWindow {
      */
     public BoardListGlanceWindow(){
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window-normal");
         main_layout = new VerticalLayout();
         prepare_dialog();
     }
@@ -51,6 +52,7 @@ public class BoardListGlanceWindow {
     void prepare_components(){
         // set components
         boardGrid = new Grid<>(AIM_Board.class,false);
+        boardGrid.addClassName("aim-grid");
         Database_AIMBoard dab = new Database_AIMBoard(AimApplication.database);
         ArrayList<AIM_Board> boardCollection = dab.getUserBoardList();
 
@@ -80,11 +82,6 @@ public class BoardListGlanceWindow {
         main_layout.setSizeFull();
         main_layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         main_layout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
-        main_layout.getStyle().set("text-align", "center");
-
-        main_layout.getStyle().set("border-radius","25px");
-        main_layout.getStyle().set("background-color",backgroundStyle);
-        main_layout.getStyle().set("--lumo-font-family","Monospace");
         main_dialog.add(main_layout);
         main_dialog.setWidth(width);main_dialog.setHeight(height);
     }

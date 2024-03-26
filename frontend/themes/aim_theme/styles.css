@@ -8,6 +8,7 @@
     --vaadin-input-field-label-color: white;
     --vaadin-input-field-focused-label-color: purple;
     --vaadin-input-field-hover-highlight: purple;
+    --vaadin-input-field-value-color: white;
 }
 .aim-grid{
     background-color: black;
@@ -60,6 +61,14 @@
     font-family: Monospace;
     color: white;
 }
+.aim-window-normal H4{
+    font-family: Monospace;
+    color: white;
+}
+.aim-window-normal  H3{
+   font-family: Monospace;
+   color: white;
+}
 .page-header{
     background-color: black;
     color: white;
@@ -91,12 +100,25 @@
     border-style: solid;
     border-color: white;
 }
+.task-layout H3{
+    font-family: Monospace;
+    color: white;
+}
 .task-layout H6{
     color: white;
 }
 /*----------------------------------HomeView styling and components*/
 .home-view{
     background-color: black;
+}
+.home-view H6{
+    color: white;
+}
+.home-view H3{
+    color: white;
+}
+.home-view H4{
+    color: white;
 }
 .mainredirect-page{
     background-color: black;

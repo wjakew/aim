@@ -35,6 +35,7 @@ public class CTaskListGlanceWindow {
      */
     public CTaskListGlanceWindow(){
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window-bright");
         main_layout = new VerticalLayout();
         prepare_dialog();
     }

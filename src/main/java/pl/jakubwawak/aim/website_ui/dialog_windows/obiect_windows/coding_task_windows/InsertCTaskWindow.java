@@ -68,6 +68,7 @@ public class InsertCTaskWindow {
         }
         this.actv = null;
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window-normal");
         main_layout = new VerticalLayout();
         prepare_dialog();
     }
@@ -82,6 +83,7 @@ public class InsertCTaskWindow {
             this.act = new AIM_CodingTask();
         }
         main_dialog = new Dialog();
+        main_dialog.addClassName("aim-window-normal");
         main_layout = new VerticalLayout();
         prepare_dialog();
     }
@@ -106,15 +108,18 @@ public class InsertCTaskWindow {
         ctaskname_field = new TextField();
         ctaskname_field.setWidth("100%");
         ctaskname_field.setPlaceholder("my dear task...");
+        ctaskname_field.addClassName("aim-inputfield-bright");
 
         ctasktag_field = new TextField();
         ctasktag_field.setWidth("100%");
         ctasktag_field.setPlaceholder("tag1,tag2,tag69...");
+        ctasktag_field.addClassName("aim-inputfield-bright");
 
         gridContent = new ArrayList<>();
 
         comment_grid = new Grid<>(GridElement.class,false);
         comment_grid.setSizeFull();
+        comment_grid.addClassName("aim-grid");
         comment_grid.addColumn(GridElement::getGridelement_text).setHeader("Comments");
         reloadCommentContent();
         comment_grid.setItems(gridContent);
@@ -122,14 +127,15 @@ public class InsertCTaskWindow {
         desc_area = new TextArea("Description");
         desc_area.setSizeFull();
         desc_area.setPlaceholder("my dear coding task...");
+        desc_area.addClassName("aim-inputfield-bright");;
 
         addtask_button = new Button("Create", VaadinIcon.PLUS.create(),this::setAddtask_button);
         addtask_button.setWidth("100%");
-        addtask_button.addThemeVariants(ButtonVariant.LUMO_SUCCESS,ButtonVariant.LUMO_PRIMARY);
+        addtask_button.addClassName("aim-button-black");
 
         addcomment_button = new Button("Add Comment", VaadinIcon.COMMENT.create(),this::setAddcomment_button);
         addcomment_button.setWidth("100%");
-        addcomment_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        addcomment_button.addClassName("aim-button-black");
 
         if ( !this.act.isEmpty() ){
             // object to update - updating fields, setting values for update
