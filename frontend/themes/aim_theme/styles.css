@@ -7,8 +7,8 @@
     --vaadin-input-field-value-color: white;
     --vaadin-input-field-label-color: white;
     --vaadin-input-field-focused-label-color: purple;
+    --vaadin-input-field-background: black;
     --vaadin-input-field-hover-highlight: purple;
-    --vaadin-input-field-value-color: white;
 }
 .aim-grid{
     background-color: black;
@@ -106,6 +106,22 @@
 }
 .task-layout H6{
     color: white;
+}
+.tab-layout{
+    background-color: black;
+    border-radius: 25px;
+    text-align: left;
+    font-family: Monospace;
+    border-style: solid;
+    border-color: white;
+}
+.tab-layout vaadin-tab{
+    font-family: Monospace;
+    color: white;
+}
+.tab-layout vaadin-tab[focused]{
+    font-family: Monospace;
+    color: purple;
 }
 /*----------------------------------HomeView styling and components*/
 .home-view{

@@ -37,9 +37,11 @@ public class FileDownloaderComponent {
      */
     public FileDownloaderComponent(File file_to_download){
         dialog = new Dialog();
+        dialog.addClassName("aim-window-normal");
         this.to_download = file_to_download;
         main_layout = new VerticalLayout();
         close_button = new Button("Close Window",this::close_action);
+        close_button.addClassName("aim-button-black");
         prepare_dialog();
     }
 

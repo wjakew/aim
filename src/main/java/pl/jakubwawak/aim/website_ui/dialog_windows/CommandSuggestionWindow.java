@@ -86,6 +86,7 @@ public class CommandSuggestionWindow {
         terminal_field.setPrefixComponent(VaadinIcon.TERMINAL.create());
         terminal_field.setPlaceholder("let's create something...");
         terminal_field.setWidth("100%");
+        terminal_field.addClassName("aim-inputfield-bright");
         terminal_field.setValue(userInput);
 
         terminal_field.addKeyPressListener(e->{
@@ -105,7 +106,7 @@ public class CommandSuggestionWindow {
         });
 
         acceptsuggestion_button = new Button("Use this command!",VaadinIcon.ARROW_RIGHT.create(),this::acceptsuggestionbutton_action);
-        acceptsuggestion_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
+        acceptsuggestion_button.addClassName("aim-button-black");
         acceptsuggestion_button.setWidth("100%");
 
         reloadGridContent();

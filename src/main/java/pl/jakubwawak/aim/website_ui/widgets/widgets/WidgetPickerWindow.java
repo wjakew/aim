@@ -112,7 +112,6 @@ public class WidgetPickerWindow {
 
         content_field = new TextArea("Description");
         content_field.setSizeFull();
-        content_field.setReadOnly(true);
         content_field.addClassName("aim-inputfield-bright");
 
     }

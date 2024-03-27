@@ -72,6 +72,7 @@ public class AIMInputParser {
         allCommandsCollection = new ArrayList<>();
         createAllCommandsCollection();
         currentGlanceLayout = new VerticalLayout();
+        currentGlanceLayout.addClassName("tab-layout");
         currentGlanceLayout.setVisible(false);
         prepareLayout();
     }
@@ -91,6 +92,7 @@ public class AIMInputParser {
         task_grid.addColumn(AIM_Task::getStatus).setHeader("Task Status");
         task_grid.setItems(taskCollection);
         task_grid.setWidth("100%");task_grid.setHeight("100%");
+        task_grid.addClassName("aim-grid");
 
         // projects_tab
         Database_AIMProject dap = new Database_AIMProject(AimApplication.database);
@@ -100,6 +102,7 @@ public class AIMInputParser {
         project_grid.addColumn(AIM_Project::getAim_owner_glance).setHeader("Project Owner");
         project_grid.setItems(projectCollection);
         project_grid.setWidth("100%");project_grid.setHeight("100%");
+        project_grid.addClassName("aim-grid");
 
         // board_tab
         Database_AIMBoard dab = new Database_AIMBoard(AimApplication.database);
@@ -110,6 +113,7 @@ public class AIMInputParser {
         board_grid.addColumn(AIM_Board::getBoard_members_size).setHeader("Members Amount");
         board_grid.setItems(boardCollection);
         board_grid.setWidth("100%");board_grid.setHeight("100%");
+        board_grid.addClassName("aim-grid");
 
         task_grid.addItemClickListener(e->{
             for(AIM_Task selected_task : task_grid.getSelectedItems()){
@@ -149,11 +153,6 @@ public class AIMInputParser {
         currentGlanceLayout.setSizeFull();
         currentGlanceLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         currentGlanceLayout.setDefaultHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
-        currentGlanceLayout.getStyle().set("text-align", "center");
-
-        currentGlanceLayout.getStyle().set("border-radius","25px");
-        currentGlanceLayout.getStyle().set("background-color","grey");
-        currentGlanceLayout.getStyle().set("--lumo-font-family","Monospace");
     }
 
     /**

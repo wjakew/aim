@@ -140,7 +140,6 @@ public class DetailsTaskWindow {
 
         taskdesc_area = new TextArea("Task description");
         taskdesc_area.setValue(taskObject.aim_task_desc);
-        taskdesc_area.setReadOnly(true);
         taskdesc_area.setWidth("100%");
         taskdesc_area.addClassName("aim-inputfield-bright");
 

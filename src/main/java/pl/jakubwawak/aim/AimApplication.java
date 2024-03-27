@@ -37,7 +37,7 @@ import java.util.Scanner;
 public class AimApplication extends SpringBootServletInitializer implements AppShellConfigurator {
 
 	public static String version = "v1.1.0";
-	public static String build = "aim260324REV01";
+	public static String build = "aim270324REV01";
 	public static String applicationStartup;
 	public static int test_flag = 0; // flag for enabling testing
 	public static int log_database_dump_flag = 1; // flag for enabling database log dump
