@@ -44,7 +44,7 @@ public class AimApplication extends SpringBootServletInitializer implements AppS
 
 	public static Database_Connector database;
 	public static AIM_GlobalConfiguration globalConfiguration;
-	public static String connectionStringDebug = "mongodb://localhost:27017";
+	public static String connectionStringDebug = "";
 
 	public static AIM_User loggedUser;
 
