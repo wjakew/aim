@@ -7,6 +7,8 @@
 > Current version is in ALPHA - ready to test.
 > 
 
+![screenshot15](https://github.com/wjakew/aim/blob/master/readme_resources/aim_screenshot15.png)
+
 ### Roadmap
 
 - Ollama support! - IN FUTURE
