@@ -98,10 +98,14 @@ public class UserOptionsWindow {
         color2_field.setPlaceholder("color2 hex");
 
         if (!AimApplication.loggedUser.aim_user_configuration2.equals("blank")){
-            color1_field.setValue(AimApplication.loggedUser.aim_user_configuration2.split(",")[0]);
-            color2_field.setValue(AimApplication.loggedUser.aim_user_configuration2.split(",")[1]);
+            try{
+                color1_field.setValue(AimApplication.loggedUser.aim_user_configuration2.split(",")[0]);
+                color2_field.setValue(AimApplication.loggedUser.aim_user_configuration2.split(",")[1]);
+            }catch(Exception ex){
+                color1_field.setValue("");
+                color2_field.setValue("");
+            }
         }
-
         savecolors_button = new Button("Save", VaadinIcon.PAINTBRUSH.create(),this::savecolorsbutton_action);
         savecolors_button.addThemeVariants(ButtonVariant.LUMO_CONTRAST,ButtonVariant.LUMO_PRIMARY);
         clear_button = new Button("Clear",VaadinIcon.TRASH.create(),this::clearbutton_action);

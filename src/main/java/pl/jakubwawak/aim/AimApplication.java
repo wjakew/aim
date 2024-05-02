@@ -36,8 +36,8 @@ import java.util.Scanner;
 @Theme(value="aim_theme")
 public class AimApplication extends SpringBootServletInitializer implements AppShellConfigurator {
 
-	public static String version = "v1.1.0";
-	public static String build = "aim270324REV01";
+	public static String version = "v1.1.5";
+	public static String build = "aim020524REV01";
 	public static String applicationStartup;
 	public static int test_flag = 0; // flag for enabling testing
 	public static int log_database_dump_flag = 1; // flag for enabling database log dump
@@ -75,16 +75,29 @@ public class AimApplication extends SpringBootServletInitializer implements AppS
 		if ( test_flag == 0 ){
 			// run application in normal mode
 			if ( connectionStringDebug.isBlank() ){
-				System.out.print(ConsoleColors.BLUE_BRIGHT+"ConnectionURL: "+ConsoleColors.RESET);
-				String connectionString = scanner.nextLine();
-				database.setDatabase_url(connectionString);
-				database.connect();
-				if(database.connected){
-					SpringApplication.run(AimApplication.class, args);
-					aam.run();
+				if ( args.length == 1 ){
+					database.setDatabase_url(args[0]);
+					database.connect();
+					if(database.connected){
+						SpringApplication.run(AimApplication.class, args);
+						aam.run();
+					}
+					else{
+						System.out.println(ConsoleColors.RED_BACKGROUND+"Cannot connect to database. Check connection string!");
+					}
 				}
 				else{
-					System.out.println(ConsoleColors.RED_BACKGROUND+"Cannot connect to database. Check connection string!");
+					System.out.print(ConsoleColors.BLUE_BRIGHT+"ConnectionURL: "+ConsoleColors.RESET);
+					String connectionString = scanner.nextLine();
+					database.setDatabase_url(connectionString);
+					database.connect();
+					if(database.connected){
+						SpringApplication.run(AimApplication.class, args);
+						aam.run();
+					}
+					else{
+						System.out.println(ConsoleColors.RED_BACKGROUND+"Cannot connect to database. Check connection string!");
+					}
 				}
 			}
 			// running application with debug connection string

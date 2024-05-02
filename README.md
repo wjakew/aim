@@ -12,7 +12,6 @@
 ### Roadmap
 
 - Ollama support! - IN FUTURE
-- Journal functionality - IN FUTURE
 - New API features - IN FUTURE
 
 ![screenshot1](https://github.com/wjakew/aim/blob/master/readme_resources/aim_screenshot1.png)
@@ -118,5 +117,12 @@ widget picker. You can also add widgets as floating windows in /workspace.
 ```jsx
 java -jar aim.jar
 ```
-4. Insert the connection string from your MongoDB tenant.
-5. Create the admin account!
+4. Insert the connection string from your MongoDB tenant or start the app with string as the argument
+```jsx
+java -jar aim.jar mongodb://localhost:27017
+```
+5. Create the user account!
+6. After creating the user account make the account admin by typing in the app console:
+```bash
+mkadmin user@email.com
+```

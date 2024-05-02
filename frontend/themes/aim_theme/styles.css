@@ -1,6 +1,11 @@
+/*----------------------------------global font */
+@font-face {
+  font-family: aim_main;
+  src: url("/JetBrainsMono-Bold.ttf");
+}
 /*----------------------------------standard normal components*/
 .aim-inputfield-bright{
-    font-family: Monospace;
+    font-family: aim_main;
     --vaadin-input-field-border-width: 1px;
     --vaadin-input-field-border-color: white;
     --vaadin-input-field-placeholder-color: white;
@@ -16,19 +21,19 @@
 .aim-grid::part(cell){
     background-color: black;
     color: white;
-    font-family: Monospace;
+    font-family: aim_main;
 }
 .aim-button-transparent{
     --lumo-primary-color:white;
     background-color: transparent;
     color: white;
-    font-family: Monospace;
+    font-family: aim_main;
 }
 .aim-button-black{
     --lumo-primary-color:white;
     background-color: black;
     color: white;
-    font-family: Monospace;
+    font-family: aim_main;
     border-style: solid;
     border-color: white;
 }
@@ -36,13 +41,13 @@
     --lumo-primary-color:white;
     background-color: black;
     color: white;
-    font-family: Monospace;
+    font-family: aim_main;
     border-radius: 25px;
 }
 .aim-menu::part(overlay){
     --lumo-primary-color:white;
     color: white;
-    font-family: Monospace;
+    font-family: aim_main;
 }
 .aim-window::part(overlay){
     background-color: transparent;
@@ -58,21 +63,21 @@
     background-color: transparent;
 }
 .aim-window-normal  H6{
-    font-family: Monospace;
+    font-family: aim_main;
     color: white;
 }
 .aim-window-normal H4{
-    font-family: Monospace;
+    font-family: aim_main;
     color: white;
 }
 .aim-window-normal  H3{
-   font-family: Monospace;
+   font-family: aim_main;
    color: white;
 }
 .page-header{
     background-color: black;
     color: white;
-    font-family: Monospace;
+    font-family: aim_main;
     border-style: solid;
     border-color: white;
     border-radius: 25px;
@@ -90,18 +95,18 @@
 .current-task-composer{
     background-color: black;
     text-align: center;
-    font-family: Monospace;
+    font-family: aim_main;
 }
 .task-layout{
     background-color: black;
     border-radius: 25px;
     text-align: left;
-    font-family: Monospace;
+    font-family: aim_main;
     border-style: solid;
     border-color: white;
 }
 .task-layout H3{
-    font-family: Monospace;
+    font-family: aim_main;
     color: white;
 }
 .task-layout H6{
@@ -111,16 +116,16 @@
     background-color: black;
     border-radius: 25px;
     text-align: left;
-    font-family: Monospace;
+    font-family: aim_main;
     border-style: solid;
     border-color: white;
 }
 .tab-layout vaadin-tab{
-    font-family: Monospace;
+    font-family: aim_main;
     color: white;
 }
 .tab-layout vaadin-tab[focused]{
-    font-family: Monospace;
+    font-family: aim_main;
     color: purple;
 }
 /*----------------------------------HomeView styling and components*/
@@ -146,7 +151,7 @@
     color: white;
 }
 .welcome-view H6{
-    font-family: Monospace;
+    font-family: aim_main;
     color: white;
 }
 /*----------------------------------LoginWindow styling and components*/
@@ -161,7 +166,7 @@
     background-color: transparent;
 }
 .loginwindow-dialog H6{
-    font-family: Monospace;
+    font-family: aim_main;
     color: white;
 }
 /*----------------------------------DashboardView styling and components*/
@@ -169,7 +174,7 @@
     background-color: black;
 }
 .dashboard-view H6{
-    font-family: Monospace;
+    font-family: aim_main;
     color: white;
 }
 /*----------------------------------TerminalView styling and components*/
@@ -177,7 +182,7 @@
     background-color: black;
 }
 .terminal-view H6{
-    font-family: Monospace;
+    font-family: aim_main;
     color: white;
 }
 /*----------------------------------Project styling and components*/
@@ -185,7 +190,7 @@
     background-color: black;
     border-radius: 25px;
     text-align: left;
-    font-family: Monospace;
+    font-family: aim_main;
     border-style: solid;
     border-color: white;
 }
@@ -193,7 +198,7 @@
     background-color: black;
     border-radius: 25px;
     text-align: left;
-    font-family: Monospace;
+    font-family: aim_main;
     border-style: solid;
     border-color: white;
 }
@@ -201,14 +206,14 @@
     background-color: black;
     border-radius: 25px;
     text-align: center;
-    font-family: Monospace;
+    font-family: aim_main;
 }
 /*-----------------------------------Board styling and components */
 .current-board-composer{
     background-color: black;
         border-radius: 25px;
         text-align: center;
-        font-family: Monospace;
+        font-family: aim_main;
         border-style: solid;
         border-color: white;
 }
